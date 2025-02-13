@@ -1,0 +1,23 @@
+name: 'breadcrumbs-workspace'
+
+services:
+  nginx:
+    image: nginx:stable-alpine3.20
+    volumes:
+      - ../../src:/symfony-app
+      - ./_config/nginx/default.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    working_dir: /symfony-app
+    depends_on:
+      - php-fpm
+  php-fpm:
+    build:
+      context: '_services/php-fpm'
+    volumes:
+      - ../../src:/symfony-app
+    working_dir: /symfony-app
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    environment:
+      PHP_IDE_CONFIG: serverName=breadcrumbs-workspace.local
