@@ -1,6 +1,6 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Loader;
+namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
 use Symfony\Component\Routing\RouterInterface;

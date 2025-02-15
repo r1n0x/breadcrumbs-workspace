@@ -1,27 +1,25 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Provider;
+namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
-use R1n0x\BreadcrumbsBundle\Loader\BreadcrumbsStorage;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class Tester
+class BreadcrumbsBuilder
 {
     public function __construct(
-        private BreadcrumbsStorage $storage
+        private readonly BreadcrumbsStorage $storage
     )
     {
     }
 
-    public function test(Request $request): void
+    public function build(Request $request): void
     {
         $routeName = $request->attributes->getString('_route');
-        $breadcrumbs = $this->getBreadcrumbs($routeName);
+        $breadcrumbs = array_reverse($this->getBreadcrumbs($routeName));
         $route = $request;
     }
 

@@ -8,8 +8,8 @@ namespace R1n0x\BreadcrumbsBundle\Dao;
 class BreadcrumbDao
 {
     public function __construct(
-        private readonly string $route,
-        private readonly string $label,
+        private readonly string  $route,
+        private readonly string  $expression,
         private readonly ?string $parentRoute
     )
     {
@@ -20,9 +20,9 @@ class BreadcrumbDao
         return $this->route;
     }
 
-    public function getLabel(): string
+    public function getExpression(): string
     {
-        return $this->label;
+        return $this->expression;
     }
 
     public function getParentRoute(): ?string

@@ -45,6 +45,7 @@
       <path value="$PROJECT_DIR$/src/vendor/symfony/framework-bundle" />
       <path value="$PROJECT_DIR$/src/vendor/composer" />
       <path value="$PROJECT_DIR$/src/breadcrumbs-bundle/vendor/composer" />
+      <path value="$PROJECT_DIR$/src/vendor/symfony/expression-language" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

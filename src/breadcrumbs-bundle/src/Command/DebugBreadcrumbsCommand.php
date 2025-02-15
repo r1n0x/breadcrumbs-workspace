@@ -2,8 +2,8 @@
 
 namespace R1n0x\BreadcrumbsBundle\Command;
 
+use R1n0x\BreadcrumbsBundle\BreadcrumbsStorage;
 use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
-use R1n0x\BreadcrumbsBundle\Loader\BreadcrumbsStorage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,7 +40,7 @@ class DebugBreadcrumbsCommand extends Command
         }
         $output->writeln('');
 
-        if($this->errors > 0) {
+        if ($this->errors > 0) {
             $this->error($output, "Found " . $this->errors . " errors in all the breadcrumb trees.");
             return Command::FAILURE;
         }
@@ -49,7 +49,7 @@ class DebugBreadcrumbsCommand extends Command
 
     private function buildTree(OutputInterface $output, BreadcrumbDao $breadcrumb, int $level): void
     {
-        $output->writeln($this->getLevelSpacer($level) . $breadcrumb->getRoute() . " \"" . $breadcrumb->getLabel() . "\"");
+        $output->writeln($this->getLevelSpacer($level) . $breadcrumb->getRoute() . " \"" . $breadcrumb->getExpression() . "\"");
         $this->printStatusMessages($output, $level, $breadcrumb->getRoute());
         if ($breadcrumb->getParentRoute()) {
             $parentBreadcrumb = $this->storage->get($breadcrumb->getParentRoute());
@@ -76,7 +76,7 @@ class DebugBreadcrumbsCommand extends Command
     private function printStatusMessages(OutputInterface $output, int $level, string $routeName): void
     {
         $prefix = $this->getLevelSpacer($level, false) . '   ';
-        if($this->isValidRoute($routeName)) {
+        if ($this->isValidRoute($routeName)) {
             $this->success($output, $prefix . "Route was found (OK)");
         } else {
             $this->error($output, $prefix . "Route named \"" . $routeName . "\" was not found (ERROR)");
