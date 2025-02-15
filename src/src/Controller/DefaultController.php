@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
-use R1n0x\BreadcrumbsBundle\BreadcrumbsBuilder;
 use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
+use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbsResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Lexer;
 use Symfony\Component\ExpressionLanguage\Parser;
@@ -37,21 +37,33 @@ class DefaultController extends AbstractController
         return $this->json(['one']);
     }
 
-    #[Route(path: '/two/{id}', name: 'two', breadcrumb: [Route::EXPRESSION => 'two', Route::PARENT_ROUTE => 'default_one'])]
+    #[Route(path: '/two/{id}/{eo}', name: 'two', breadcrumb: [Route::EXPRESSION => 'two ~ next', Route::PARENT_ROUTE => 'default_one'])]
     public function two(
-        string             $id,
-        Request            $request,
-        BreadcrumbsBuilder $breadcrumbsBuilder,
-        BreadcrumbsManager $breadcrumbsManager
+        string              $id,
+        Request             $request,
+        BreadcrumbsResolver $breadcrumbsBuilder,
+        BreadcrumbsManager  $breadcrumbsManager
     ): JsonResponse
     {
         $breadcrumbsManager
             ->setParameter('id', "SUS")
+            ->setParameter('eo', "SUS2")
             ->setVariable("zero", "VALUE ZERO")
             ->setVariable("two", "VALUE TWO")
-            ->setVariable("one", "VALUE ONE");
-        $breadcrumbsBuilder->build($request);
-        return $this->json(['two']);
+            ->setVariable("one", "VALUE ONE")
+            ->setVariable('next', 'xd');
+        $built = $breadcrumbsBuilder->getBreadcrumbs($request);
+        $a = [];
+        foreach($built as $breadcrumb) {
+            $a[] = [
+                'label' => $breadcrumb->getLabel(),
+                'url' => $breadcrumb->getUrl()
+            ];
+        }
+        return $this->json([
+            'url' => 'two',
+            'breadcrumbs' => $a
+        ]);
     }
 
     #[Route(path: '/three', name: 'three', breadcrumb: [Route::EXPRESSION => 'three', Route::PARENT_ROUTE => 'default_two'])]

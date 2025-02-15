@@ -1,15 +1,15 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Dao;
+namespace R1n0x\BreadcrumbsBundle\Model;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ParsedBreadcrumbDao
+class Breadcrumb
 {
     public function __construct(
-        private readonly string  $label,
-        private readonly string  $url
+        private readonly string $label,
+        private readonly string $url
     )
     {
     }

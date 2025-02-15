@@ -38,6 +38,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/var-exporter" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/expression-language" />
+      <excludeFolder url="file://$MODULE_DIR$/src/var" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -7,7 +7,7 @@ use R1n0x\BreadcrumbsBundle\Attribute\Route;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class RouteBuildEvent
+class RouteInitializedEvent
 {
     public function __construct(
         private readonly string $routeName,

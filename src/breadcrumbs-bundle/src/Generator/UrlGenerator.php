@@ -2,8 +2,8 @@
 
 namespace R1n0x\BreadcrumbsBundle\Generator;
 
-use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
-use R1n0x\BreadcrumbsBundle\Storage\RouterParametersStorage;
+use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -12,26 +12,27 @@ use Symfony\Component\Routing\RouterInterface;
 class UrlGenerator
 {
     public function __construct(
-        private readonly RouterParametersStorage $storage,
-        private readonly RouterInterface         $router
+        private readonly ParametersHolder $holder,
+        private readonly RouterInterface  $router
     )
     {
     }
 
-    public function generate(BreadcrumbDao $breadcrumb): string
+    public function generate(BreadcrumbDefinition $breadcrumb): string
     {
-        return $this->router->generate($breadcrumb->getRoute(), $this->getParameters($breadcrumb));
+        return $this->router->generate($breadcrumb->getRouteName(), $this->getParameters($breadcrumb));
     }
 
     /**
-     * @param BreadcrumbDao $breadcrumb
+     * @param BreadcrumbDefinition $breadcrumb
      * @return array
      */
-    public function getParameters(BreadcrumbDao $breadcrumb): array
+    public function getParameters(BreadcrumbDefinition $breadcrumb): array
     {
+        $routeName = $breadcrumb->getRouteName();
         $parameters = [];
-        foreach($breadcrumb->getParameters() as $parameter) {
-            $parameters[$parameter] = $this->storage->get($parameter);
+        foreach ($breadcrumb->getParameters() as $parameterName) {
+            $parameters[$parameterName] = $this->holder->getValue($parameterName, $routeName) ?? $this->holder->getValue($parameterName);
         }
         return $parameters;
     }

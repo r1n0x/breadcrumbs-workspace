@@ -5,7 +5,6 @@ namespace R1n0x\BreadcrumbsBundle\Exception;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class RouteNotFoundException extends BreadcrumbsException
+class RuntimeException extends \RuntimeException
 {
-
 }

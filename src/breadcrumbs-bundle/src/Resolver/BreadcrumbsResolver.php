@@ -2,9 +2,14 @@
 
 namespace R1n0x\BreadcrumbsBundle\Resolver;
 
-use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
-use R1n0x\BreadcrumbsBundle\Exception\RouteNotFoundException;
-use R1n0x\BreadcrumbsBundle\Storage\BreadcrumbsStorage;
+use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
+use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
+use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
+use R1n0x\BreadcrumbsBundle\Model\Breadcrumb;
+use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Validator\NodeValidator;
+use R1n0x\BreadcrumbsBundle\Validator\ValidationContext;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -12,39 +17,41 @@ use R1n0x\BreadcrumbsBundle\Storage\BreadcrumbsStorage;
 class BreadcrumbsResolver
 {
     public function __construct(
-        private readonly BreadcrumbsStorage $storage
+        private readonly BreadcrumbNodesResolver $resolver,
+        private readonly UrlGenerator            $urlGenerator,
+        private readonly LabelGenerator          $labelGenerator,
+        private readonly NodeValidator           $validator
     )
     {
     }
 
-
     /**
-     * @param string $routeName
-     * @return array<int, BreadcrumbDao>
-     * @throws RouteNotFoundException
+     * @param Request $request
+     * @return array<int, Breadcrumb>
+     * @throws ValidationException
      */
-    public function resolve(string $routeName): array
+    public function getBreadcrumbs(Request $request): array
     {
-        return array_reverse($this->getBreadcrumbs($routeName));
+        $routeName = $request->attributes->getString('_route');
+        $node = $this->resolver->getNode($routeName);
+        if (!$node) {
+            return [];
+        }
+        $context = new ValidationContext();
+        $this->validator->validate($context, [$node], true);
+        return array_reverse($this->doBuild($node));
     }
 
-    /**
-     * @param string $routeName
-     * @return array<int, BreadcrumbDao>
-     * @throws RouteNotFoundException
-     */
-    public function getBreadcrumbs(string $routeName): array
+    private function doBuild(?BreadcrumbNode $node): array
     {
-        $breadcrumb = $this->storage->get($routeName);
-        if (!$breadcrumb) {
-            throw new RouteNotFoundException(sprintf(
-                'Route "%s" was not found',
-                $routeName
-            ));
+        $builtBreadcrumbs = [];
+        $builtBreadcrumbs[] = new Breadcrumb(
+            $this->labelGenerator->generate($node->getDefinition()),
+            $this->urlGenerator->generate($node->getDefinition())
+        );
+        if ($node->getChild()) {
+            $builtBreadcrumbs = [...$builtBreadcrumbs, ...$this->doBuild($node->getChild())];
         }
-        if (!$breadcrumb->getParentRoute()) {
-            return [$breadcrumb];
-        }
-        return [$breadcrumb, ...$this->getBreadcrumbs($breadcrumb->getParentRoute())];
+        return $builtBreadcrumbs;
     }
 }

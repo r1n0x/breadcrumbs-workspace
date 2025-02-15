@@ -1,14 +1,14 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Dao;
+namespace R1n0x\BreadcrumbsBundle\Model;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbDao
+class BreadcrumbDefinition
 {
     public function __construct(
-        private readonly string  $route,
+        private readonly string  $routeName,
         private readonly string  $expression,
         private readonly ?string $parentRoute,
         private readonly array   $variables = [],
@@ -17,9 +17,9 @@ class BreadcrumbDao
     {
     }
 
-    public function getRoute(): string
+    public function getRouteName(): string
     {
-        return $this->route;
+        return $this->routeName;
     }
 
     public function getExpression(): string

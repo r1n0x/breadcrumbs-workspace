@@ -2,8 +2,10 @@
 
 namespace R1n0x\BreadcrumbsBundle;
 
-use R1n0x\BreadcrumbsBundle\Storage\ExpressionVariablesStorage;
-use R1n0x\BreadcrumbsBundle\Storage\RouterParametersStorage;
+use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Holder\VariablesHolder;
+use R1n0x\BreadcrumbsBundle\Model\Parameter;
+use R1n0x\BreadcrumbsBundle\Model\Variable;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -11,22 +13,21 @@ use R1n0x\BreadcrumbsBundle\Storage\RouterParametersStorage;
 class BreadcrumbsManager
 {
     public function __construct(
-        private readonly RouterParametersStorage $parametersStorage,
-        private readonly ExpressionVariablesStorage $variablesStorage
+        private readonly ParametersHolder $parametersHolder,
+        private readonly VariablesHolder  $variablesHolder
     )
     {
     }
 
-
-    public function setParameter(string $name, string $value): static
+    public function setParameter(string $name, string $value, string $routeName = null): static
     {
-        $this->parametersStorage->set($name, $value);
+        $this->parametersHolder->set(new Parameter($name, $value, $routeName));
         return $this;
     }
 
-    public function setVariable(string $name, mixed $value): static
+    public function setVariable(string $name, mixed $value, string $routeName = null): static
     {
-        $this->variablesStorage->set($name, $value);
+        $this->variablesHolder->set(new Variable($name, $value, $routeName));
         return $this;
     }
 }
