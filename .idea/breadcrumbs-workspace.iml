@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/breadcrumbs-bundle/src" isTestSource="false" packagePrefix="R1n0x\BreadcrumbsBundle\" />
+      <sourceFolder url="file://$MODULE_DIR$/src/src" isTestSource="false" packagePrefix="App\" />
+      <excludeFolder url="file://$MODULE_DIR$/src/breadcrumbs-bundle/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/psr/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/psr/container" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/psr/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/cache-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/config" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/console" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/dependency-injection" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/deprecation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/dotenv" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/error-handler" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/event-dispatcher-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/filesystem" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/finder" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/flex" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/framework-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/http-foundation" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/http-kernel" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-intl-grapheme" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-intl-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-php83" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/routing" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/runtime" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/service-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/string" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/var-dumper" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/var-exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/yaml" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
