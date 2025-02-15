@@ -4,7 +4,8 @@ namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Collection\BreadcrumbDaoCollection;
 use R1n0x\BreadcrumbsBundle\Dao\ParsedBreadcrumbDao;
-use R1n0x\BreadcrumbsBundle\Exception\BreadcrumbsValidationException;
+use R1n0x\BreadcrumbsBundle\Exception\RouteNotFoundException;
+use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbsResolver;
@@ -27,7 +28,8 @@ class BreadcrumbsBuilder
     /**
      * @param Request $request
      * @return array<int, ParsedBreadcrumbDao>
-     * @throws BreadcrumbsValidationException
+     * @throws ValidationException
+     * @throws RouteNotFoundException
      */
     public function build(Request $request): array
     {

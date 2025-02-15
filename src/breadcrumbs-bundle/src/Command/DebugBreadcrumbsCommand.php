@@ -77,9 +77,9 @@ class DebugBreadcrumbsCommand extends Command
     {
         $prefix = $this->getLevelSpacer($level, false) . '   ';
         if ($this->isValidRoute($routeName)) {
-            $this->success($output, $prefix . "Route was found (OK)");
+            $this->success($output, $prefix . "Route was found");
         } else {
-            $this->error($output, $prefix . "Route named \"" . $routeName . "\" was not found (ERROR)");
+            $this->error($output, $prefix . "Route named \"" . $routeName . "\" was not found - unable to resolve further");
             $this->errors++;
         }
     }

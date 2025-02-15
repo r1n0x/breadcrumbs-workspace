@@ -3,6 +3,7 @@
 namespace R1n0x\BreadcrumbsBundle\Resolver;
 
 use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
+use R1n0x\BreadcrumbsBundle\Exception\RouteNotFoundException;
 use R1n0x\BreadcrumbsBundle\Storage\BreadcrumbsStorage;
 
 /**
@@ -20,6 +21,7 @@ class BreadcrumbsResolver
     /**
      * @param string $routeName
      * @return array<int, BreadcrumbDao>
+     * @throws RouteNotFoundException
      */
     public function resolve(string $routeName): array
     {
@@ -29,12 +31,16 @@ class BreadcrumbsResolver
     /**
      * @param string $routeName
      * @return array<int, BreadcrumbDao>
+     * @throws RouteNotFoundException
      */
     public function getBreadcrumbs(string $routeName): array
     {
         $breadcrumb = $this->storage->get($routeName);
         if (!$breadcrumb) {
-            return [];
+            throw new RouteNotFoundException(sprintf(
+                'Route "%s" was not found',
+                $routeName
+            ));
         }
         if (!$breadcrumb->getParentRoute()) {
             return [$breadcrumb];

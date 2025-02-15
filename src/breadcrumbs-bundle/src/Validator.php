@@ -3,7 +3,7 @@
 namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Collection\BreadcrumbDaoCollection;
-use R1n0x\BreadcrumbsBundle\Exception\BreadcrumbsValidationException;
+use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Storage\ExpressionVariablesStorage;
 use R1n0x\BreadcrumbsBundle\Storage\RouterParametersStorage;
 
@@ -21,7 +21,7 @@ class Validator
 
 
     /**
-     * @throws BreadcrumbsValidationException
+     * @throws ValidationException
      */
     public function validate(BreadcrumbDaoCollection $breadcrumbs): void
     {
@@ -41,7 +41,7 @@ class Validator
             $message = $message . ' Missing parameters: ' . implode(', ', $missingParameters);
         }
         if($message) {
-            throw new BreadcrumbsValidationException($message);
+            throw new ValidationException($message);
         }
     }
 
