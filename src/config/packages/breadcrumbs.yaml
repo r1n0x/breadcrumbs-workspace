@@ -1,2 +1,4 @@
 breadcrumbs:
-  root_expression: 'BASE BREADCRUMB'
+  root:
+    expression: 'sus'
+    route: 'default_zero'

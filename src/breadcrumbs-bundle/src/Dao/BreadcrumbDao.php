@@ -10,7 +10,9 @@ class BreadcrumbDao
     public function __construct(
         private readonly string  $route,
         private readonly string  $expression,
-        private readonly ?string $parentRoute
+        private readonly ?string $parentRoute,
+        private readonly array   $variables = [],
+        private readonly array   $parameters = []
     )
     {
     }
@@ -28,5 +30,15 @@ class BreadcrumbDao
     public function getParentRoute(): ?string
     {
         return $this->parentRoute;
+    }
+
+    public function getVariables(): array
+    {
+        return $this->variables;
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 }

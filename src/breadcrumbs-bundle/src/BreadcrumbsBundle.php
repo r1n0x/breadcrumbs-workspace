@@ -16,7 +16,7 @@ class BreadcrumbsBundle extends AbstractBundle
     {
         $container->import('../config/services.php');
         $container->parameters()
-            ->set('r1n0x.breadcrumbs.root_expression', $config['root_expression']);
+            ->set('r1n0x.breadcrumbs.config.route', $config['root']['route']);
     }
 
     public function configure(DefinitionConfigurator $definition): void

@@ -2,8 +2,8 @@
 
 namespace R1n0x\BreadcrumbsBundle\Command;
 
-use R1n0x\BreadcrumbsBundle\BreadcrumbsStorage;
 use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
+use R1n0x\BreadcrumbsBundle\Storage\BreadcrumbsStorage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

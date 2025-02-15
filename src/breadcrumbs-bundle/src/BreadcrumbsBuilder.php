@@ -2,7 +2,12 @@
 
 namespace R1n0x\BreadcrumbsBundle;
 
-use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
+use R1n0x\BreadcrumbsBundle\Collection\BreadcrumbDaoCollection;
+use R1n0x\BreadcrumbsBundle\Dao\ParsedBreadcrumbDao;
+use R1n0x\BreadcrumbsBundle\Exception\BreadcrumbsValidationException;
+use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
+use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
+use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbsResolver;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -11,31 +16,31 @@ use Symfony\Component\HttpFoundation\Request;
 class BreadcrumbsBuilder
 {
     public function __construct(
-        private readonly BreadcrumbsStorage $storage
+        private readonly BreadcrumbsResolver $resolver,
+        private readonly UrlGenerator        $urlGenerator,
+        private readonly LabelGenerator      $labelGenerator,
+        private readonly Validator $validator
     )
     {
     }
 
-    public function build(Request $request): void
+    /**
+     * @param Request $request
+     * @return array<int, ParsedBreadcrumbDao>
+     * @throws BreadcrumbsValidationException
+     */
+    public function build(Request $request): array
     {
         $routeName = $request->attributes->getString('_route');
-        $breadcrumbs = array_reverse($this->getBreadcrumbs($routeName));
-        $route = $request;
-    }
-
-    /**
-     * @param string $routeName
-     * @return array<int, BreadcrumbDao>
-     */
-    public function getBreadcrumbs(string $routeName): array
-    {
-        $breadcrumb = $this->storage->get($routeName);
-        if (!$breadcrumb) {
-            return [];
+        $parsedBreadcrumbs = [];
+        $breadcrumbs = $this->resolver->resolve($routeName);
+        $this->validator->validate(new BreadcrumbDaoCollection($breadcrumbs));
+        foreach ($breadcrumbs as $breadcrumb) {
+            $parsedBreadcrumbs[] = new ParsedBreadcrumbDao(
+                $this->labelGenerator->generate($breadcrumb),
+                $this->urlGenerator->generate($breadcrumb)
+            );
         }
-        if (!$breadcrumb->getParentRoute()) {
-            return [$breadcrumb];
-        }
-        return [$breadcrumb, ...$this->getBreadcrumbs($breadcrumb->getParentRoute())];
+        return $parsedBreadcrumbs;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\BreadcrumbsBuilder;
+use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Lexer;
 use Symfony\Component\ExpressionLanguage\Parser;
@@ -37,9 +38,19 @@ class DefaultController extends AbstractController
     }
 
     #[Route(path: '/two/{id}', name: 'two', breadcrumb: [Route::EXPRESSION => 'two', Route::PARENT_ROUTE => 'default_one'])]
-    public function two(string $id, Request $request, BreadcrumbsBuilder $tester): JsonResponse
+    public function two(
+        string             $id,
+        Request            $request,
+        BreadcrumbsBuilder $breadcrumbsBuilder,
+        BreadcrumbsManager $breadcrumbsManager
+    ): JsonResponse
     {
-        $tester->build($request);
+        $breadcrumbsManager
+            ->setParameter('id', "SUS")
+            ->setVariable("zero", "VALUE ZERO")
+            ->setVariable("two", "VALUE TWO")
+            ->setVariable("one", "VALUE ONE");
+        $breadcrumbsBuilder->build($request);
         return $this->json(['two']);
     }
 

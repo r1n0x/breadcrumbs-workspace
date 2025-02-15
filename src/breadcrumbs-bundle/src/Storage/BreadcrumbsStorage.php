@@ -1,6 +1,6 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle;
+namespace R1n0x\BreadcrumbsBundle\Storage;
 
 use R1n0x\BreadcrumbsBundle\Dao\BreadcrumbDao;
 use Symfony\Component\Routing\RouterInterface;
@@ -41,7 +41,7 @@ class BreadcrumbsStorage
         return $this->breadcrumbs[$routeName] ?? null;
     }
 
-    public function initialize(): void
+    private function initialize(): void
     {
         if (!$this->breadcrumbs) {
             $this->router->getRouteCollection()->all();
