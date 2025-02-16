@@ -4,9 +4,9 @@ namespace R1n0x\BreadcrumbsBundle\CacheWarmer;
 
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
-use R1n0x\BreadcrumbsBundle\Factory\CachePathFactory;
 use R1n0x\BreadcrumbsBundle\Event\RouteInitializedEvent;
 use R1n0x\BreadcrumbsBundle\Exception\FileAccessException;
+use R1n0x\BreadcrumbsBundle\Factory\CachePathFactory;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Provider\ParametersProvider;
 use R1n0x\BreadcrumbsBundle\Provider\VariablesProvider;
@@ -28,7 +28,7 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
         private readonly VariablesProvider                     $variablesProvider,
         private readonly ParametersProvider                    $parametersProvider,
         private readonly BreadcrumbDefinitionToNodeTransformer $transformer,
-        private readonly CachePathFactory $pathFactory
+        private readonly CachePathFactory                      $pathFactory
     )
     {
     }
@@ -82,7 +82,7 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
 
         $this->dispatcher->addListener(RouteInitializedEvent::class, $listener);
 
-        // initialize breadcrumbs (symfony internally initialized all routes when this is executed, which causes listener to be called)
+        // initialize breadcrumbs (symfony internally initializes all routes when this is executed, which causes listener to be called)
         $this->router->getRouteCollection();
 
         $this->dispatcher->removeListener(RouteInitializedEvent::class, $listener);

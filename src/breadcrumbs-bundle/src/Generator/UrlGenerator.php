@@ -18,20 +18,20 @@ class UrlGenerator
     {
     }
 
-    public function generate(BreadcrumbDefinition $breadcrumb): string
+    public function generate(BreadcrumbDefinition $definition): string
     {
-        return $this->router->generate($breadcrumb->getRouteName(), $this->getParameters($breadcrumb));
+        return $this->router->generate($definition->getRouteName(), $this->getParameters($definition));
     }
 
     /**
-     * @param BreadcrumbDefinition $breadcrumb
+     * @param BreadcrumbDefinition $definition
      * @return array
      */
-    public function getParameters(BreadcrumbDefinition $breadcrumb): array
+    public function getParameters(BreadcrumbDefinition $definition): array
     {
-        $routeName = $breadcrumb->getRouteName();
+        $routeName = $definition->getRouteName();
         $parameters = [];
-        foreach ($breadcrumb->getParameters() as $parameterName) {
+        foreach ($definition->getParameters() as $parameterName) {
             $parameters[$parameterName] = $this->holder->getValue($parameterName, $routeName) ?? $this->holder->getValue($parameterName);
         }
         return $parameters;

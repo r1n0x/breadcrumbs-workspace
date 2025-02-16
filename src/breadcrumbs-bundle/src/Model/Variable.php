@@ -8,9 +8,10 @@ namespace R1n0x\BreadcrumbsBundle\Model;
 class Variable
 {
     public function __construct(
-        private readonly string $name,
-        private readonly mixed $value,
-        private readonly ?string $routeName = null)
+        private readonly string  $name,
+        private readonly mixed   $value,
+        private readonly ?string $routeName = null
+    )
     {
     }
 

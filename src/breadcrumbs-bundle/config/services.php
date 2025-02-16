@@ -24,6 +24,9 @@ return function (ContainerConfigurator $configurator) {
 
     $services
         ->set('r1n0x.breadcrumbs.command.debug_breadcrumbs', R1n0x\BreadcrumbsBundle\Command\DebugBreadcrumbsCommand::class)
+        ->args([
+            service('r1n0x.breadcrumbs.nodes_provider')
+        ])
         ->tag('console.command');
 
     $services

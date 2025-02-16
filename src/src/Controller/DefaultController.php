@@ -11,6 +11,7 @@ use Symfony\Component\ExpressionLanguage\Parser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -41,10 +42,12 @@ class DefaultController extends AbstractController
     public function two(
         string              $id,
         Request             $request,
-        BreadcrumbsResolver $breadcrumbsBuilder,
+        BreadcrumbsResolver $resolver,
+        RouterInterface $router,
         BreadcrumbsManager  $breadcrumbsManager
     ): JsonResponse
     {
+        $router->getRouteCollection();
         $breadcrumbsManager
             ->setParameter('id', "SUS")
             ->setParameter('eo', "SUS2")
@@ -52,7 +55,7 @@ class DefaultController extends AbstractController
             ->setVariable("two", "VALUE TWO")
             ->setVariable("one", "VALUE ONE")
             ->setVariable('next', 'xd');
-        $built = $breadcrumbsBuilder->getBreadcrumbs($request);
+        $built = $resolver->getBreadcrumbs($request);
         $a = [];
         foreach($built as $breadcrumb) {
             $a[] = [

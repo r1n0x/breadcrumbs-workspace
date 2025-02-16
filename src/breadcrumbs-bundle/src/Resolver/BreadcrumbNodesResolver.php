@@ -35,7 +35,7 @@ class BreadcrumbNodesResolver
     /**
      * @return array<int, BreadcrumbNode>
      */
-    private function all(): array
+    public function all(): array
     {
         if (!$this->nodes) {
             $serializedNodes = file_get_contents($this->pathFactory->getFileCachePath($this->cacheDir));

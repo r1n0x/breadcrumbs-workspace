@@ -16,8 +16,8 @@ class ViolationMessageFactory
         $message = 'Breadcrumb validation failed:' . PHP_EOL;
         foreach ($grouped as $group) {
             $type = match ($group[ValidationContext::TYPE]) {
-                ValidationContext::TYPE_PARAMETER => "Parameters",
-                ValidationContext::TYPE_VARIABLE => "Variables",
+                ValidationContext::TYPE_PARAMETER => 'Parameters',
+                ValidationContext::TYPE_VARIABLE => 'Variables',
                 default => throw new RuntimeException(sprintf(
                     'Unexpected violation type "%s"',
                     $group[ValidationContext::TYPE]

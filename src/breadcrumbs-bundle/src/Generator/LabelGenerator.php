@@ -20,28 +20,28 @@ class LabelGenerator
     {
     }
 
-    public function generate(BreadcrumbDefinition $breadcrumb)
+    public function generate(BreadcrumbDefinition $definition)
     {
         try {
-            return $this->expressionLanguage->evaluate($breadcrumb->getExpression(), $this->getVariables($breadcrumb));
+            return $this->expressionLanguage->evaluate($definition->getExpression(), $this->getVariables($definition));
         } catch (Throwable $e) {
             throw new RuntimeException(sprintf(
                 'Error occurred when evaluating breadcrumb expression "%s" for route "%s"',
-                $breadcrumb->getExpression(),
-                $breadcrumb->getRouteName()
+                $definition->getExpression(),
+                $definition->getRouteName()
             ), 0, $e);
         }
     }
 
     /**
-     * @param BreadcrumbDefinition $breadcrumb
+     * @param BreadcrumbDefinition $definition
      * @return array
      */
-    public function getVariables(BreadcrumbDefinition $breadcrumb): array
+    public function getVariables(BreadcrumbDefinition $definition): array
     {
-        $routeName = $breadcrumb->getRouteName();
+        $routeName = $definition->getRouteName();
         $variables = [];
-        foreach ($breadcrumb->getVariables() as $variableName) {
+        foreach ($definition->getVariables() as $variableName) {
             $variables[$variableName] = $this->holder->getValue($variableName, $routeName)
                 ?? $this->holder->getValue($variableName);
         }

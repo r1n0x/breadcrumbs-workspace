@@ -2,8 +2,8 @@
 
 namespace R1n0x\BreadcrumbsBundle\Validator;
 
-use R1n0x\BreadcrumbsBundle\Factory\ViolationMessageFactory;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
+use R1n0x\BreadcrumbsBundle\Factory\ViolationMessageFactory;
 use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
@@ -44,11 +44,11 @@ class NodeValidator
             return;
         }
 
-        foreach ($node->getDefinition()->getVariables() as $parameterName) {
-            $value = $this->variablesHolder->getValue($parameterName, $node->getDefinition()->getRouteName())
-                ?? $this->variablesHolder->getValue($parameterName);
+        foreach ($node->getDefinition()->getVariables() as $variableName) {
+            $value = $this->variablesHolder->getValue($variableName, $node->getDefinition()->getRouteName())
+                ?? $this->variablesHolder->getValue($variableName);
             if (!$value) {
-                $context->addVariableViolation($node->getDefinition()->getRouteName(), $parameterName);
+                $context->addVariableViolation($node->getDefinition()->getRouteName(), $variableName);
             }
         }
 
