@@ -3,7 +3,7 @@
 namespace R1n0x\BreadcrumbsBundle\Factory;
 
 use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
-use R1n0x\BreadcrumbsBundle\Validator\ValidationContext;
+use R1n0x\BreadcrumbsBundle\Validator\Node\ValidationContext;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>

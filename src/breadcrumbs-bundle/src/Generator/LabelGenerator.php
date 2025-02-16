@@ -42,8 +42,9 @@ class LabelGenerator
         $routeName = $definition->getRouteName();
         $variables = [];
         foreach ($definition->getVariables() as $variableName) {
-            $variables[$variableName] = $this->holder->getValue($variableName, $routeName)
+            $value = $this->holder->getValue($variableName, $routeName)
                 ?? $this->holder->getValue($variableName);
+            $variables[$variableName] = $value === VariablesHolder::OPTIONAL_VARIABLE ? null : $value;
         }
         return $variables;
     }

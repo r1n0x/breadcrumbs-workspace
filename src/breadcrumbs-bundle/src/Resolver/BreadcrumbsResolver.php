@@ -7,8 +7,8 @@ use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Model\Breadcrumb;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Validator\NodeValidator;
-use R1n0x\BreadcrumbsBundle\Validator\ValidationContext;
+use R1n0x\BreadcrumbsBundle\Validator\Node\NodeValidator;
+use R1n0x\BreadcrumbsBundle\Validator\Node\ValidationContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

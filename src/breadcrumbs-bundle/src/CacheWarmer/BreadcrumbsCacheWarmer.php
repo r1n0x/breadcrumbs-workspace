@@ -12,6 +12,7 @@ use R1n0x\BreadcrumbsBundle\Provider\ParametersProvider;
 use R1n0x\BreadcrumbsBundle\Provider\VariablesProvider;
 use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Transformer\BreadcrumbDefinitionToNodeTransformer;
+use R1n0x\BreadcrumbsBundle\Validator\RouteValidator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -29,7 +30,8 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
         private readonly ParametersProvider                    $parametersProvider,
         private readonly BreadcrumbDefinitionToNodeTransformer $transformer,
         private readonly CachePathFactory                      $pathFactory,
-        private readonly bool $passParametersToExpression
+        private readonly RouteValidator                        $validator,
+        private readonly bool                                  $passParametersToExpression
     )
     {
     }
@@ -72,6 +74,7 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
             if (!$expression) {
                 return;
             }
+            $this->validator->validate($route);
             $definitions[] = new BreadcrumbDefinition(
                 $event->getRouteName(),
                 $expression,

@@ -1,4 +1,10 @@
 breadcrumbs:
-  root:
-    expression: 'sus'
-    route: 'default_zero'
+  defaults:
+    pass_parameters_to_expression: true
+  roots:
+    public:
+      expression: "Public"
+      route: 'public_home'
+    admin:
+      expression: "'Admin'"
+      route: "public"

@@ -10,6 +10,7 @@ use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbNodesResolver;
 use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbsResolver;
 use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Transformer\BreadcrumbDefinitionToNodeTransformer;
+use R1n0x\BreadcrumbsBundle\Validator\Node\NodeValidator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -68,7 +69,7 @@ return function (ContainerConfigurator $configurator) {
         ->set('r1n0x.breadcrumbs.storage.router_parameters', R1n0x\BreadcrumbsBundle\Holder\ParametersHolder::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.validator', R1n0x\BreadcrumbsBundle\Validator\NodeValidator::class)
+        ->set('r1n0x.breadcrumbs.validator', NodeValidator::class)
         ->args([
             service('r1n0x.breadcrumbs.storage.router_parameters'),
             service('r1n0x.breadcrumbs.storage.expression_variables'),
@@ -107,6 +108,7 @@ return function (ContainerConfigurator $configurator) {
             service('r1n0x.breadcrumbs.storage.expression_variables')
         ]);
 
+    $services->set('r1n0x.breadcrumbs.validator.route', R1n0x\BreadcrumbsBundle\Validator\RouteValidator::class);
     $services->alias(BreadcrumbsManager::class, 'r1n0x.breadcrumbs.manager');
 
     $services->set('r1n0x.breadcrumbs.serializer', NodeSerializer::class);
@@ -124,6 +126,7 @@ return function (ContainerConfigurator $configurator) {
             service('r1n0x.breadcrumbs.resolver.route_parameters'),
             service('r1n0x.breadcrumbs.node_builder'),
             service('r1n0x.breadcrumbs.cache.path_factory'),
+            service('r1n0x.breadcrumbs.validator.route'),
             param('r1n0x.breadcrumbs.config.defaults.pass_parameters_to_expression')
         ])
         ->tag('kernel.cache_warmer', ['priority' => -9999999]);

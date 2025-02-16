@@ -1,6 +1,6 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Validator;
+namespace R1n0x\BreadcrumbsBundle\Validator\Node;
 
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Factory\ViolationMessageFactory;
