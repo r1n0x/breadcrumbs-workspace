@@ -19,7 +19,7 @@ class BreadcrumbsManager
     {
     }
 
-    public function setParameter(string $name, string $value, string $routeName = null): static
+    public function setParameter(string $name, ?string $value, string $routeName = null): static
     {
         $this->parametersHolder->set(new Parameter($name, $value, $routeName));
         return $this;

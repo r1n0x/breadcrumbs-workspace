@@ -38,7 +38,7 @@ class DefaultController extends AbstractController
         return $this->json(['one']);
     }
 
-    #[Route(path: '/two/{id}/{eo}', name: 'two', breadcrumb: [Route::EXPRESSION => 'two ~ next', Route::PARENT_ROUTE => 'default_one'])]
+    #[Route(path: '/two/{id}/{eo}', name: 'two', defaults: ['eo' => null], breadcrumb: [Route::EXPRESSION => 'two ~ next', Route::PARENT_ROUTE => 'default_one'])]
     public function two(
         string              $id,
         Request             $request,
@@ -49,8 +49,6 @@ class DefaultController extends AbstractController
     {
         $router->getRouteCollection();
         $breadcrumbsManager
-            ->setParameter('id', "SUS")
-            ->setParameter('eo', "SUS2")
             ->setVariable("zero", "VALUE ZERO")
             ->setVariable("two", "VALUE TWO")
             ->setVariable("one", "VALUE ONE")

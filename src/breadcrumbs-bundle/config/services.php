@@ -22,6 +22,13 @@ return function (ContainerConfigurator $configurator) {
 
     $services = $configurator->services();
 
+    $services->set('r1n0x.breadcrumbs.listener.controller_arguments', R1n0x\BreadcrumbsBundle\EventListener\ControllerArgumentsListener::class)
+        ->args([
+            service('r1n0x.breadcrumbs.manager'),
+            service('r1n0x.breadcrumbs.nodes_provider')
+        ])
+        ->tag('kernel.event_listener');
+
     $services
         ->set('r1n0x.breadcrumbs.command.debug_breadcrumbs', R1n0x\BreadcrumbsBundle\Command\DebugBreadcrumbsCommand::class)
         ->args([

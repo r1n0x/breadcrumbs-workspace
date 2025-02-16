@@ -38,9 +38,13 @@ class BreadcrumbNodesResolver
     public function all(): array
     {
         if (!$this->nodes) {
-            $serializedNodes = file_get_contents($this->pathFactory->getFileCachePath($this->cacheDir));
+            $filePath = $this->pathFactory->getFileCachePath($this->cacheDir);
+            $serializedNodes = @file_get_contents($filePath);
             if ($serializedNodes === false) {
-                throw new FileAccessException('Breadcrumbs couldn\'t be loaded from cache');
+                throw new FileAccessException(sprintf(
+                    'Breadcrumbs couldn\'t be loaded from cache file (%s) - maybe you\'ve enabled debugging and stopped it before cache warmer could finish? If yes, rebuild cache.',
+                    $filePath
+                ));
             }
             $this->nodes = $this->serializer->deserialize($serializedNodes);
         }

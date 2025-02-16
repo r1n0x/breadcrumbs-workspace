@@ -32,7 +32,8 @@ class UrlGenerator
         $routeName = $definition->getRouteName();
         $parameters = [];
         foreach ($definition->getParameters() as $parameterName) {
-            $parameters[$parameterName] = $this->holder->getValue($parameterName, $routeName) ?? $this->holder->getValue($parameterName);
+            $value = $this->holder->getValue($parameterName, $routeName) ?? $this->holder->getValue($parameterName);
+            $parameters[$parameterName] = $value === ParametersHolder::OPTIONAL_PARAMETER ? null : $value;
         }
         return $parameters;
     }

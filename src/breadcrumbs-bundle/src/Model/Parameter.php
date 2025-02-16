@@ -9,7 +9,7 @@ class Parameter
 {
     public function __construct(
         private readonly string  $name,
-        private readonly string  $value,
+        private readonly ?string  $value,
         private readonly ?string $routeName = null
     )
     {
@@ -20,7 +20,7 @@ class Parameter
         return $this->name;
     }
 
-    public function getValue(): string
+    public function getValue(): ?string
     {
         return $this->value;
     }

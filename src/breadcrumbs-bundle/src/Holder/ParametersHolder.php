@@ -9,6 +9,8 @@ use R1n0x\BreadcrumbsBundle\Model\Parameter;
  */
 class ParametersHolder
 {
+    public const OPTIONAL_PARAMETER = "d3d64c86-cabf-4ff7-978e-b8a99f13f3d1";
+
     /**
      * @var array<int, Parameter>
      */
@@ -24,14 +26,14 @@ class ParametersHolder
         if ($routeName) {
             foreach ($this->parameters as $parameter) {
                 if ($parameter->getRouteName() === $routeName && $parameter->getName() === $name) {
-                    return $parameter->getValue();
+                    return $parameter->getValue() ?? self::OPTIONAL_PARAMETER;
                 }
             }
             return null;
         }
         foreach ($this->parameters as $parameter) {
             if ($parameter->getRouteName() === null && $parameter->getName() === $name) {
-                return $parameter->getValue();
+                return $parameter->getValue() ?? self::OPTIONAL_PARAMETER;
             }
         }
         return null;
