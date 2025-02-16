@@ -38,7 +38,11 @@ class DefaultController extends AbstractController
         return $this->json(['one']);
     }
 
-    #[Route(path: '/two/{id}/{eo}', name: 'two', defaults: ['eo' => null], breadcrumb: [Route::EXPRESSION => 'two ~ next', Route::PARENT_ROUTE => 'default_one'])]
+    #[Route(path: '/two/{id}/{eo}', name: 'two', defaults: ['eo' => null], breadcrumb: [
+        Route::EXPRESSION => 'id ~ eo',
+        Route::PARENT_ROUTE => 'default_one',
+        Route::PASS_PARAMETERS_TO_EXPRESSION => true
+    ])]
     public function two(
         string              $id,
         Request             $request,
@@ -50,9 +54,7 @@ class DefaultController extends AbstractController
         $router->getRouteCollection();
         $breadcrumbsManager
             ->setVariable("zero", "VALUE ZERO")
-            ->setVariable("two", "VALUE TWO")
-            ->setVariable("one", "VALUE ONE")
-            ->setVariable('next', 'xd');
+            ->setVariable("one", "VALUE ONE");
         $built = $resolver->getBreadcrumbs($request);
         $a = [];
         foreach($built as $breadcrumb) {

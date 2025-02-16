@@ -11,8 +11,9 @@ class BreadcrumbDefinition
         private readonly string  $routeName,
         private readonly string  $expression,
         private readonly ?string $parentRoute,
+        private readonly bool    $passParametersToExpression,
         private readonly array   $variables = [],
-        private readonly array   $parameters = []
+        private readonly array   $parameters = [],
     )
     {
     }
@@ -20,6 +21,11 @@ class BreadcrumbDefinition
     public function getRouteName(): string
     {
         return $this->routeName;
+    }
+
+    public function getPassParametersToExpression(): bool
+    {
+        return $this->passParametersToExpression;
     }
 
     public function getExpression(): string

@@ -2,6 +2,7 @@
 
 namespace R1n0x\BreadcrumbsBundle;
 
+use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -16,7 +17,7 @@ class BreadcrumbsBundle extends AbstractBundle
     {
         $container->import('../config/services.php');
         $container->parameters()
-            ->set('r1n0x.breadcrumbs.config.route', $config['root']['route']);
+            ->set('r1n0x.breadcrumbs.config.defaults.pass_parameters_to_expression', $config['defaults'][Route::PASS_PARAMETERS_TO_EXPRESSION]);
     }
 
     public function configure(DefinitionConfigurator $definition): void

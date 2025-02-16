@@ -123,7 +123,8 @@ return function (ContainerConfigurator $configurator) {
             service('r1n0x.breadcrumbs.resolver.expression_variables'),
             service('r1n0x.breadcrumbs.resolver.route_parameters'),
             service('r1n0x.breadcrumbs.node_builder'),
-            service('r1n0x.breadcrumbs.cache.path_factory')
+            service('r1n0x.breadcrumbs.cache.path_factory'),
+            param('r1n0x.breadcrumbs.config.defaults.pass_parameters_to_expression')
         ])
         ->tag('kernel.cache_warmer', ['priority' => -9999999]);
 

@@ -2,6 +2,7 @@
 
 namespace R1n0x\BreadcrumbsBundle\Serializer;
 
+use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
 
@@ -34,8 +35,9 @@ class NodeSerializer
         return [
             'node' => [
                 'route' => $node->getDefinition()->getRouteName(),
-                'expression' => $node->getDefinition()->getExpression(),
-                'parent_route' => $node->getDefinition()->getParentRoute(),
+                Route::EXPRESSION => $node->getDefinition()->getExpression(),
+                Route::PARENT_ROUTE => $node->getDefinition()->getParentRoute(),
+                Route::PASS_PARAMETERS_TO_EXPRESSION => $node->getDefinition()->getPassParametersToExpression(),
                 'parameters' => $node->getDefinition()->getParameters(),
                 'variables' => $node->getDefinition()->getVariables()
             ],
@@ -63,8 +65,9 @@ class NodeSerializer
         return new BreadcrumbNode(
             new BreadcrumbDefinition(
                 $item['node']['route'],
-                $item['node']['expression'],
-                $item['node']['parent_route'],
+                $item['node'][Route::EXPRESSION],
+                $item['node'][Route::PARENT_ROUTE],
+                $item['node'][Route::PASS_PARAMETERS_TO_EXPRESSION],
                 $item['node']['variables'],
                 $item['node']['parameters']
             ),

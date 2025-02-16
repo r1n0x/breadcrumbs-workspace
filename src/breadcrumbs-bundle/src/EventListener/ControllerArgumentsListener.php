@@ -12,10 +12,8 @@ use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
  */
 class ControllerArgumentsListener
 {
-    private const UNDEFINED_VALUE = '88231635-a4b9-40fd-b9ee-1b207721452c';
-
     public function __construct(
-        private readonly BreadcrumbsManager $manager,
+        private readonly BreadcrumbsManager      $manager,
         private readonly BreadcrumbNodesResolver $resolver
     )
     {
@@ -26,20 +24,24 @@ class ControllerArgumentsListener
     {
         $request = $event->getRequest();
         $routeName = $request->attributes->get('_route');
-        if(!$routeName) {
+        if (!$routeName) {
             return;
         }
         $node = $this->resolver->getNode($routeName);
-        if(!$node) {
+        if (!$node) {
             return;
         }
         $values = $request->attributes->get('_route_params');
-        foreach ($node->getDefinition()->getParameters() as $parameterName) {
-            $value = array_key_exists($parameterName, $values) ? $values[$parameterName] : static::UNDEFINED_VALUE;
-            if($value === static::UNDEFINED_VALUE) {
+        $definition = $node->getDefinition();
+        foreach ($definition->getParameters() as $parameterName) {
+            $value = array_key_exists($parameterName, $values) ? $values[$parameterName] : ParametersHolder::OPTIONAL_PARAMETER;
+            if ($value === ParametersHolder::OPTIONAL_PARAMETER) {
                 continue;
             }
             $this->manager->setParameter($parameterName, $value, $routeName);
+            if ($definition->getPassParametersToExpression()) {
+                $this->manager->setVariable($parameterName, $value, $routeName);
+            }
         }
     }
 }

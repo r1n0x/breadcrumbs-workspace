@@ -28,7 +28,8 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
         private readonly VariablesProvider                     $variablesProvider,
         private readonly ParametersProvider                    $parametersProvider,
         private readonly BreadcrumbDefinitionToNodeTransformer $transformer,
-        private readonly CachePathFactory                      $pathFactory
+        private readonly CachePathFactory                      $pathFactory,
+        private readonly bool $passParametersToExpression
     )
     {
     }
@@ -75,6 +76,7 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
                 $event->getRouteName(),
                 $expression,
                 $route->getBreadcrumb()[Route::PARENT_ROUTE] ?? null,
+                $route->getBreadcrumb()[Route::PASS_PARAMETERS_TO_EXPRESSION] ?? $this->passParametersToExpression,
                 $this->variablesProvider->getVariables($expression),
                 $this->parametersProvider->getParameters($route->getPath())
             );
