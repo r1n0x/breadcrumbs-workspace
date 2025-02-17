@@ -1,20 +1,20 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Resolver;
+namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Model\Breadcrumb;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbNodesResolver;
 use R1n0x\BreadcrumbsBundle\Validator\Node\NodeValidator;
-use R1n0x\BreadcrumbsBundle\Validator\Node\ValidationContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbsResolver
+class BreadcrumbsBuilder
 {
     public function __construct(
         private readonly BreadcrumbNodesResolver $resolver,
@@ -37,8 +37,7 @@ class BreadcrumbsResolver
         if (!$node) {
             return [];
         }
-        $context = new ValidationContext();
-        $this->validator->validate($context, [$node], true);
+        $this->validator->validate($node);
         return array_reverse($this->doBuild($node));
     }
 

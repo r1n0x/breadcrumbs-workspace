@@ -2,10 +2,13 @@
 
 namespace R1n0x\BreadcrumbsBundle;
 
+use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Holder\VariablesHolder;
+use R1n0x\BreadcrumbsBundle\Model\Breadcrumb;
 use R1n0x\BreadcrumbsBundle\Model\Parameter;
 use R1n0x\BreadcrumbsBundle\Model\Variable;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -13,8 +16,9 @@ use R1n0x\BreadcrumbsBundle\Model\Variable;
 class BreadcrumbsManager
 {
     public function __construct(
-        private readonly ParametersHolder $parametersHolder,
-        private readonly VariablesHolder  $variablesHolder
+        private readonly ParametersHolder   $parametersHolder,
+        private readonly VariablesHolder    $variablesHolder,
+        private readonly BreadcrumbsBuilder $builder
     )
     {
     }
@@ -29,5 +33,15 @@ class BreadcrumbsManager
     {
         $this->variablesHolder->set(new Variable($name, $value, $routeName));
         return $this;
+    }
+
+    /**
+     * @param Request $request
+     * @return array<int, Breadcrumb>
+     * @throws ValidationException
+     */
+    public function build(Request $request): array
+    {
+        return $this->builder->getBreadcrumbs($request);
     }
 }

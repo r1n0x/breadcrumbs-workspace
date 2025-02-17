@@ -31,16 +31,17 @@ class ControllerArgumentsListener
         if (!$node) {
             return;
         }
-        $values = $request->attributes->get('_route_params');
+        $parameterNames = $request->attributes->get('_route_params');
+        $values = $event->getNamedArguments();
         $definition = $node->getDefinition();
         foreach ($definition->getParameters() as $parameterName) {
-            $value = array_key_exists($parameterName, $values) ? $values[$parameterName] : ParametersHolder::OPTIONAL_PARAMETER;
+            $value = array_key_exists($parameterName, $parameterNames) ? $parameterNames[$parameterName] : ParametersHolder::OPTIONAL_PARAMETER;
             if ($value === ParametersHolder::OPTIONAL_PARAMETER) {
                 continue;
             }
             $this->manager->setParameter($parameterName, $value, $routeName);
             if ($definition->getPassParametersToExpression()) {
-                $this->manager->setVariable($parameterName, $value, $routeName);
+                $this->manager->setVariable($parameterName, $values[$parameterName] ?? $parameterNames[$parameterName], $routeName);
             }
         }
     }

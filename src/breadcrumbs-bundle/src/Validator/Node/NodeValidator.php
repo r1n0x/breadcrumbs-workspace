@@ -22,18 +22,15 @@ class NodeValidator
     }
 
     /**
-     * @param ValidationContext $context
-     * @param array<int, BreadcrumbNode> $nodes
-     * @param bool $throw
+     * @param BreadcrumbNode $node
      * @return void
      * @throws ValidationException
      */
-    public function validate(ValidationContext $context, array $nodes, bool $throw = false): void
+    public function validate(BreadcrumbNode $node): void
     {
-        foreach ($nodes as $node) {
-            $this->doValidate($context, $node);
-        }
-        if ($throw && $context->hasErrors()) {
+        $context = new ValidationContext();
+        $this->doValidate($context, $node);
+        if ($context->hasErrors()) {
             throw new ValidationException($this->messageFactory->getMessage($context));
         }
     }

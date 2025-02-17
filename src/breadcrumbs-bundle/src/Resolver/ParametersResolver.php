@@ -1,11 +1,11 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Provider;
+namespace R1n0x\BreadcrumbsBundle\Resolver;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ParametersProvider
+class ParametersResolver
 {
     /**
      * @param string $path

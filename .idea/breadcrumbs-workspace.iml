@@ -39,6 +39,25 @@
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/expression-language" />
       <excludeFolder url="file://$MODULE_DIR$/src/var" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/collections" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/dbal" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/deprecations" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/doctrine-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/doctrine-migrations-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/event-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/inflector" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/lexer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/migrations" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/orm" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/persistence" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/doctrine/sql-formatter" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/nikic/php-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/doctrine-bridge" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/maker-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/stopwatch" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

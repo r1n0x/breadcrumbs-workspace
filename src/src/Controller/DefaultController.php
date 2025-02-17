@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
+use R1n0x\BreadcrumbsBundle\BreadcrumbsBuilder;
 use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
-use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbsResolver;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Lexer;
 use Symfony\Component\ExpressionLanguage\Parser;
@@ -32,46 +34,36 @@ class DefaultController extends AbstractController
         $parser = new Parser([]);
         $lexer = new Lexer();
         $tokens = $lexer->tokenize($expression);
-//        $ast = $parser->parse($tokens);
-//        $p = $x->parse("a + b", []);
-//        return $this->redirectToRoute('default');
         return $this->json(['one']);
     }
 
-    #[Route(path: '/two/{id}/{eo}', name: 'two', defaults: ['eo' => null], breadcrumb: [
-        Route::EXPRESSION => 'id ~ eo',
+    #[Route(path: '/two/{product}/{suffix}', name: 'two', defaults: ['suffix' => "some kind of default suffix"], breadcrumb: [
+        Route::EXPRESSION => 'product.getName() ~ " - " ~ suffix',
         Route::PARENT_ROUTE => 'default_one',
         Route::PASS_PARAMETERS_TO_EXPRESSION => true
     ])]
     public function two(
-        string              $id,
-        Request             $request,
-        BreadcrumbsResolver $resolver,
-        RouterInterface $router,
-        BreadcrumbsManager  $breadcrumbsManager
+        #[MapEntity(id: 'product')] Product $product,
+        Request                             $request,
+        RouterInterface                     $router,
+        BreadcrumbsManager                  $breadcrumbsManager
     ): JsonResponse
     {
         $router->getRouteCollection();
         $breadcrumbsManager
             ->setVariable("zero", "VALUE ZERO")
             ->setVariable("one", "VALUE ONE");
-        $built = $resolver->getBreadcrumbs($request);
-        $a = [];
-        foreach($built as $breadcrumb) {
-            $a[] = [
+        $breadcrumbs = $breadcrumbsManager->build($request);
+        $serialized = [];
+        foreach ($breadcrumbs as $breadcrumb) {
+            $serialized[] = [
                 'label' => $breadcrumb->getLabel(),
                 'url' => $breadcrumb->getUrl()
             ];
         }
         return $this->json([
             'url' => 'two',
-            'breadcrumbs' => $a
+            'breadcrumbs' => $serialized
         ]);
-    }
-
-    #[Route(path: '/three', name: 'three', breadcrumb: [Route::EXPRESSION => 'three', Route::PARENT_ROUTE => 'default_two'])]
-    public function three(): JsonResponse
-    {
-        return $this->json(['three']);
     }
 }

@@ -8,8 +8,8 @@ use R1n0x\BreadcrumbsBundle\Event\RouteInitializedEvent;
 use R1n0x\BreadcrumbsBundle\Exception\FileAccessException;
 use R1n0x\BreadcrumbsBundle\Factory\CachePathFactory;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Provider\ParametersProvider;
-use R1n0x\BreadcrumbsBundle\Provider\VariablesProvider;
+use R1n0x\BreadcrumbsBundle\Resolver\ParametersResolver;
+use R1n0x\BreadcrumbsBundle\Resolver\VariablesResolver;
 use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Transformer\BreadcrumbDefinitionToNodeTransformer;
 use R1n0x\BreadcrumbsBundle\Validator\RouteValidator;
@@ -26,8 +26,8 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
         private readonly RouterInterface                       $router,
         private readonly NodeSerializer                        $serializer,
         private readonly EventDispatcherInterface              $dispatcher,
-        private readonly VariablesProvider                     $variablesProvider,
-        private readonly ParametersProvider                    $parametersProvider,
+        private readonly VariablesResolver                     $variablesResolver,
+        private readonly ParametersResolver                    $parametersResolver,
         private readonly BreadcrumbDefinitionToNodeTransformer $transformer,
         private readonly CachePathFactory                      $pathFactory,
         private readonly RouteValidator                        $validator,
@@ -80,8 +80,8 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
                 $expression,
                 $route->getBreadcrumb()[Route::PARENT_ROUTE] ?? null,
                 $route->getBreadcrumb()[Route::PASS_PARAMETERS_TO_EXPRESSION] ?? $this->passParametersToExpression,
-                $this->variablesProvider->getVariables($expression),
-                $this->parametersProvider->getParameters($route->getPath())
+                $this->variablesResolver->getVariables($expression),
+                $this->parametersResolver->getParameters($route->getPath())
             );
         };
 
