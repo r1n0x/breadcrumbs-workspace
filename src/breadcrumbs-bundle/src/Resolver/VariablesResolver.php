@@ -26,7 +26,7 @@ class VariablesResolver
         $parser = new Parser([]);
         $variables = [];
 
-        // not clean but hey, it works - and only when building cache, so I don't feel like this will improve anything
+        // not clean but hey, it works and only when building cache, so I don't feel like this will improve anything
         while (true) {
             try {
                 $stream = $this->lexer->tokenize($expression);

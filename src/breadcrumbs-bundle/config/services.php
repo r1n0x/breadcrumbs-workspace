@@ -8,6 +8,8 @@ use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Loader\ListenableAttributeRouteControllerLoader;
 use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbNodesResolver;
+use R1n0x\BreadcrumbsBundle\Resolver\ParametersResolver;
+use R1n0x\BreadcrumbsBundle\Resolver\VariablesResolver;
 use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Transformer\BreadcrumbDefinitionToNodeTransformer;
 use R1n0x\BreadcrumbsBundle\Validator\Node\NodeValidator;
@@ -92,12 +94,12 @@ return function (ContainerConfigurator $configurator) {
 
     $services->set('r1n0x.breadcrumbs.expression_language', Symfony\Component\ExpressionLanguage\ExpressionLanguage::class);
 
-    $services->set('r1n0x.breadcrumbs.resolver.expression_variables', \R1n0x\BreadcrumbsBundle\Resolver\VariablesResolver::class)
+    $services->set('r1n0x.breadcrumbs.resolver.expression_variables', VariablesResolver::class)
         ->args([
             service('r1n0x.breadcrumbs.lexer')
         ]);
 
-    $services->set('r1n0x.breadcrumbs.resolver.route_parameters', \R1n0x\BreadcrumbsBundle\Resolver\ParametersResolver::class)
+    $services->set('r1n0x.breadcrumbs.resolver.route_parameters', ParametersResolver::class)
         ->args([
             service('router')
         ]);
@@ -128,6 +130,7 @@ return function (ContainerConfigurator $configurator) {
             service('r1n0x.breadcrumbs.node_builder'),
             service('r1n0x.breadcrumbs.cache.path_factory'),
             service('r1n0x.breadcrumbs.validator.route'),
+            service('r1n0x.breadcrumbs.roots_provider'),
             param('r1n0x.breadcrumbs.config.defaults.pass_parameters_to_expression')
         ])
         ->tag('kernel.cache_warmer', ['priority' => -9999999]);
@@ -140,4 +143,9 @@ return function (ContainerConfigurator $configurator) {
         ]);
 
     $services->set('r1n0x.breadcrumbs.cache.path_factory', CachePathFactory::class);
+
+    $services->set('r1n0x.breadcrumbs.roots_provider', R1n0x\BreadcrumbsBundle\Provider\RootsProvider::class)
+        ->args([
+            param('r1n0x.breadcrumbs.config.roots')
+        ]);
 };

@@ -8,11 +8,15 @@ use R1n0x\BreadcrumbsBundle\Event\RouteInitializedEvent;
 use R1n0x\BreadcrumbsBundle\Exception\FileAccessException;
 use R1n0x\BreadcrumbsBundle\Factory\CachePathFactory;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Model\RootBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Provider\RootsProvider;
 use R1n0x\BreadcrumbsBundle\Resolver\ParametersResolver;
 use R1n0x\BreadcrumbsBundle\Resolver\VariablesResolver;
 use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Transformer\BreadcrumbDefinitionToNodeTransformer;
 use R1n0x\BreadcrumbsBundle\Validator\RouteValidator;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -31,6 +35,7 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
         private readonly BreadcrumbDefinitionToNodeTransformer $transformer,
         private readonly CachePathFactory                      $pathFactory,
         private readonly RouteValidator                        $validator,
+        private readonly RootsProvider                         $rootsProvider,
         private readonly bool                                  $passParametersToExpression
     )
     {
@@ -47,7 +52,10 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
 
         $nodes = [];
         foreach ($definitions as $definition) {
-            $nodes[] = $this->transformer->transform($definition->getRouteName(), $definitions);
+            if ($definition instanceof RootBreadcrumbDefinition) {
+                continue;
+            }
+            $nodes[] = $this->transformer->transform($definition, $definitions);
         }
 
         $status = file_put_contents($this->pathFactory->getFileCachePath($cacheDir), $this->serializer->serialize($nodes));
@@ -75,10 +83,11 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
                 return;
             }
             $this->validator->validate($route);
-            $definitions[] = new BreadcrumbDefinition(
+            $definitions[] = new RouteBreadcrumbDefinition(
                 $event->getRouteName(),
                 $expression,
                 $route->getBreadcrumb()[Route::PARENT_ROUTE] ?? null,
+                $route->getBreadcrumb()[Route::ROOT] ?? null,
                 $route->getBreadcrumb()[Route::PASS_PARAMETERS_TO_EXPRESSION] ?? $this->passParametersToExpression,
                 $this->variablesResolver->getVariables($expression),
                 $this->parametersResolver->getParameters($route->getPath())
@@ -91,6 +100,34 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
         $this->router->getRouteCollection();
 
         $this->dispatcher->removeListener(RouteInitializedEvent::class, $listener);
+
+        foreach ($this->rootsProvider->getRoots() as $root) {
+            $expression = $root->getExpression();
+            $routeName = $root->getRouteName();
+            if ($routeName) {
+                $route = $this->router->getRouteCollection()->get($routeName);
+                if (!$route) {
+                    throw new InvalidConfigurationException(sprintf(
+                        'Route "%s" referenced in breadcrumbs root "%s" doesn\'t exist.',
+                        $routeName,
+                        $root->getName()
+                    ));
+                }
+                if (count($this->parametersResolver->getParameters($route->getPath())) > 0) {
+                    throw new InvalidConfigurationException(sprintf(
+                        'Route "%s" referenced in breadcrumbs root "%s" cannot be dynamic.',
+                        $routeName,
+                        $root->getName()
+                    ));
+                }
+            }
+            $definitions[] = new RootBreadcrumbDefinition(
+                $routeName,
+                $expression,
+                $root->getName(),
+                $this->variablesResolver->getVariables($expression)
+            );
+        }
 
         return $definitions;
     }

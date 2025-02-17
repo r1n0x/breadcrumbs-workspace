@@ -13,7 +13,7 @@ return static function (DefinitionConfigurator $definition): void {
             ->arrayNode('roots')->defaultValue([])
                 ->arrayPrototype()
                     ->children()
-                        ->scalarNode(R1n0x\BreadcrumbsBundle\Attribute\Route::EXPRESSION)->defaultNull()->end()
+                        ->scalarNode(R1n0x\BreadcrumbsBundle\Attribute\Route::EXPRESSION)->isRequired()->end()
                         ->scalarNode('route')->defaultNull()->end()
                     ->end()
                 ->end()

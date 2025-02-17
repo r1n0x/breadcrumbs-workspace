@@ -7,9 +7,6 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version20250217185818 extends AbstractMigration
 {
     public function getDescription(): string
@@ -29,12 +26,29 @@ VALUES
     ('Apple')
 SQL
         );
-
+        $this->addSql(<<<SQL
+INSERT INTO 
+    book (name)
+VALUES 
+    ('Sherlock Holmes'),
+    ('Harry Potter'),
+    ('The Hunger Games'),
+    ('Dune')
+SQL
+        );
+        $this->addSql(<<<SQL
+INSERT INTO 
+    animal (name)
+VALUES 
+    ('Dog'),
+    ('Cat'),
+    ('Beaver'),
+    ('Lion')
+SQL
+        );
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-
     }
 }

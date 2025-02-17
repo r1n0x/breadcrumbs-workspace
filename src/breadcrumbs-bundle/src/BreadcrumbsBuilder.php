@@ -48,8 +48,8 @@ class BreadcrumbsBuilder
             $this->labelGenerator->generate($node->getDefinition()),
             $this->urlGenerator->generate($node->getDefinition())
         );
-        if ($node->getChild()) {
-            $builtBreadcrumbs = [...$builtBreadcrumbs, ...$this->doBuild($node->getChild())];
+        if ($node->getParent()) {
+            $builtBreadcrumbs = [...$builtBreadcrumbs, ...$this->doBuild($node->getParent())];
         }
         return $builtBreadcrumbs;
     }

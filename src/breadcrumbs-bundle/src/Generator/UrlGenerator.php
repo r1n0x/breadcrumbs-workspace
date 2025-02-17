@@ -4,6 +4,8 @@ namespace R1n0x\BreadcrumbsBundle\Generator;
 
 use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Model\RootBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -18,16 +20,22 @@ class UrlGenerator
     {
     }
 
-    public function generate(BreadcrumbDefinition $definition): string
+    public function generate(BreadcrumbDefinition $definition): ?string
     {
-        return $this->router->generate($definition->getRouteName(), $this->getParameters($definition));
+        if ($definition instanceof RootBreadcrumbDefinition) {
+            return null;
+        }
+        return $this->router->generate($definition->getRouteName(), match (true) {
+            $definition instanceof RouteBreadcrumbDefinition => $this->getParameters($definition),
+            default => []
+        });
     }
 
     /**
-     * @param BreadcrumbDefinition $definition
-     * @return array
+     * @param RouteBreadcrumbDefinition $definition
+     * @return array<string, string>
      */
-    public function getParameters(BreadcrumbDefinition $definition): array
+    public function getParameters(RouteBreadcrumbDefinition $definition): array
     {
         $routeName = $definition->getRouteName();
         $parameters = [];

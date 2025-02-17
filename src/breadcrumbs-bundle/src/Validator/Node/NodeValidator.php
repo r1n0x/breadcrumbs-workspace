@@ -7,6 +7,7 @@ use R1n0x\BreadcrumbsBundle\Factory\ViolationMessageFactory;
 use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -41,21 +42,24 @@ class NodeValidator
             return;
         }
 
-        foreach ($node->getDefinition()->getVariables() as $variableName) {
-            $value = $this->variablesHolder->getValue($variableName, $node->getDefinition()->getRouteName())
+        $definition = $node->getDefinition();
+        foreach ($definition->getVariables() as $variableName) {
+            $value = $this->variablesHolder->getValue($variableName, $definition->getRouteName())
                 ?? $this->variablesHolder->getValue($variableName);
             if (!$value) {
-                $context->addVariableViolation($node->getDefinition()->getRouteName(), $variableName);
+                $context->addVariableViolation($definition->getRouteName(), $variableName);
             }
         }
 
-        foreach ($node->getDefinition()->getParameters() as $parameterName) {
-            $value = $this->parametersHolder->getValue($parameterName, $node->getDefinition()->getRouteName())
-                ?? $this->parametersHolder->getValue($parameterName);
-            if (!$value) {
-                $context->addParameterViolation($node->getDefinition()->getRouteName(), $parameterName);
+        if ($definition instanceof RouteBreadcrumbDefinition) {
+            foreach ($definition->getParameters() as $parameterName) {
+                $value = $this->parametersHolder->getValue($parameterName, $definition->getRouteName())
+                    ?? $this->parametersHolder->getValue($parameterName);
+                if (!$value) {
+                    $context->addParameterViolation($definition->getRouteName(), $parameterName);
+                }
             }
         }
-        $this->doValidate($context, $node->getChild());
+        $this->doValidate($context, $node->getParent());
     }
 }

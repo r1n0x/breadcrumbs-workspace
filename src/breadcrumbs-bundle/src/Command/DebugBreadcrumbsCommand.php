@@ -43,7 +43,7 @@ class DebugBreadcrumbsCommand extends Command
         $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
         $output->writeln($prefix . '      Variables: [' . implode(', ', $definition->getVariables()) . ']');
         $output->writeln($prefix . '      Parameters: [' . implode(', ', $definition->getParameters()) . ']');
-        $child = $node->getChild();
+        $child = $node->getParent();
         if ($child) {
             $this->printNode($child, $output, ++$level);
         }

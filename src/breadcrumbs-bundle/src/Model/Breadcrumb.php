@@ -8,8 +8,8 @@ namespace R1n0x\BreadcrumbsBundle\Model;
 class Breadcrumb
 {
     public function __construct(
-        private readonly string $label,
-        private readonly string $url
+        private readonly string  $label,
+        private readonly ?string $url
     )
     {
     }
@@ -19,7 +19,7 @@ class Breadcrumb
         return $this->label;
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }

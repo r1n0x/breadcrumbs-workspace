@@ -2,9 +2,7 @@ breadcrumbs:
   defaults:
     pass_parameters_to_expression: true
   roots:
-    public:
-      expression: "Public"
-      route: 'public_home'
-    admin:
-      expression: "'Admin'"
-      route: "public"
+    product:
+      expression: "'Products'"
+    animal:
+      expression: "'Your animal website name'"
