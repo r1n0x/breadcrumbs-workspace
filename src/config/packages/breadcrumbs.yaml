@@ -3,6 +3,6 @@ breadcrumbs:
     pass_parameters_to_expression: true
   roots:
     product:
-      expression: "'Products'"
+      expression: "'Shopping Center'"
     animal:
-      expression: "'Your animal website name'"
+      expression: "'AniLove'"
