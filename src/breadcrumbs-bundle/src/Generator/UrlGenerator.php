@@ -2,6 +2,8 @@
 
 namespace R1n0x\BreadcrumbsBundle\Generator;
 
+use R1n0x\BreadcrumbsBundle\Exception\LogicException;
+use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
 use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Model\RootBreadcrumbDefinition;
@@ -22,12 +24,13 @@ class UrlGenerator
 
     public function generate(BreadcrumbDefinition $definition): ?string
     {
-        if ($definition instanceof RootBreadcrumbDefinition) {
+        if ($definition instanceof RootBreadcrumbDefinition && !$definition->getRouteName()) {
             return null;
         }
         return $this->router->generate($definition->getRouteName(), match (true) {
             $definition instanceof RouteBreadcrumbDefinition => $this->getParameters($definition),
-            default => []
+            $definition instanceof RootBreadcrumbDefinition => [],
+            default => throw new LogicException(sprintf('Unexpected breadcrumb type of \'%s\'', get_class($definition)))
         });
     }
 

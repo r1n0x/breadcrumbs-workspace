@@ -4,6 +4,7 @@ namespace R1n0x\BreadcrumbsBundle\EventListener;
 
 use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
 use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbNodesResolver;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 
@@ -27,12 +28,13 @@ class ControllerArgumentsListener
         if (!$routeName) {
             return;
         }
-        $node = $this->resolver->getNode($routeName);
+        $node = $this->resolver->get($routeName);
         if (!$node) {
             return;
         }
         $parameterNames = $request->attributes->get('_route_params');
         $values = $event->getNamedArguments();
+        /** @var RouteBreadcrumbDefinition $definition */
         $definition = $node->getDefinition();
         foreach ($definition->getParameters() as $parameterName) {
             $value = array_key_exists($parameterName, $parameterNames) ? $parameterNames[$parameterName] : ParametersHolder::OPTIONAL_PARAMETER;

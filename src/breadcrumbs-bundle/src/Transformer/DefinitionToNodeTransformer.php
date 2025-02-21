@@ -11,15 +11,15 @@ use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbDefinitionToNodeTransformer
+class DefinitionToNodeTransformer
 {
     /**
      * @param RouteBreadcrumbDefinition $definition
      * @param array<int, BreadcrumbDefinition> $definitions
-     * @return BreadcrumbNode|null
+     * @return BreadcrumbNode
      * @throws UnknownRootException
      */
-    public function transform(RouteBreadcrumbDefinition $definition, array $definitions): ?BreadcrumbNode
+    public function transform(RouteBreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
     {
         return $this->doTransform($definition, $definitions);
     }
@@ -27,7 +27,7 @@ class BreadcrumbDefinitionToNodeTransformer
     /**
      * @throws UnknownRootException
      */
-    private function doTransform(?BreadcrumbDefinition $definition, array $definitions): ?BreadcrumbNode
+    private function doTransform(?BreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
     {
         $parentDefinition = match (true) {
             $definition instanceof RouteBreadcrumbDefinition => $this->getParentDefinition($definition, $definitions),

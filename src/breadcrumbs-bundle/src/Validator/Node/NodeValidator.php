@@ -2,6 +2,7 @@
 
 namespace R1n0x\BreadcrumbsBundle\Validator\Node;
 
+use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Factory\ViolationMessageFactory;
 use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
@@ -16,8 +17,7 @@ class NodeValidator
 {
     public function __construct(
         private readonly ParametersHolder        $parametersHolder,
-        private readonly VariablesHolder         $variablesHolder,
-        private readonly ViolationMessageFactory $messageFactory
+        private readonly VariablesHolder         $variablesHolder
     )
     {
     }
@@ -32,7 +32,7 @@ class NodeValidator
         $context = new ValidationContext();
         $this->doValidate($context, $node);
         if ($context->hasErrors()) {
-            throw new ValidationException($this->messageFactory->getMessage($context));
+            throw new ValidationException($this->buildMessage($context));
         }
     }
 
@@ -61,5 +61,28 @@ class NodeValidator
             }
         }
         $this->doValidate($context, $node->getParent());
+    }
+
+    private function buildMessage(ValidationContext $context): string
+    {
+        $grouped = $context->getGroupedForRoutes();
+        $message = 'Breadcrumb validation failed:' . PHP_EOL;
+        foreach ($grouped as $group) {
+            $type = match ($group[ValidationContext::TYPE]) {
+                ValidationContext::TYPE_PARAMETER => 'Parameters',
+                ValidationContext::TYPE_VARIABLE => 'Variables',
+                default => throw new RuntimeException(sprintf(
+                    'Unexpected violation type "%s"',
+                    $group[ValidationContext::TYPE]
+                ))
+            };
+            $message .= sprintf(
+                '%s [%s] required by route "%s" were not set.' . PHP_EOL,
+                $type,
+                implode(', ', $group[ValidationContext::NAME]),
+                $group[ValidationContext::ROUTE_NAME]
+            );
+        }
+        return $message;
     }
 }

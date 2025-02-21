@@ -2,8 +2,7 @@
 
 namespace R1n0x\BreadcrumbsBundle\Resolver;
 
-use R1n0x\BreadcrumbsBundle\Exception\FileAccessException;
-use R1n0x\BreadcrumbsBundle\Factory\CachePathFactory;
+use R1n0x\BreadcrumbsBundle\CacheReader;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
 
@@ -15,14 +14,14 @@ class BreadcrumbNodesResolver
     private ?array $nodes = null;
 
     public function __construct(
-        private readonly string           $cacheDir,
-        private readonly CachePathFactory $pathFactory,
-        private readonly NodeSerializer   $serializer
+        private readonly string         $cacheDir,
+        private readonly CacheReader    $pathFactory,
+        private readonly NodeSerializer $serializer
     )
     {
     }
 
-    public function getNode(string $routeName): ?BreadcrumbNode
+    public function get(string $routeName): ?BreadcrumbNode
     {
         foreach ($this->all() as $node) {
             if ($node->getDefinition()->getRouteName() === $routeName) {
@@ -38,14 +37,7 @@ class BreadcrumbNodesResolver
     public function all(): array
     {
         if (!$this->nodes) {
-            $filePath = $this->pathFactory->getFileCachePath($this->cacheDir);
-            $serializedNodes = @file_get_contents($filePath);
-            if ($serializedNodes === false) {
-                throw new FileAccessException(sprintf(
-                    'Breadcrumbs couldn\'t be loaded from cache file (%s) - maybe you\'ve enabled debugging and stopped it before cache warmer could finish? If yes, rebuild cache.',
-                    $filePath
-                ));
-            }
+            $serializedNodes = $this->pathFactory->read($this->cacheDir);
             $this->nodes = $this->serializer->deserialize($serializedNodes);
         }
         return $this->nodes;

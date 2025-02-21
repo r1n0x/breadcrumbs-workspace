@@ -33,7 +33,7 @@ class BreadcrumbsBuilder
     public function getBreadcrumbs(Request $request): array
     {
         $routeName = $request->attributes->getString('_route');
-        $node = $this->resolver->getNode($routeName);
+        $node = $this->resolver->get($routeName);
         if (!$node) {
             return [];
         }

@@ -6,3 +6,4 @@ breadcrumbs:
       expression: "'Shopping Center'"
     animal:
       expression: "'AniLove'"
+      route: 'animal_list'

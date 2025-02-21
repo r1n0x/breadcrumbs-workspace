@@ -2,8 +2,6 @@
 
 use R1n0x\BreadcrumbsBundle\BreadcrumbsBuilder;
 use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
-use R1n0x\BreadcrumbsBundle\Factory\CachePathFactory;
-use R1n0x\BreadcrumbsBundle\Factory\ViolationMessageFactory;
 use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Loader\ListenableAttributeRouteControllerLoader;
@@ -11,7 +9,7 @@ use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbNodesResolver;
 use R1n0x\BreadcrumbsBundle\Resolver\ParametersResolver;
 use R1n0x\BreadcrumbsBundle\Resolver\VariablesResolver;
 use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
-use R1n0x\BreadcrumbsBundle\Transformer\BreadcrumbDefinitionToNodeTransformer;
+use R1n0x\BreadcrumbsBundle\Transformer\DefinitionToNodeTransformer;
 use R1n0x\BreadcrumbsBundle\Validator\Node\NodeValidator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -74,8 +72,7 @@ return function (ContainerConfigurator $configurator) {
         ->set('r1n0x.breadcrumbs.validator', NodeValidator::class)
         ->args([
             service('r1n0x.breadcrumbs.storage.router_parameters'),
-            service('r1n0x.breadcrumbs.storage.expression_variables'),
-            service('r1n0x.breadcrumbs.builder.violation_message')
+            service('r1n0x.breadcrumbs.storage.expression_variables')
         ]);
 
     $services
@@ -116,24 +113,16 @@ return function (ContainerConfigurator $configurator) {
 
     $services->set('r1n0x.breadcrumbs.serializer', NodeSerializer::class);
 
-    $services->set('r1n0x.breadcrumbs.node_builder', BreadcrumbDefinitionToNodeTransformer::class);
-
-    $services->set('r1n0x.breadcrumbs.builder.violation_message', ViolationMessageFactory::class);
+    $services->set('r1n0x.breadcrumbs.node_builder', DefinitionToNodeTransformer::class);
 
     $services->set('r1n0x.breadcrumbs.cache_warmer', R1n0x\BreadcrumbsBundle\CacheWarmer\BreadcrumbsCacheWarmer::class)
         ->args([
-            service('router'),
             service('r1n0x.breadcrumbs.serializer'),
-            service("event_dispatcher"),
-            service('r1n0x.breadcrumbs.resolver.expression_variables'),
-            service('r1n0x.breadcrumbs.resolver.route_parameters'),
             service('r1n0x.breadcrumbs.node_builder'),
             service('r1n0x.breadcrumbs.cache.path_factory'),
-            service('r1n0x.breadcrumbs.validator.route'),
-            service('r1n0x.breadcrumbs.roots_provider'),
-            param('r1n0x.breadcrumbs.config.defaults.pass_parameters_to_expression')
+            service(R1n0x\BreadcrumbsBundle\Resolver\DefinitionsResolver::class)
         ])
-        ->tag('kernel.cache_warmer', ['priority' => -9999999]);
+        ->tag('kernel.cache_warmer');
 
     $services->set('r1n0x.breadcrumbs.nodes_provider', BreadcrumbNodesResolver::class)
         ->args([
@@ -142,10 +131,21 @@ return function (ContainerConfigurator $configurator) {
             service('r1n0x.breadcrumbs.serializer')
         ]);
 
-    $services->set('r1n0x.breadcrumbs.cache.path_factory', CachePathFactory::class);
+    $services->set('r1n0x.breadcrumbs.cache.path_factory', \R1n0x\BreadcrumbsBundle\CacheReader::class);
 
-    $services->set('r1n0x.breadcrumbs.roots_provider', R1n0x\BreadcrumbsBundle\Provider\RootsProvider::class)
+    $services->set('r1n0x.breadcrumbs.roots_provider', \R1n0x\BreadcrumbsBundle\Resolver\RootsResolver::class)
         ->args([
             param('r1n0x.breadcrumbs.config.roots')
+        ]);
+
+    $services->set(R1n0x\BreadcrumbsBundle\Resolver\DefinitionsResolver::class, R1n0x\BreadcrumbsBundle\Resolver\DefinitionsResolver::class)
+        ->args([
+            service('router'),
+            service("event_dispatcher"),
+            service('r1n0x.breadcrumbs.resolver.expression_variables'),
+            service('r1n0x.breadcrumbs.resolver.route_parameters'),
+            service('r1n0x.breadcrumbs.validator.route'),
+            service('r1n0x.breadcrumbs.roots_provider'),
+            param('r1n0x.breadcrumbs.config.defaults.pass_parameters_to_expression')
         ]);
 };

@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'debug:breadcrumbs',
-    description: 'Display breadcrumbs trees for an application'
+    description: 'Display breadcrumb trees for an application'
 )]
 class DebugBreadcrumbsCommand extends Command
 {
