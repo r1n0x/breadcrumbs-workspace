@@ -7,7 +7,7 @@ use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Model\Breadcrumb;
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbNodesResolver;
+use R1n0x\BreadcrumbsBundle\Resolver\NodesResolver;
 use R1n0x\BreadcrumbsBundle\Validator\Node\NodeValidator;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,10 +17,10 @@ use Symfony\Component\HttpFoundation\Request;
 class BreadcrumbsBuilder
 {
     public function __construct(
-        private readonly BreadcrumbNodesResolver $resolver,
-        private readonly UrlGenerator            $urlGenerator,
-        private readonly LabelGenerator          $labelGenerator,
-        private readonly NodeValidator           $validator
+        private readonly NodesResolver  $resolver,
+        private readonly UrlGenerator   $urlGenerator,
+        private readonly LabelGenerator $labelGenerator,
+        private readonly NodeValidator  $validator
     )
     {
     }

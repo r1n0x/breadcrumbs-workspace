@@ -3,7 +3,7 @@
 namespace R1n0x\BreadcrumbsBundle\Command;
 
 use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Resolver\BreadcrumbNodesResolver;
+use R1n0x\BreadcrumbsBundle\Resolver\NodesResolver;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DebugBreadcrumbsCommand extends Command
 {
     public function __construct(
-        private readonly BreadcrumbNodesResolver $resolver
+        private readonly NodesResolver $resolver
     )
     {
         parent::__construct();

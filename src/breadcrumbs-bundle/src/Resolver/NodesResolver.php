@@ -9,14 +9,14 @@ use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbNodesResolver
+class NodesResolver
 {
     private ?array $nodes = null;
 
     public function __construct(
-        private readonly string         $cacheDir,
         private readonly CacheReader    $pathFactory,
-        private readonly NodeSerializer $serializer
+        private readonly NodeSerializer $serializer,
+        private readonly string         $cacheDir
     )
     {
     }
