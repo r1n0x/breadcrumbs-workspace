@@ -1,14 +1,14 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Validator\Node;
+namespace R1n0x\BreadcrumbsBundle\Internal\Validator\Node;
 
 use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Factory\ViolationMessageFactory;
-use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
-use R1n0x\BreadcrumbsBundle\Holder\VariablesHolder;
-use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -16,8 +16,8 @@ use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
 class NodeValidator
 {
     public function __construct(
-        private readonly ParametersHolder        $parametersHolder,
-        private readonly VariablesHolder         $variablesHolder
+        private readonly ParametersHolder $parametersHolder,
+        private readonly VariablesHolder  $variablesHolder
     )
     {
     }

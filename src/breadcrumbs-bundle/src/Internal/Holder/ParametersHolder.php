@@ -1,8 +1,8 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Holder;
+namespace R1n0x\BreadcrumbsBundle\Internal\Holder;
 
-use R1n0x\BreadcrumbsBundle\Model\Parameter;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>

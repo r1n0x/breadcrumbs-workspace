@@ -2,14 +2,12 @@
 
 namespace R1n0x\BreadcrumbsBundle\CacheWarmer;
 
-
-use R1n0x\BreadcrumbsBundle\Cache\CacheReaderInterface;
-use R1n0x\BreadcrumbsBundle\CacheReader;
-use R1n0x\BreadcrumbsBundle\Model\RootBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Resolver\DefinitionsResolver;
-use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
-use R1n0x\BreadcrumbsBundle\Transformer\DefinitionToNodeTransformer;
+use R1n0x\BreadcrumbsBundle\Internal\CacheReader;
+use R1n0x\BreadcrumbsBundle\Internal\DefinitionToNodeTransformer;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
+use R1n0x\BreadcrumbsBundle\Internal\Resolver\DefinitionsResolver;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 /**

@@ -3,9 +3,9 @@
 namespace R1n0x\BreadcrumbsBundle\EventListener;
 
 use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
-use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
-use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Resolver\NodesResolver;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 
 /**
@@ -14,8 +14,8 @@ use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 class ControllerArgumentsListener
 {
     public function __construct(
-        private readonly BreadcrumbsManager      $manager,
-        private readonly NodesResolver $resolver
+        private readonly BreadcrumbsManager $manager,
+        private readonly NodesResolver      $resolver
     )
     {
     }

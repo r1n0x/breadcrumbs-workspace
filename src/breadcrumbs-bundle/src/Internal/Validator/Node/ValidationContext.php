@@ -1,6 +1,6 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Validator\Node;
+namespace R1n0x\BreadcrumbsBundle\Internal\Validator\Node;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>

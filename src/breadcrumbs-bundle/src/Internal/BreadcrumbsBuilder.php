@@ -1,14 +1,14 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle;
+namespace R1n0x\BreadcrumbsBundle\Internal;
 
+use R1n0x\BreadcrumbsBundle\Breadcrumb;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
-use R1n0x\BreadcrumbsBundle\Generator\LabelGenerator;
-use R1n0x\BreadcrumbsBundle\Generator\UrlGenerator;
-use R1n0x\BreadcrumbsBundle\Model\Breadcrumb;
-use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Resolver\NodesResolver;
-use R1n0x\BreadcrumbsBundle\Validator\Node\NodeValidator;
+use R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator;
+use R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
+use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeValidator;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

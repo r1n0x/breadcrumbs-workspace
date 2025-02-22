@@ -1,6 +1,6 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Validator;
+namespace R1n0x\BreadcrumbsBundle\Internal\Validator;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;

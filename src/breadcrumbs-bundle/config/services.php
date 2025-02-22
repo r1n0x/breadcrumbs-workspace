@@ -34,34 +34,34 @@ return function (ContainerConfigurator $configurator) {
         ->decorate('routing.loader.attribute');
 
     $services
-        ->set('r1n0x.breadcrumbs.generator.label', R1n0x\BreadcrumbsBundle\Generator\LabelGenerator::class)
+        ->set('r1n0x.breadcrumbs.generator.label', R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator::class)
         ->args([
             service('r1n0x.breadcrumbs.holder.variables'),
             service('r1n0x.breadcrumbs.expression_language.engine')
         ]);
 
     $services
-        ->set('r1n0x.breadcrumbs.generator.url', R1n0x\BreadcrumbsBundle\Generator\UrlGenerator::class)
+        ->set('r1n0x.breadcrumbs.generator.url', R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator::class)
         ->args([
             service('r1n0x.breadcrumbs.holder.parameters'),
             service('router')
         ]);
 
     $services
-        ->set('r1n0x.breadcrumbs.holder.variables', R1n0x\BreadcrumbsBundle\Holder\VariablesHolder::class);
+        ->set('r1n0x.breadcrumbs.holder.variables', R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.holder.parameters', R1n0x\BreadcrumbsBundle\Holder\ParametersHolder::class);
+        ->set('r1n0x.breadcrumbs.holder.parameters', R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.validator.node', R1n0x\BreadcrumbsBundle\Validator\Node\NodeValidator::class)
+        ->set('r1n0x.breadcrumbs.validator.node', R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeValidator::class)
         ->args([
             service('r1n0x.breadcrumbs.holder.parameters'),
             service('r1n0x.breadcrumbs.holder.variables')
         ]);
 
     $services
-        ->set('r1n0x.breadcrumbs.builder', R1n0x\BreadcrumbsBundle\BreadcrumbsBuilder::class)
+        ->set('r1n0x.breadcrumbs.builder', R1n0x\BreadcrumbsBundle\Internal\BreadcrumbsBuilder::class)
         ->args([
             service('r1n0x.breadcrumbs.resolver.nodes'),
             service('r1n0x.breadcrumbs.generator.url'),
@@ -70,7 +70,7 @@ return function (ContainerConfigurator $configurator) {
         ]);
 
     $services
-        ->alias(R1n0x\BreadcrumbsBundle\BreadcrumbsBuilder::class, 'r1n0x.breadcrumbs.builder');
+        ->alias(R1n0x\BreadcrumbsBundle\Internal\BreadcrumbsBuilder::class, 'r1n0x.breadcrumbs.builder');
 
     $services
         ->set('r1n0x.breadcrumbs.expression_language.lexer', Symfony\Component\ExpressionLanguage\Lexer::class);
@@ -79,13 +79,13 @@ return function (ContainerConfigurator $configurator) {
         ->set('r1n0x.breadcrumbs.expression_language.engine', Symfony\Component\ExpressionLanguage\ExpressionLanguage::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.resolver.variables', R1n0x\BreadcrumbsBundle\Resolver\VariablesResolver::class)
+        ->set('r1n0x.breadcrumbs.resolver.variables', R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver::class)
         ->args([
             service('r1n0x.breadcrumbs.expression_language.lexer')
         ]);
 
     $services
-        ->set('r1n0x.breadcrumbs.resolver.parameters', R1n0x\BreadcrumbsBundle\Resolver\ParametersResolver::class)
+        ->set('r1n0x.breadcrumbs.resolver.parameters', R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver::class)
         ->args([
             service('router')
         ]);
@@ -102,13 +102,13 @@ return function (ContainerConfigurator $configurator) {
         ->alias(R1n0x\BreadcrumbsBundle\BreadcrumbsManager::class, 'r1n0x.breadcrumbs.manager');
 
     $services
-        ->set('r1n0x.breadcrumbs.validator.route', R1n0x\BreadcrumbsBundle\Validator\RouteValidator::class);
+        ->set('r1n0x.breadcrumbs.validator.route', R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.serializer.node', R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer::class);
+        ->set('r1n0x.breadcrumbs.serializer.node', R1n0x\BreadcrumbsBundle\Internal\NodeSerializer::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.transformer.definition_to_node', R1n0x\BreadcrumbsBundle\Transformer\DefinitionToNodeTransformer::class);
+        ->set('r1n0x.breadcrumbs.transformer.definition_to_node', R1n0x\BreadcrumbsBundle\Internal\DefinitionToNodeTransformer::class);
 
     $services
         ->set('r1n0x.breadcrumbs.cache_warmer', R1n0x\BreadcrumbsBundle\CacheWarmer\BreadcrumbsCacheWarmer::class)
@@ -121,7 +121,7 @@ return function (ContainerConfigurator $configurator) {
         ->tag('kernel.cache_warmer');
 
     $services
-        ->set('r1n0x.breadcrumbs.resolver.nodes', R1n0x\BreadcrumbsBundle\Resolver\NodesResolver::class)
+        ->set('r1n0x.breadcrumbs.resolver.nodes', R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver::class)
         ->args([
             service('r1n0x.breadcrumbs.cache_reader'),
             service('r1n0x.breadcrumbs.serializer.node'),
@@ -129,15 +129,15 @@ return function (ContainerConfigurator $configurator) {
         ]);
 
     $services
-        ->set('r1n0x.breadcrumbs.cache_reader', R1n0x\BreadcrumbsBundle\CacheReader::class);
+        ->set('r1n0x.breadcrumbs.cache_reader', R1n0x\BreadcrumbsBundle\Internal\CacheReader::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.resolver.roots', R1n0x\BreadcrumbsBundle\Resolver\RootsResolver::class)
+        ->set('r1n0x.breadcrumbs.resolver.roots', R1n0x\BreadcrumbsBundle\Internal\Resolver\RootsResolver::class)
         ->args([
             param('r1n0x.breadcrumbs.config.roots')
         ]);
 
-    $services->set('r1n0x.breadcrumbs.resolver.definitions', R1n0x\BreadcrumbsBundle\Resolver\DefinitionsResolver::class)
+    $services->set('r1n0x.breadcrumbs.resolver.definitions', R1n0x\BreadcrumbsBundle\Internal\Resolver\DefinitionsResolver::class)
         ->args([
             service('router'),
             service('event_dispatcher'),

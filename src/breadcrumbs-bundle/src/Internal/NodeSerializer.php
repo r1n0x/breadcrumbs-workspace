@@ -1,11 +1,11 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Serializer;
+namespace R1n0x\BreadcrumbsBundle\Internal;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
-use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Model\RootBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>

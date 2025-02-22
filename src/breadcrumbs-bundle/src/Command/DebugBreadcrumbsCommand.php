@@ -2,8 +2,8 @@
 
 namespace R1n0x\BreadcrumbsBundle\Command;
 
-use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Resolver\NodesResolver;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

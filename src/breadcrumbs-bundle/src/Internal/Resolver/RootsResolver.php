@@ -1,9 +1,9 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Resolver;
+namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
-use R1n0x\BreadcrumbsBundle\Model\Root;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Root;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -23,7 +23,7 @@ class RootsResolver
      */
     public function getRoots(): array
     {
-        if(!$this->roots) {
+        if (!$this->roots) {
             $this->initializeRoots();
         }
         return $this->roots;

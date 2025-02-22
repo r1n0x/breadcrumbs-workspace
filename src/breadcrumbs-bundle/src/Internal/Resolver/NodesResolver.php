@@ -1,10 +1,10 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Resolver;
+namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
-use R1n0x\BreadcrumbsBundle\CacheReader;
-use R1n0x\BreadcrumbsBundle\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Serializer\NodeSerializer;
+use R1n0x\BreadcrumbsBundle\Internal\CacheReader;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>

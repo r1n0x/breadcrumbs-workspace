@@ -1,6 +1,6 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle;
+namespace R1n0x\BreadcrumbsBundle\Internal;
 
 use R1n0x\BreadcrumbsBundle\Exception\FileAccessException;
 
@@ -18,6 +18,11 @@ class CacheReader
 
     }
 
+    private function getFilePath(string $cacheDir): string
+    {
+        return sprintf('%s/%s', $cacheDir, 'breadcrumbs.json');
+    }
+
     public function read(string $cacheDir): string
     {
         $contents = @file_get_contents($this->getFilePath($cacheDir));
@@ -25,10 +30,5 @@ class CacheReader
             throw new FileAccessException('Breadcrumbs couldn\'t be read from cache file');
         }
         return $contents;
-    }
-
-    private function getFilePath(string $cacheDir): string
-    {
-        return sprintf('%s/%s', $cacheDir, 'breadcrumbs.json');
     }
 }

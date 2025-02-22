@@ -1,13 +1,13 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Resolver;
+namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Event\RouteInitializedEvent;
-use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Model\RootBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Model\RouteBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Validator\RouteValidator;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;

@@ -1,10 +1,10 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Generator;
+namespace R1n0x\BreadcrumbsBundle\Internal\Generator;
 
 use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
-use R1n0x\BreadcrumbsBundle\Holder\VariablesHolder;
-use R1n0x\BreadcrumbsBundle\Model\BreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Throwable;
 

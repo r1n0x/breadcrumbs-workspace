@@ -1,16 +1,16 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Model;
+namespace R1n0x\BreadcrumbsBundle\Internal\Model;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class Parameter
+class Root
 {
     public function __construct(
         private readonly string  $name,
-        private readonly ?string $value,
-        private readonly ?string $routeName = null
+        private readonly string  $expression,
+        private readonly ?string $routeName
     )
     {
     }
@@ -20,9 +20,9 @@ class Parameter
         return $this->name;
     }
 
-    public function getValue(): ?string
+    public function getExpression(): string
     {
-        return $this->value;
+        return $this->expression;
     }
 
     public function getRouteName(): ?string

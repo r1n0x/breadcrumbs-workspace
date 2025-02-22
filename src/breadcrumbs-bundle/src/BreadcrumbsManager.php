@@ -3,11 +3,11 @@
 namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
-use R1n0x\BreadcrumbsBundle\Holder\ParametersHolder;
-use R1n0x\BreadcrumbsBundle\Holder\VariablesHolder;
-use R1n0x\BreadcrumbsBundle\Model\Breadcrumb;
-use R1n0x\BreadcrumbsBundle\Model\Parameter;
-use R1n0x\BreadcrumbsBundle\Model\Variable;
+use R1n0x\BreadcrumbsBundle\Internal\BreadcrumbsBuilder;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

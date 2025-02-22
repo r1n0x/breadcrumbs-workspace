@@ -1,6 +1,6 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Model;
+namespace R1n0x\BreadcrumbsBundle;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>

@@ -1,6 +1,6 @@
 <?php
 
-namespace R1n0x\BreadcrumbsBundle\Resolver;
+namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
 use Symfony\Component\ExpressionLanguage\Lexer;
 use Symfony\Component\ExpressionLanguage\Parser;
