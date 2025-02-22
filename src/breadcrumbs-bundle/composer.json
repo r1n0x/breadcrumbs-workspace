@@ -12,7 +12,16 @@
     }
   ],
   "require": {
-    "php": ">=8.1",
-    "symfony/framework-bundle": "6.4.*"
+    "php": ">=8.3",
+    "symfony/framework-bundle": "6.4.*",
+    "symfony/expression-language": "6.4.*"
+  },
+  "scripts": {
+    "phpunit": "composer install && composer install --working-dir=tools && tools/vendor/bin/phpunit --testdox --coverage-html coverege_report",
+    "phpunit-github": "composer install --quiet --no-progress && composer install --quiet --no-progress --working-dir=tools && tools/vendor/bin/phpunit --coverage-clover ./coverage.xml",
+    "phpstan": "composer install && composer install --working-dir=tools && tools/vendor/bin/phpstan analyse",
+    "phpstan-github": "composer install --quiet --no-progress && composer install --quiet --no-progress --working-dir=tools && tools/vendor/bin/phpstan analyse --no-progress",
+    "csfixer": "composer install && composer install --working-dir=tools && tools/vendor/bin/php-cs-fixer fix",
+    "csfixer-github": "composer install --quiet --no-progress && composer install --quiet --no-progress --working-dir=tools && tools/vendor/bin/php-cs-fixer check --show-progress=none"
   }
 }
