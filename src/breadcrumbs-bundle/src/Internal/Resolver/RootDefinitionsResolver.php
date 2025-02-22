@@ -12,13 +12,11 @@ use Symfony\Component\Routing\RouterInterface;
 class RootDefinitionsResolver
 {
     public function __construct(
-        private readonly RouterInterface    $router,
-        private readonly VariablesResolver  $variablesResolver,
+        private readonly RouterInterface $router,
+        private readonly VariablesResolver $variablesResolver,
         private readonly ParametersResolver $parametersResolver,
-        private readonly RootsResolver      $rootsResolver
-    )
-    {
-    }
+        private readonly RootsResolver $rootsResolver
+    ) {}
 
     /**
      * @return array<int, RootBreadcrumbDefinition>

@@ -12,23 +12,23 @@ class CacheReader
     public function write(string $cacheDir, string $contents): void
     {
         $status = file_put_contents($this->getFilePath($cacheDir), $contents);
-        if ($status === false) {
+        if (false === $status) {
             throw new FileAccessException('Breadcrumbs couldn\'t be written to cache file');
         }
-
-    }
-
-    private function getFilePath(string $cacheDir): string
-    {
-        return sprintf('%s/%s', $cacheDir, 'breadcrumbs.json');
     }
 
     public function read(string $cacheDir): string
     {
         $contents = @file_get_contents($this->getFilePath($cacheDir));
-        if ($contents === false) {
+        if (false === $contents) {
             throw new FileAccessException('Breadcrumbs couldn\'t be read from cache file');
         }
+
         return $contents;
+    }
+
+    private function getFilePath(string $cacheDir): string
+    {
+        return sprintf('%s/%s', $cacheDir, 'breadcrumbs.json');
     }
 }

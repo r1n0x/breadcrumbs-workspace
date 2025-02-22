@@ -15,11 +15,8 @@ class ControllerArgumentsListener
 {
     public function __construct(
         private readonly BreadcrumbsManager $manager,
-        private readonly NodesResolver      $resolver
-    )
-    {
-    }
-
+        private readonly NodesResolver $resolver
+    ) {}
 
     public function __invoke(ControllerArgumentsEvent $event): void
     {
@@ -34,11 +31,12 @@ class ControllerArgumentsListener
         }
         $parameterNames = $request->attributes->get('_route_params');
         $values = $event->getNamedArguments();
+
         /** @var RouteBreadcrumbDefinition $definition */
         $definition = $node->getDefinition();
         foreach ($definition->getParameters() as $parameterName) {
             $value = array_key_exists($parameterName, $parameterNames) ? $parameterNames[$parameterName] : ParametersHolder::OPTIONAL_PARAMETER;
-            if ($value === ParametersHolder::OPTIONAL_PARAMETER) {
+            if (ParametersHolder::OPTIONAL_PARAMETER === $value) {
                 continue;
             }
             $this->manager->setParameter($parameterName, $value, $routeName);

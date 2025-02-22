@@ -12,13 +12,12 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
  */
 class NodeSerializer
 {
-    private const NODE_TYPE = "node_type";
-    private const NODE_TYPE_ROUTE = "route";
-    private const NODE_TYPE_ROOT = "root";
+    private const NODE_TYPE = 'node_type';
+    private const NODE_TYPE_ROUTE = 'route';
+    private const NODE_TYPE_ROOT = 'root';
 
     /**
      * @param array<int, BreadcrumbNode> $nodes
-     * @return string
      */
     public function serialize(array $nodes): string
     {
@@ -31,13 +30,10 @@ class NodeSerializer
         return json_encode($serializedNodes, JSON_PRETTY_PRINT);
     }
 
-    /**
-     * @param BreadcrumbNode $node
-     * @return array
-     */
     public function serializeNode(BreadcrumbNode $node): array
     {
         $definition = $node->getDefinition();
+
         return [
             'definition' => match (get_class($definition)) {
                 RouteBreadcrumbDefinition::class => [
@@ -48,22 +44,21 @@ class NodeSerializer
                     Route::ROOT => $definition->getRoot(),
                     Route::PASS_PARAMETERS_TO_EXPRESSION => $definition->getPassParametersToExpression(),
                     'parameters' => $definition->getParameters(),
-                    'variables' => $definition->getVariables()
+                    'variables' => $definition->getVariables(),
                 ],
                 RootBreadcrumbDefinition::class => [
                     self::NODE_TYPE => self::NODE_TYPE_ROOT,
                     'route' => $definition->getRouteName(),
                     Route::EXPRESSION => $definition->getExpression(),
                     'name' => $definition->getName(),
-                    'variables' => $definition->getVariables()
+                    'variables' => $definition->getVariables(),
                 ],
             },
-            'parent' => $node->getParent() ? $this->serializeNode($node->getParent()) : null
+            'parent' => $node->getParent() ? $this->serializeNode($node->getParent()) : null,
         ];
     }
 
     /**
-     * @param string $data
      * @return array<int, BreadcrumbNode>
      */
     public function deserialize(string $data): array
@@ -97,7 +92,7 @@ class NodeSerializer
                     $item['definition']['variables']
                 )
             },
-            $item['parent'] !== null ? $this->deserializeNode($item['parent']) : null
+            null !== $item['parent'] ? $this->deserializeNode($item['parent']) : null
         );
     }
 }

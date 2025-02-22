@@ -14,9 +14,7 @@ class RootsResolver
 
     public function __construct(
         private readonly array $rootsConfig
-    )
-    {
-    }
+    ) {}
 
     /**
      * @return array<int, Root>
@@ -26,6 +24,7 @@ class RootsResolver
         if (!$this->roots) {
             $this->initializeRoots();
         }
+
         return $this->roots;
     }
 

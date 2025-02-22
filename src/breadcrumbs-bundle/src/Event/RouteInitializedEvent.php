@@ -11,10 +11,8 @@ class RouteInitializedEvent
 {
     public function __construct(
         private readonly string $routeName,
-        private readonly Route  $route
-    )
-    {
-    }
+        private readonly Route $route
+    ) {}
 
     public function getRouteName(): string
     {

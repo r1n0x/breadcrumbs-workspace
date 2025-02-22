@@ -13,12 +13,9 @@ class VariablesResolver
 {
     public function __construct(
         private readonly Lexer $lexer
-    )
-    {
-    }
+    ) {}
 
     /**
-     * @param string $expression
      * @return array<int, string>
      */
     public function getVariables(string $expression): array
@@ -34,8 +31,10 @@ class VariablesResolver
             } catch (SyntaxError $e) {
                 $variableName = explode('"', $e->getMessage())[1];
                 $variables[] = $variableName;
+
                 continue;
             }
+
             break;
         }
 

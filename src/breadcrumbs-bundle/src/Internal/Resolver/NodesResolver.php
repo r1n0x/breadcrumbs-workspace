@@ -14,12 +14,10 @@ class NodesResolver
     private ?array $nodes = null;
 
     public function __construct(
-        private readonly CacheReader    $pathFactory,
+        private readonly CacheReader $pathFactory,
         private readonly NodeSerializer $serializer,
-        private readonly string         $cacheDir
-    )
-    {
-    }
+        private readonly string $cacheDir
+    ) {}
 
     public function get(string $routeName): ?BreadcrumbNode
     {
@@ -28,6 +26,7 @@ class NodesResolver
                 return $node;
             }
         }
+
         return null;
     }
 
@@ -40,6 +39,7 @@ class NodesResolver
             $serializedNodes = $this->pathFactory->read($this->cacheDir);
             $this->nodes = $this->serializer->deserialize($serializedNodes);
         }
+
         return $this->nodes;
     }
 }

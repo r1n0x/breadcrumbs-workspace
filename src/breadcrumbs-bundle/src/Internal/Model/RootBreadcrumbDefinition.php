@@ -9,11 +9,10 @@ class RootBreadcrumbDefinition extends BreadcrumbDefinition
 {
     public function __construct(
         private readonly ?string $routeName,
-        string                   $expression,
-        private readonly string  $name,
-        array                    $variables = []
-    )
-    {
+        string $expression,
+        private readonly string $name,
+        array $variables = []
+    ) {
         parent::__construct($expression, $variables);
     }
 

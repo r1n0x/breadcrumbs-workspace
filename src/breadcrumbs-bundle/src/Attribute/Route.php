@@ -16,25 +16,25 @@ class Route extends \Symfony\Component\Routing\Attribute\Route
     public const ROOT = 'root';
 
     public function __construct(
-        array|string|null      $path = null,
-        ?string                $name = null,
-        array                  $requirements = [],
-        array                  $options = [],
-        array                  $defaults = [],
-        ?string                $host = null,
-        array|string           $methods = [],
-        array|string           $schemes = [],
-        ?string                $condition = null,
-        ?int                   $priority = null,
-        ?string                $locale = null,
-        ?string                $format = null,
-        ?bool                  $utf8 = null,
-        ?bool                  $stateless = null,
-        ?string                $env = null,
+        null|array|string $path = null,
+        ?string $name = null,
+        array $requirements = [],
+        array $options = [],
+        array $defaults = [],
+        ?string $host = null,
+        array|string $methods = [],
+        array|string $schemes = [],
+        ?string $condition = null,
+        ?int $priority = null,
+        ?string $locale = null,
+        ?string $format = null,
+        ?bool $utf8 = null,
+        ?bool $stateless = null,
+        ?string $env = null,
         private readonly array $breadcrumb = []
-    )
-    {
-        parent::__construct($path,
+    ) {
+        parent::__construct(
+            $path,
             $name,
             $requirements,
             $options,

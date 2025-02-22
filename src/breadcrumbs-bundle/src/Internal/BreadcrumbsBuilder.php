@@ -17,17 +17,15 @@ use Symfony\Component\HttpFoundation\Request;
 class BreadcrumbsBuilder
 {
     public function __construct(
-        private readonly NodesResolver  $resolver,
-        private readonly UrlGenerator   $urlGenerator,
+        private readonly NodesResolver $resolver,
+        private readonly UrlGenerator $urlGenerator,
         private readonly LabelGenerator $labelGenerator,
-        private readonly NodeValidator  $validator
-    )
-    {
-    }
+        private readonly NodeValidator $validator
+    ) {}
 
     /**
-     * @param Request $request
      * @return array<int, Breadcrumb>
+     *
      * @throws ValidationException
      */
     public function getBreadcrumbs(Request $request): array
@@ -38,6 +36,7 @@ class BreadcrumbsBuilder
             return [];
         }
         $this->validator->validate($node);
+
         return array_reverse($this->doBuild($node));
     }
 
@@ -51,6 +50,7 @@ class BreadcrumbsBuilder
         if ($node->getParent()) {
             $builtBreadcrumbs = [...$builtBreadcrumbs, ...$this->doBuild($node->getParent())];
         }
+
         return $builtBreadcrumbs;
     }
 }

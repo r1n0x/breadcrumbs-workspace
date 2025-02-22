@@ -16,13 +16,11 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 class BreadcrumbsCacheWarmer implements CacheWarmerInterface
 {
     public function __construct(
-        private readonly NodeSerializer              $serializer,
+        private readonly NodeSerializer $serializer,
         private readonly DefinitionToNodeTransformer $transformer,
-        private readonly CacheReader                 $cacheReader,
-        private readonly DefinitionsResolver         $resolver,
-    )
-    {
-    }
+        private readonly CacheReader $cacheReader,
+        private readonly DefinitionsResolver $resolver,
+    ) {}
 
     public function isOptional(): bool
     {
@@ -38,10 +36,6 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
         return [];
     }
 
-    /**
-     * @param array $definitions
-     * @return array
-     */
     public function transform(array $definitions): array
     {
         $nodes = [];
@@ -49,9 +43,10 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
             if ($definition instanceof RootBreadcrumbDefinition) {
                 continue;
             }
-            /** @var RouteBreadcrumbDefinition $definition */
+            // @var RouteBreadcrumbDefinition $definition
             $nodes[] = $this->transformer->transform($definition, $definitions);
         }
+
         return $nodes;
     }
 }

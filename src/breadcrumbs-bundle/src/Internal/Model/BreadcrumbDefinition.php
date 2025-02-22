@@ -9,10 +9,8 @@ abstract class BreadcrumbDefinition
 {
     public function __construct(
         private readonly string $expression,
-        private readonly array  $variables = []
-    )
-    {
-    }
+        private readonly array $variables = []
+    ) {}
 
     public function getExpression(): string
     {

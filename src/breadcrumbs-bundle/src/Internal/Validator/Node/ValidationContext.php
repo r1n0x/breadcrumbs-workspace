@@ -20,7 +20,7 @@ class ValidationContext
         $this->errors[] = [
             ValidationContext::TYPE => ValidationContext::TYPE_PARAMETER,
             ValidationContext::ROUTE_NAME => $routeName,
-            ValidationContext::NAME => $parameterName
+            ValidationContext::NAME => $parameterName,
         ];
     }
 
@@ -29,7 +29,7 @@ class ValidationContext
         $this->errors[] = [
             ValidationContext::TYPE => ValidationContext::TYPE_VARIABLE,
             ValidationContext::ROUTE_NAME => $routeName,
-            ValidationContext::NAME => $variableName
+            ValidationContext::NAME => $variableName,
         ];
     }
 
@@ -38,9 +38,6 @@ class ValidationContext
         return count($this->errors) > 0;
     }
 
-    /**
-     * @return array
-     */
     public function getGroupedForRoutes(): array
     {
         $errors = [];
@@ -51,18 +48,19 @@ class ValidationContext
             if (isset($errors[$key])) {
                 $errors[$key][ValidationContext::NAME] = [
                     ...$errors[$key][ValidationContext::NAME],
-                    $name
+                    $name,
                 ];
+
                 continue;
             }
             $errors[$key] = [
                 ValidationContext::TYPE => $error[ValidationContext::TYPE],
                 ValidationContext::ROUTE_NAME => $routeName,
-                ValidationContext::NAME => [$name]
+                ValidationContext::NAME => [$name],
             ];
         }
 
-        usort($errors, fn($error) => $error[ValidationContext::TYPE] === ValidationContext::TYPE_VARIABLE);
+        usort($errors, fn ($error) => ValidationContext::TYPE_VARIABLE === $error[ValidationContext::TYPE]);
 
         return array_values($errors);
     }

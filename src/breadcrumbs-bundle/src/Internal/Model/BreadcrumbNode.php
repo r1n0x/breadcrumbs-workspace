@@ -9,10 +9,8 @@ class BreadcrumbNode
 {
     public function __construct(
         private readonly BreadcrumbDefinition $definition,
-        private readonly ?BreadcrumbNode      $parent
-    )
-    {
-    }
+        private readonly ?BreadcrumbNode $parent
+    ) {}
 
     public function getDefinition(): BreadcrumbDefinition
     {

@@ -16,28 +16,28 @@ use Symfony\Component\HttpFoundation\Request;
 class BreadcrumbsManager
 {
     public function __construct(
-        private readonly ParametersHolder   $parametersHolder,
-        private readonly VariablesHolder    $variablesHolder,
+        private readonly ParametersHolder $parametersHolder,
+        private readonly VariablesHolder $variablesHolder,
         private readonly BreadcrumbsBuilder $builder
-    )
-    {
-    }
+    ) {}
 
-    public function setParameter(string $name, ?string $value, string $routeName = null): static
+    public function setParameter(string $name, ?string $value, ?string $routeName = null): static
     {
         $this->parametersHolder->set(new Parameter($name, $value, $routeName));
+
         return $this;
     }
 
-    public function setVariable(string $name, mixed $value, string $routeName = null): static
+    public function setVariable(string $name, mixed $value, ?string $routeName = null): static
     {
         $this->variablesHolder->set(new Variable($name, $value, $routeName));
+
         return $this;
     }
 
     /**
-     * @param Request $request
      * @return array<int, Breadcrumb>
+     *
      * @throws ValidationException
      */
     public function build(Request $request): array

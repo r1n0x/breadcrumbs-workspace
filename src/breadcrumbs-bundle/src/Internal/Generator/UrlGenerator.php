@@ -16,16 +16,15 @@ class UrlGenerator
 {
     public function __construct(
         private readonly ParametersHolder $holder,
-        private readonly RouterInterface  $router
-    )
-    {
-    }
+        private readonly RouterInterface $router
+    ) {}
 
     public function generate(BreadcrumbDefinition $definition): ?string
     {
         if ($definition instanceof RootBreadcrumbDefinition && !$definition->getRouteName()) {
             return null;
         }
+
         return $this->router->generate($definition->getRouteName(), match (true) {
             $definition instanceof RouteBreadcrumbDefinition => $this->getParameters($definition),
             $definition instanceof RootBreadcrumbDefinition => [],
@@ -34,7 +33,6 @@ class UrlGenerator
     }
 
     /**
-     * @param RouteBreadcrumbDefinition $definition
      * @return array<string, string>
      */
     public function getParameters(RouteBreadcrumbDefinition $definition): array
@@ -43,8 +41,9 @@ class UrlGenerator
         $parameters = [];
         foreach ($definition->getParameters() as $parameterName) {
             $value = $this->holder->getValue($parameterName, $routeName) ?? $this->holder->getValue($parameterName);
-            $parameters[$parameterName] = $value === ParametersHolder::OPTIONAL_PARAMETER ? null : $value;
+            $parameters[$parameterName] = ParametersHolder::OPTIONAL_PARAMETER === $value ? null : $value;
         }
+
         return $parameters;
     }
 }

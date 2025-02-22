@@ -8,12 +8,10 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model;
 class Parameter
 {
     public function __construct(
-        private readonly string  $name,
+        private readonly string $name,
         private readonly ?string $value,
         private readonly ?string $routeName = null
-    )
-    {
-    }
+    ) {}
 
     public function getName(): string
     {

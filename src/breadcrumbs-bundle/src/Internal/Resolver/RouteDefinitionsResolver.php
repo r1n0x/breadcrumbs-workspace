@@ -15,15 +15,13 @@ use Symfony\Component\Routing\RouterInterface;
 class RouteDefinitionsResolver
 {
     public function __construct(
-        private readonly RouterInterface          $router,
+        private readonly RouterInterface $router,
         private readonly EventDispatcherInterface $dispatcher,
-        private readonly VariablesResolver        $variablesResolver,
-        private readonly ParametersResolver       $parametersResolver,
-        private readonly RouteValidator           $validator,
-        private readonly bool                     $passParametersToExpression
-    )
-    {
-    }
+        private readonly VariablesResolver $variablesResolver,
+        private readonly ParametersResolver $parametersResolver,
+        private readonly RouteValidator $validator,
+        private readonly bool $passParametersToExpression
+    ) {}
 
     /**
      * @return array<int, RouteBreadcrumbDefinition>

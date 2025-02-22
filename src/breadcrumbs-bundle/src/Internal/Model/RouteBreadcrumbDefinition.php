@@ -8,15 +8,14 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model;
 class RouteBreadcrumbDefinition extends BreadcrumbDefinition
 {
     public function __construct(
-        private readonly string  $routeName,
-        string                   $expression,
+        private readonly string $routeName,
+        string $expression,
         private readonly ?string $parentRoute,
         private readonly ?string $root,
-        private readonly bool    $passParametersToExpression,
-        private readonly array   $parameters = [],
-        array                    $variables = []
-    )
-    {
+        private readonly bool $passParametersToExpression,
+        private readonly array $parameters = [],
+        array $variables = []
+    ) {
         parent::__construct($expression, $variables);
     }
 

@@ -14,9 +14,8 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 class DefinitionToNodeTransformer
 {
     /**
-     * @param RouteBreadcrumbDefinition $definition
      * @param array<int, BreadcrumbDefinition> $definitions
-     * @return BreadcrumbNode
+     *
      * @throws UnknownRootException
      */
     public function transform(RouteBreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
@@ -25,24 +24,8 @@ class DefinitionToNodeTransformer
     }
 
     /**
-     * @throws UnknownRootException
-     */
-    private function doTransform(?BreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
-    {
-        $parentDefinition = match (true) {
-            $definition instanceof RouteBreadcrumbDefinition => $this->getParentDefinition($definition, $definitions),
-            default => null
-        };
-        return new BreadcrumbNode(
-            $definition,
-            $parentDefinition
-        );
-    }
-
-    /**
-     * @param RouteBreadcrumbDefinition $definition
      * @param array<int, BreadcrumbDefinition> $definitions
-     * @return BreadcrumbNode|null
+     *
      * @throws UnknownRootException
      */
     public function getParentDefinition(RouteBreadcrumbDefinition $definition, array $definitions): ?BreadcrumbNode
@@ -56,6 +39,7 @@ class DefinitionToNodeTransformer
                     null
                 );
             }
+
             return $this->doTransform($parentRouteDefinition, $definitions);
         }
         $rootName = $definition->getRoot();
@@ -68,15 +52,33 @@ class DefinitionToNodeTransformer
                     $definition->getRouteName()
                 ));
             }
+
             return $this->doTransform($rootDefinition, []);
         }
+
         return null;
     }
 
     /**
-     * @param string $routeName
+     * @throws UnknownRootException
+     */
+    private function doTransform(?BreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
+    {
+        $parentDefinition = match (true) {
+            $definition instanceof RouteBreadcrumbDefinition => $this->getParentDefinition($definition, $definitions),
+            default => null
+        };
+
+        return new BreadcrumbNode(
+            $definition,
+            $parentDefinition
+        );
+    }
+
+    /**
      * @param array<int, BreadcrumbDefinition> $definitions
-     * @return BreadcrumbDefinition|null
+     *
+     * @return null|BreadcrumbDefinition
      */
     private function getRouteDefinition(string $routeName, array $definitions): ?RouteBreadcrumbDefinition
     {
@@ -85,13 +87,12 @@ class DefinitionToNodeTransformer
                 return $definition;
             }
         }
+
         return null;
     }
 
     /**
-     * @param string $rootName
      * @param array<int, BreadcrumbDefinition> $definitions
-     * @return RootBreadcrumbDefinition|null
      */
     private function getRootDefinition(string $rootName, array $definitions): ?RootBreadcrumbDefinition
     {
@@ -100,6 +101,7 @@ class DefinitionToNodeTransformer
                 return $definition;
             }
         }
+
         return null;
     }
 }

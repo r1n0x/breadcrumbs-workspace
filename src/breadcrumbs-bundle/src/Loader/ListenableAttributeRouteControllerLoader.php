@@ -25,7 +25,7 @@ class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerL
     protected function addRoute(RouteCollection $collection, object $annot, array $globals, ReflectionClass $class, ReflectionMethod $method): void
     {
         parent::addRoute($collection, $annot, $globals, $class, $method);
-        if (!($annot instanceof Route)) {
+        if (!$annot instanceof Route) {
             return;
         }
         // As far is I know, after looking through symfony internals for FAR too long, this is the simplest way

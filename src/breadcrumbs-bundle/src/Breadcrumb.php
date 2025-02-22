@@ -8,11 +8,9 @@ namespace R1n0x\BreadcrumbsBundle;
 class Breadcrumb
 {
     public function __construct(
-        private readonly string  $label,
+        private readonly string $label,
         private readonly ?string $url
-    )
-    {
-    }
+    ) {}
 
     public function getLabel(): string
     {

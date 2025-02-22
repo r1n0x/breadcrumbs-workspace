@@ -14,11 +14,9 @@ use Throwable;
 class LabelGenerator
 {
     public function __construct(
-        private readonly VariablesHolder    $holder,
+        private readonly VariablesHolder $holder,
         private readonly ExpressionLanguage $expressionLanguage
-    )
-    {
-    }
+    ) {}
 
     public function generate(BreadcrumbDefinition $definition)
     {
@@ -33,10 +31,6 @@ class LabelGenerator
         }
     }
 
-    /**
-     * @param BreadcrumbDefinition $definition
-     * @return array
-     */
     public function getVariables(BreadcrumbDefinition $definition): array
     {
         $routeName = $definition->getRouteName();
@@ -44,8 +38,9 @@ class LabelGenerator
         foreach ($definition->getVariables() as $variableName) {
             $value = $this->holder->getValue($variableName, $routeName)
                 ?? $this->holder->getValue($variableName);
-            $variables[$variableName] = $value === VariablesHolder::OPTIONAL_VARIABLE ? null : $value;
+            $variables[$variableName] = VariablesHolder::OPTIONAL_VARIABLE === $value ? null : $value;
         }
+
         return $variables;
     }
 }

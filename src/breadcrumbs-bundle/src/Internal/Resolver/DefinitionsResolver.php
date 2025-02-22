@@ -11,10 +11,8 @@ class DefinitionsResolver
 {
     public function __construct(
         private readonly RouteDefinitionsResolver $routeDefinitionsResolver,
-        private readonly RootDefinitionsResolver  $rootDefinitionsResolver
-    )
-    {
-    }
+        private readonly RootDefinitionsResolver $rootDefinitionsResolver
+    ) {}
 
     /**
      * @return array<int, BreadcrumbDefinition>

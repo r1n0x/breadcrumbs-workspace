@@ -8,7 +8,6 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 class ParametersResolver
 {
     /**
-     * @param string $path
      * @return array<int, string>
      */
     public function getParameters(string $path): array
@@ -18,6 +17,7 @@ class ParametersResolver
         foreach ($matches as $match) {
             $parameters[] = $match[1];
         }
+
         return $parameters;
     }
 }

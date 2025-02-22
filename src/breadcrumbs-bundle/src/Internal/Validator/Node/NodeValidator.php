@@ -4,7 +4,6 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Validator\Node;
 
 use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
-use R1n0x\BreadcrumbsBundle\Factory\ViolationMessageFactory;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
@@ -17,14 +16,10 @@ class NodeValidator
 {
     public function __construct(
         private readonly ParametersHolder $parametersHolder,
-        private readonly VariablesHolder  $variablesHolder
-    )
-    {
-    }
+        private readonly VariablesHolder $variablesHolder
+    ) {}
 
     /**
-     * @param BreadcrumbNode $node
-     * @return void
      * @throws ValidationException
      */
     public function validate(BreadcrumbNode $node): void
@@ -83,6 +78,7 @@ class NodeValidator
                 $group[ValidationContext::ROUTE_NAME]
             );
         }
+
         return $message;
     }
 }

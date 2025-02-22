@@ -20,11 +20,9 @@ class DebugBreadcrumbsCommand extends Command
 {
     public function __construct(
         private readonly NodesResolver $resolver
-    )
-    {
+    ) {
         parent::__construct();
     }
-
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -32,6 +30,7 @@ class DebugBreadcrumbsCommand extends Command
             $this->printNode($node, $output, 1);
             $output->writeln('');
         }
+
         return Command::SUCCESS;
     }
 
