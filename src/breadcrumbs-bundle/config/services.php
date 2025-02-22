@@ -139,12 +139,25 @@ return function (ContainerConfigurator $configurator) {
 
     $services->set('r1n0x.breadcrumbs.resolver.definitions', R1n0x\BreadcrumbsBundle\Internal\Resolver\DefinitionsResolver::class)
         ->args([
+            service('r1n0x.breadcrumbs.resolver.route_definitions'),
+            service('r1n0x.breadcrumbs.resolver.root_definitions')
+        ]);
+
+    $services->set('r1n0x.breadcrumbs.resolver.route_definitions', R1n0x\BreadcrumbsBundle\Internal\Resolver\RouteDefinitionsResolver::class)
+        ->args([
             service('router'),
             service('event_dispatcher'),
             service('r1n0x.breadcrumbs.resolver.variables'),
             service('r1n0x.breadcrumbs.resolver.parameters'),
             service('r1n0x.breadcrumbs.validator.route'),
-            service('r1n0x.breadcrumbs.resolver.roots'),
             param('r1n0x.breadcrumbs.config.defaults.pass_parameters_to_expression')
+        ]);
+
+    $services->set('r1n0x.breadcrumbs.resolver.root_definitions', R1n0x\BreadcrumbsBundle\Internal\Resolver\RootDefinitionsResolver::class)
+        ->args([
+            service('router'),
+            service('r1n0x.breadcrumbs.resolver.variables'),
+            service('r1n0x.breadcrumbs.resolver.parameters'),
+            service('r1n0x.breadcrumbs.resolver.roots')
         ]);
 };

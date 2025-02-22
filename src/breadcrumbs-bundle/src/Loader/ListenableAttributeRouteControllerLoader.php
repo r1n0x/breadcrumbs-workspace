@@ -34,10 +34,10 @@ class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerL
         // Problems I encountered were:
         //
         // - one controller being able to have multiple routes, which can't be
-        //   easily related to breadcrumbs later on (cannot use controller as anchor)
+        //   easily related to breadcrumbs later on (cannot use controller attribute as anchor)
         //
         // - symfony dynamic route name generation and being able to add prefixes to routes by putting Route
-        //   attribute on class and adding sometimes adding indexes at the end of name (cannot use route name as anchor)
+        //   attribute on class and adding sometimes adding indexes at the end of name (cannot use route name attribute as anchor)
         //
         // - surely, there is more ways to use Route attribute than I know (knowing Symfony) and I just don't want
         //   to copy every single thing to this bundle, when I can just add a listener here and have Symfony leverage everything
