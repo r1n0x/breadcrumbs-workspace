@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal;
 
 use R1n0x\BreadcrumbsBundle\Breadcrumb;
+use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
+use R1n0x\BreadcrumbsBundle\Exception\RouteGenerationException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator;
@@ -27,12 +31,14 @@ class BreadcrumbsBuilder
      * @return array<int, Breadcrumb>
      *
      * @throws ValidationException
+     * @throws LabelGenerationException
+     * @throws RouteGenerationException
      */
     public function getBreadcrumbs(Request $request): array
     {
         $routeName = $request->attributes->getString('_route');
         $node = $this->resolver->get($routeName);
-        if (!$node) {
+        if (null === $node) {
             return [];
         }
         $this->validator->validate($node);
@@ -42,6 +48,9 @@ class BreadcrumbsBuilder
 
     /**
      * @return array<int, Breadcrumb>
+     *
+     * @throws LabelGenerationException
+     * @throws RouteGenerationException
      */
     private function doBuild(BreadcrumbNode $node): array
     {
@@ -51,7 +60,7 @@ class BreadcrumbsBuilder
             $this->urlGenerator->generate($node->getDefinition())
         );
         $parent = $node->getParent();
-        if ($parent) {
+        if (null !== $parent) {
             $breadcrumbs = array_merge($breadcrumbs, $this->doBuild($parent));
         }
 

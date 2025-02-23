@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
 use R1n0x\BreadcrumbsBundle\Internal\CacheReader;
@@ -38,7 +40,7 @@ class NodesResolver
      */
     public function all(): array
     {
-        if (!$this->nodes) {
+        if (null === $this->nodes) {
             $this->initializeNodes();
         }
 
@@ -48,6 +50,7 @@ class NodesResolver
 
     public function initializeNodes(): void
     {
+        /** @phpstan-ignore missingType.checkedException */
         $nodes = $this->cacheReader->read($this->cacheDir);
         $this->nodes = $this->serializer->deserialize($nodes);
     }

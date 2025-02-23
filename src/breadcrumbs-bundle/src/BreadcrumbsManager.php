@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle;
 
+use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
+use R1n0x\BreadcrumbsBundle\Exception\RouteGenerationException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Internal\BreadcrumbsBuilder;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
@@ -39,6 +43,8 @@ class BreadcrumbsManager
      * @return array<int, Breadcrumb>
      *
      * @throws ValidationException
+     * @throws LabelGenerationException
+     * @throws RouteGenerationException
      */
     public function build(Request $request): array
     {

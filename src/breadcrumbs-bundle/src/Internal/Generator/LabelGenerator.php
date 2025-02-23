@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Generator;
 
-use R1n0x\BreadcrumbsBundle\Exception\LogicException;
-use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
+use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
@@ -21,28 +22,27 @@ class LabelGenerator
         private readonly ExpressionLanguage $expressionLanguage
     ) {}
 
+    /**
+     * @throws LabelGenerationException
+     */
     public function generate(BreadcrumbDefinition $definition): string
     {
         try {
             /* @phpstan-ignore return.type */
             return $this->expressionLanguage->evaluate($definition->getExpression(), $this->getVariables($definition));
         } catch (Throwable $e) {
-            if ($definition instanceof RouteBreadcrumbDefinition) {
-                throw new RuntimeException(sprintf(
+            match (true) {
+                $definition instanceof RouteBreadcrumbDefinition => throw new LabelGenerationException(sprintf(
                     'Error occurred when evaluating breadcrumb expression "%s" for route "%s"',
                     $definition->getExpression(),
                     $definition->getRouteName()
-                ), 0, $e);
-            }
-            if ($definition instanceof RootBreadcrumbDefinition) {
-                throw new RuntimeException(sprintf(
+                ), 0, $e),
+                $definition instanceof RootBreadcrumbDefinition => throw new LabelGenerationException(sprintf(
                     'Error occurred when evaluating breadcrumb expression "%s" for root "%s"',
                     $definition->getExpression(),
                     $definition->getName()
-                ), 0, $e);
-            }
-
-            throw new LogicException(sprintf('Unknown type of breadcrumb "%s"', get_class($definition)));
+                ), 0, $e)
+            };
         }
     }
 

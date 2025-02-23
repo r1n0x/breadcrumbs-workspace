@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Loader;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
@@ -11,10 +13,13 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerLoader
 {
+    /** @phpstan-ignore property.uninitialized */
     private EventDispatcherInterface $dispatcher;
 
     public function setDispatcher(EventDispatcherInterface $dispatcher): void

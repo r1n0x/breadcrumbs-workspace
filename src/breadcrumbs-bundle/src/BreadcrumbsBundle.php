@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
@@ -9,6 +11,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class BreadcrumbsBundle extends AbstractBundle

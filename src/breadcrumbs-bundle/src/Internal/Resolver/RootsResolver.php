@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
@@ -23,7 +25,7 @@ class RootsResolver
      */
     public function getRoots(): array
     {
-        if (!$this->roots) {
+        if (null === $this->roots) {
             $this->initializeRoots();
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\EventListener;
 
 use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
@@ -9,6 +11,8 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class ControllerArgumentsListener
@@ -22,11 +26,8 @@ class ControllerArgumentsListener
     {
         $request = $event->getRequest();
         $routeName = $request->attributes->getString('_route');
-        if (!$routeName) {
-            return;
-        }
         $node = $this->resolver->get($routeName);
-        if (!$node) {
+        if (null === $node) {
             return;
         }
 

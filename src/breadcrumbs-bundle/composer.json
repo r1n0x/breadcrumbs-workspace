@@ -6,6 +6,11 @@
       "R1n0x\\BreadcrumbsBundle\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "R1n0x\\BreadcrumbsBundle\\Tests\\": "tests/"
+    }
+  },
   "authors": [
     {
       "name": "r1n0x"

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Holder;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
@@ -23,7 +25,7 @@ class VariablesHolder
 
     public function getValue(string $name, ?string $routeName = null): mixed
     {
-        if ($routeName) {
+        if (null !== $routeName) {
             foreach ($this->variables as $variable) {
                 if ($variable->getRouteName() === $routeName && $variable->getName() === $name) {
                     return $variable->getValue() ?? self::OPTIONAL_VARIABLE;

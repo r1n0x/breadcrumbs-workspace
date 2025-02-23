@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
@@ -12,9 +14,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
  */
 class NodeSerializer
 {
-    private const NODE_TYPE = 'node_type';
-    private const NODE_TYPE_ROUTE = 'route';
-    private const NODE_TYPE_ROOT = 'root';
+    public const NODE_TYPE = 'node_type';
+    public const NODE_TYPE_ROUTE = 'route';
+    public const NODE_TYPE_ROOT = 'root';
 
     /**
      * @param array<int, BreadcrumbNode> $nodes
@@ -40,9 +42,8 @@ class NodeSerializer
         $definition = $node->getDefinition();
 
         return [
-            /* @phpstan-ignore match.unhandled */
-            'definition' => match (get_class($definition)) {
-                RouteBreadcrumbDefinition::class => [
+            'definition' => match (true) {
+                $definition instanceof RouteBreadcrumbDefinition => [
                     self::NODE_TYPE => self::NODE_TYPE_ROUTE,
                     'route' => $definition->getRouteName(),
                     Route::EXPRESSION => $definition->getExpression(),
@@ -52,7 +53,7 @@ class NodeSerializer
                     'parameters' => $definition->getParameters(),
                     'variables' => $definition->getVariables(),
                 ],
-                RootBreadcrumbDefinition::class => [
+                $definition instanceof RootBreadcrumbDefinition => [
                     self::NODE_TYPE => self::NODE_TYPE_ROOT,
                     'route' => $definition->getRouteName(),
                     Route::EXPRESSION => $definition->getExpression(),
@@ -60,7 +61,7 @@ class NodeSerializer
                     'variables' => $definition->getVariables(),
                 ],
             },
-            'parent' => $node->getParent() ? $this->serializeNode($node->getParent()) : null,
+            'parent' => null !== $node->getParent() ? $this->serializeNode($node->getParent()) : null,
         ];
     }
 
@@ -88,7 +89,7 @@ class NodeSerializer
     private function deserializeNode(array $item): BreadcrumbNode
     {
         return new BreadcrumbNode(
-            /* @phpstan-ignore match.unhandled */
+            /* @phpstan-ignore match.unhandled, missingType.checkedException */
             match ($item['definition'][self::NODE_TYPE]) {
                 self::NODE_TYPE_ROUTE => new RouteBreadcrumbDefinition(
                     $item['definition']['route'],
