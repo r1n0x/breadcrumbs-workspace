@@ -2,66 +2,79 @@
 
 namespace R1n0x\BreadcrumbsBundle\Internal\Validator\Node;
 
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\Error;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\ErrorType;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RootError;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RouteError;
+
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class ValidationContext
 {
-    public const TYPE_PARAMETER = 'parameter';
-    public const TYPE_VARIABLE = 'variable';
-    public const TYPE = 'type';
-    public const ROUTE_NAME = 'route_name';
-    public const NAME = 'name';
+    /** @var array<int, RouteError> */
+    private array $routeErrors = [];
 
-    private array $errors = [];
+    /** @var array<int, RootError> */
+    private array $rootErrors = [];
 
-    public function addParameterViolation(string $routeName, string $parameterName): void
+    public function addRouteParameterViolation(string $routeName, string $parameterName): void
     {
-        $this->errors[] = [
-            ValidationContext::TYPE => ValidationContext::TYPE_PARAMETER,
-            ValidationContext::ROUTE_NAME => $routeName,
-            ValidationContext::NAME => $parameterName,
-        ];
+        $this->getRouteViolation($routeName, ErrorType::Parameter)->addName($parameterName);
     }
 
-    public function addVariableViolation(string $routeName, string $variableName): void
+    public function addRouteVariableViolation(string $routeName, string $variableName): void
     {
-        $this->errors[] = [
-            ValidationContext::TYPE => ValidationContext::TYPE_VARIABLE,
-            ValidationContext::ROUTE_NAME => $routeName,
-            ValidationContext::NAME => $variableName,
-        ];
+        $this->getRouteViolation($routeName, ErrorType::Variable)->addName($variableName);
+    }
+
+    public function addRootVariableViolation(string $name, string $variableName): void
+    {
+        $this->getRootViolation($name, ErrorType::Variable)->addName($variableName);
     }
 
     public function hasErrors(): bool
     {
-        return count($this->errors) > 0;
+        return (count($this->routeErrors) + count($this->rootErrors)) > 0;
     }
 
-    public function getGroupedForRoutes(): array
+    /**
+     * @return array<int, Error>
+     */
+    public function getErrors(): array
     {
-        $errors = [];
-        foreach ($this->errors as $error) {
-            $routeName = $error[ValidationContext::ROUTE_NAME];
-            $key = $routeName . '.' . $error[ValidationContext::TYPE];
-            $name = $error[ValidationContext::NAME];
-            if (isset($errors[$key])) {
-                $errors[$key][ValidationContext::NAME] = [
-                    ...$errors[$key][ValidationContext::NAME],
-                    $name,
-                ];
+        return array_merge($this->routeErrors, $this->routeErrors);
+    }
 
-                continue;
+    private function getRouteViolation(string $routeName, ErrorType $type): RouteError
+    {
+        foreach ($this->routeErrors as $error) {
+            if ($error->getRouteName() === $routeName && $error->getType() === $type) {
+                return $error;
             }
-            $errors[$key] = [
-                ValidationContext::TYPE => $error[ValidationContext::TYPE],
-                ValidationContext::ROUTE_NAME => $routeName,
-                ValidationContext::NAME => [$name],
-            ];
         }
+        $error = new RouteError(
+            $type,
+            $routeName,
+        );
+        $this->routeErrors[] = $error;
 
-        usort($errors, fn ($error) => ValidationContext::TYPE_VARIABLE === $error[ValidationContext::TYPE]);
+        return $error;
+    }
 
-        return array_values($errors);
+    private function getRootViolation(string $name, ErrorType $type): RootError
+    {
+        foreach ($this->rootErrors as $error) {
+            if ($error->getName() === $name && $error->getType() === $type) {
+                return $error;
+            }
+        }
+        $error = new RootError(
+            $type,
+            $name,
+        );
+        $this->rootErrors[] = $error;
+
+        return $error;
     }
 }

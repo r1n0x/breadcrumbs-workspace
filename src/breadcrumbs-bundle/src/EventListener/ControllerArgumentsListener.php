@@ -21,7 +21,7 @@ class ControllerArgumentsListener
     public function __invoke(ControllerArgumentsEvent $event): void
     {
         $request = $event->getRequest();
-        $routeName = $request->attributes->get('_route');
+        $routeName = $request->attributes->getString('_route');
         if (!$routeName) {
             return;
         }
@@ -29,19 +29,21 @@ class ControllerArgumentsListener
         if (!$node) {
             return;
         }
-        $parameterNames = $request->attributes->get('_route_params');
+
+        /** @var array<string, string> $parameterValues */
+        $parameterValues = $request->attributes->get('_route_params');
         $values = $event->getNamedArguments();
 
         /** @var RouteBreadcrumbDefinition $definition */
         $definition = $node->getDefinition();
         foreach ($definition->getParameters() as $parameterName) {
-            $value = array_key_exists($parameterName, $parameterNames) ? $parameterNames[$parameterName] : ParametersHolder::OPTIONAL_PARAMETER;
+            $value = array_key_exists($parameterName, $parameterValues) ? $parameterValues[$parameterName] : ParametersHolder::OPTIONAL_PARAMETER;
             if (ParametersHolder::OPTIONAL_PARAMETER === $value) {
                 continue;
             }
             $this->manager->setParameter($parameterName, $value, $routeName);
             if ($definition->getPassParametersToExpression()) {
-                $this->manager->setVariable($parameterName, $values[$parameterName] ?? $parameterNames[$parameterName], $routeName);
+                $this->manager->setVariable($parameterName, $values[$parameterName] ?? $parameterValues[$parameterName], $routeName);
             }
         }
     }

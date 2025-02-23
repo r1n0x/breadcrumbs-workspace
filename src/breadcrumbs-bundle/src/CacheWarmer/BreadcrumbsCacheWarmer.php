@@ -4,8 +4,9 @@ namespace R1n0x\BreadcrumbsBundle\CacheWarmer;
 
 use R1n0x\BreadcrumbsBundle\Internal\CacheReader;
 use R1n0x\BreadcrumbsBundle\Internal\DefinitionToNodeTransformer;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\DefinitionsResolver;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
@@ -36,6 +37,11 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
         return [];
     }
 
+    /**
+     * @param array<int, BreadcrumbDefinition> $definitions
+     *
+     * @return array<int, BreadcrumbNode>
+     */
     public function transform(array $definitions): array
     {
         $nodes = [];
@@ -43,7 +49,7 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
             if ($definition instanceof RootBreadcrumbDefinition) {
                 continue;
             }
-            // @var RouteBreadcrumbDefinition $definition
+            /* @phpstan-ignore argument.type */
             $nodes[] = $this->transformer->transform($definition, $definitions);
         }
 

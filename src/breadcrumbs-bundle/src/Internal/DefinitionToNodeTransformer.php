@@ -60,9 +60,11 @@ class DefinitionToNodeTransformer
     }
 
     /**
+     * @param array<int, BreadcrumbDefinition> $definitions
+     *
      * @throws UnknownRootException
      */
-    private function doTransform(?BreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
+    private function doTransform(BreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
     {
         $parentDefinition = match (true) {
             $definition instanceof RouteBreadcrumbDefinition => $this->getParentDefinition($definition, $definitions),
@@ -77,8 +79,6 @@ class DefinitionToNodeTransformer
 
     /**
      * @param array<int, BreadcrumbDefinition> $definitions
-     *
-     * @return null|BreadcrumbDefinition
      */
     private function getRouteDefinition(string $routeName, array $definitions): ?RouteBreadcrumbDefinition
     {

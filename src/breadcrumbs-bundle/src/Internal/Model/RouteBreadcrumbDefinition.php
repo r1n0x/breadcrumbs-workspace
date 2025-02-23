@@ -7,8 +7,12 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model;
  */
 class RouteBreadcrumbDefinition extends BreadcrumbDefinition
 {
+    /**
+     * @param array<int, string> $parameters
+     * @param array<int, string> $variables
+     */
     public function __construct(
-        private readonly string $routeName,
+        string $routeName,
         string $expression,
         private readonly ?string $parentRoute,
         private readonly ?string $root,
@@ -16,12 +20,7 @@ class RouteBreadcrumbDefinition extends BreadcrumbDefinition
         private readonly array $parameters = [],
         array $variables = []
     ) {
-        parent::__construct($expression, $variables);
-    }
-
-    public function getRouteName(): string
-    {
-        return $this->routeName;
+        parent::__construct($routeName, $expression, $variables);
     }
 
     public function getPassParametersToExpression(): bool
@@ -39,6 +38,9 @@ class RouteBreadcrumbDefinition extends BreadcrumbDefinition
         return $this->parentRoute;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getParameters(): array
     {
         return $this->parameters;

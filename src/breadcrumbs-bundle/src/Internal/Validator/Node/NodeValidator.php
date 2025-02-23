@@ -2,12 +2,15 @@
 
 namespace R1n0x\BreadcrumbsBundle\Internal\Validator\Node;
 
-use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\ErrorType;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RootError;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RouteError;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -31,52 +34,62 @@ class NodeValidator
         }
     }
 
-    private function doValidate(ValidationContext $context, ?BreadcrumbNode $node): void
+    private function doValidate(ValidationContext $context, BreadcrumbNode $node): void
     {
-        if (!$node) {
-            return;
-        }
-
         $definition = $node->getDefinition();
-        foreach ($definition->getVariables() as $variableName) {
-            $value = $this->variablesHolder->getValue($variableName, $definition->getRouteName())
-                ?? $this->variablesHolder->getValue($variableName);
-            if (!$value) {
-                $context->addVariableViolation($definition->getRouteName(), $variableName);
-            }
-        }
 
         if ($definition instanceof RouteBreadcrumbDefinition) {
+            foreach ($definition->getVariables() as $variableName) {
+                $value = $this->variablesHolder->getValue($variableName, $definition->getRouteName())
+                    ?? $this->variablesHolder->getValue($variableName);
+                if (!$value) {
+                    $context->addRouteVariableViolation($definition->getRouteName(), $variableName); /* @phpstan-ignore argument.type */
+                }
+            }
             foreach ($definition->getParameters() as $parameterName) {
                 $value = $this->parametersHolder->getValue($parameterName, $definition->getRouteName())
                     ?? $this->parametersHolder->getValue($parameterName);
                 if (!$value) {
-                    $context->addParameterViolation($definition->getRouteName(), $parameterName);
+                    $context->addRouteParameterViolation($definition->getRouteName(), $parameterName); /* @phpstan-ignore argument.type */
+                }
+            }
+        } elseif ($definition instanceof RootBreadcrumbDefinition) {
+            foreach ($definition->getVariables() as $variableName) {
+                $value = $this->variablesHolder->getValue($variableName);
+                if (!$value) {
+                    $context->addRootVariableViolation($definition->getName(), $variableName);
                 }
             }
         }
-        $this->doValidate($context, $node->getParent());
+        $parent = $node->getParent();
+        if ($parent) {
+            $this->doValidate($context, $parent);
+        }
     }
 
     private function buildMessage(ValidationContext $context): string
     {
-        $grouped = $context->getGroupedForRoutes();
         $message = 'Breadcrumb validation failed:' . PHP_EOL;
-        foreach ($grouped as $group) {
-            $type = match ($group[ValidationContext::TYPE]) {
-                ValidationContext::TYPE_PARAMETER => 'Parameters',
-                ValidationContext::TYPE_VARIABLE => 'Variables',
-                default => throw new RuntimeException(sprintf(
-                    'Unexpected violation type "%s"',
-                    $group[ValidationContext::TYPE]
-                ))
+        foreach ($context->getErrors() as $error) {
+            $type = match ($error->getType()) {
+                ErrorType::Parameter => 'Parameters',
+                ErrorType::Variable => 'Variables',
             };
-            $message .= sprintf(
-                '%s [%s] required by route "%s" were not set.' . PHP_EOL,
-                $type,
-                implode(', ', $group[ValidationContext::NAME]),
-                $group[ValidationContext::ROUTE_NAME]
-            );
+            if ($error instanceof RouteError) {
+                $message .= sprintf(
+                    '%s [%s] required by route "%s" were not set.' . PHP_EOL,
+                    $type,
+                    implode(', ', $error->getNames()),
+                    $error->getRouteName()
+                );
+            } elseif ($error instanceof RootError) {
+                $message .= sprintf(
+                    '%s [%s] required by root "%s" were not set.' . PHP_EOL,
+                    $type,
+                    implode(', ', $error->getNames()),
+                    $error->getName()
+                );
+            }
         }
 
         return $message;

@@ -21,11 +21,13 @@ class UrlGenerator
 
     public function generate(BreadcrumbDefinition $definition): ?string
     {
-        if ($definition instanceof RootBreadcrumbDefinition && !$definition->getRouteName()) {
+        $routeName = $definition->getRouteName();
+        if ($definition instanceof RootBreadcrumbDefinition && !$routeName) {
             return null;
         }
 
-        return $this->router->generate($definition->getRouteName(), match (true) {
+        /* @phpstan-ignore argument.type */
+        return $this->router->generate($routeName, match (true) {
             $definition instanceof RouteBreadcrumbDefinition => $this->getParameters($definition),
             $definition instanceof RootBreadcrumbDefinition => [],
             default => throw new LogicException(sprintf('Unexpected breadcrumb type of \'%s\'', get_class($definition)))
@@ -33,7 +35,7 @@ class UrlGenerator
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, null|string>
      */
     public function getParameters(RouteBreadcrumbDefinition $definition): array
     {

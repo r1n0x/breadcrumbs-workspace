@@ -3,6 +3,8 @@
 namespace R1n0x\BreadcrumbsBundle\Command;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -38,10 +40,17 @@ class DebugBreadcrumbsCommand extends Command
     {
         $prefix = str_repeat("\t", $level);
         $definition = $node->getDefinition();
-        $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
-        $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
+        if ($definition instanceof RouteBreadcrumbDefinition) {
+            $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
+            $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
+            $output->writeln($prefix . '      Parameters: [' . implode(', ', $definition->getParameters()) . ']');
+        } elseif ($definition instanceof RootBreadcrumbDefinition) {
+            $output->writeln($prefix . "----> \033[0;33m(root)\033[0m (" . $level . ')');
+            $output->writeln($prefix . '      Name: "' . $definition->getName() . '"');
+            $output->writeln($prefix . '      Route: "' . ($definition->getRouteName() ?? '__UNSET__') . '"');
+            $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
+        }
         $output->writeln($prefix . '      Variables: [' . implode(', ', $definition->getVariables()) . ']');
-        $output->writeln($prefix . '      Parameters: [' . implode(', ', $definition->getParameters()) . ']');
         $child = $node->getParent();
         if ($child) {
             $this->printNode($child, $output, ++$level);

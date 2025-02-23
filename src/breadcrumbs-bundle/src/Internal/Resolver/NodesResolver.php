@@ -11,10 +11,13 @@ use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
  */
 class NodesResolver
 {
+    /**
+     * @var null|array<int, BreadcrumbNode>
+     */
     private ?array $nodes = null;
 
     public function __construct(
-        private readonly CacheReader $pathFactory,
+        private readonly CacheReader $cacheReader,
         private readonly NodeSerializer $serializer,
         private readonly string $cacheDir
     ) {}
@@ -36,10 +39,16 @@ class NodesResolver
     public function all(): array
     {
         if (!$this->nodes) {
-            $serializedNodes = $this->pathFactory->read($this->cacheDir);
-            $this->nodes = $this->serializer->deserialize($serializedNodes);
+            $this->initializeNodes();
         }
 
+        /* @phpstan-ignore return.type */
         return $this->nodes;
+    }
+
+    public function initializeNodes(): void
+    {
+        $nodes = $this->cacheReader->read($this->cacheDir);
+        $this->nodes = $this->serializer->deserialize($nodes);
     }
 }

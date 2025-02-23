@@ -18,7 +18,7 @@ class VariablesHolder
 
     public function set(Variable $variable): void
     {
-        $this->variables[$variable->getName()] = $variable;
+        $this->variables[] = $variable;
     }
 
     public function getValue(string $name, ?string $routeName = null): mixed

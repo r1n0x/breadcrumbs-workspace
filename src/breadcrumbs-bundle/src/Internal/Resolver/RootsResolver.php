@@ -10,9 +10,11 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Root;
  */
 class RootsResolver
 {
+    /** @var null|array<int, Root> */
     private ?array $roots = null;
 
     public function __construct(
+        /** @var array<string, array<string, string>> */
         private readonly array $rootsConfig
     ) {}
 
@@ -25,6 +27,7 @@ class RootsResolver
             $this->initializeRoots();
         }
 
+        /* @phpstan-ignore return.type */
         return $this->roots;
     }
 

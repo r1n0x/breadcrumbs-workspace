@@ -22,6 +22,9 @@ class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerL
         $this->dispatcher = $dispatcher;
     }
 
+    /**
+     * @phpstan-ignore missingType.generics, missingType.iterableValue
+     */
     protected function addRoute(RouteCollection $collection, object $annot, array $globals, ReflectionClass $class, ReflectionMethod $method): void
     {
         parent::addRoute($collection, $annot, $globals, $class, $method);
@@ -49,7 +52,7 @@ class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerL
         //
         // Huge thanks to Symfony for developing an awesome tool <3
         $this->dispatcher->dispatch(new RouteInitializedEvent(
-            array_key_last($collection->all()),
+            array_key_last($collection->all()), /* @phpstan-ignore argument.type */
             $annot
         ));
     }

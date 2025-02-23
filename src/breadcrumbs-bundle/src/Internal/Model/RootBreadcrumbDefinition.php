@@ -8,17 +8,12 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model;
 class RootBreadcrumbDefinition extends BreadcrumbDefinition
 {
     public function __construct(
-        private readonly ?string $routeName,
+        ?string $routeName,
         string $expression,
         private readonly string $name,
         array $variables = []
     ) {
-        parent::__construct($expression, $variables);
-    }
-
-    public function getRouteName(): ?string
-    {
-        return $this->routeName;
+        parent::__construct($routeName, $expression, $variables);
     }
 
     public function getName(): string

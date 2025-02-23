@@ -21,20 +21,26 @@ class NodeSerializer
      */
     public function serialize(array $nodes): string
     {
+        /** @var array<int, mixed> $serializedNodes */
         $serializedNodes = [];
 
         foreach ($nodes as $node) {
             $serializedNodes[] = $this->serializeNode($node);
         }
 
+        /* @phpstan-ignore return.type */
         return json_encode($serializedNodes, JSON_PRETTY_PRINT);
     }
 
+    /**
+     * @phpstan-ignore missingType.iterableValue
+     */
     public function serializeNode(BreadcrumbNode $node): array
     {
         $definition = $node->getDefinition();
 
         return [
+            /* @phpstan-ignore match.unhandled */
             'definition' => match (get_class($definition)) {
                 RouteBreadcrumbDefinition::class => [
                     self::NODE_TYPE => self::NODE_TYPE_ROUTE,
@@ -63,18 +69,26 @@ class NodeSerializer
      */
     public function deserialize(string $data): array
     {
+        /** @var array<int, BreadcrumbNode> $deserializedNodes */
         $deserializedNodes = [];
 
-        foreach (json_decode($data, true) as $item) {
+        $items = json_decode($data, true);
+        /* @phpstan-ignore foreach.nonIterable */
+        foreach ($items as $item) {
+            /* @phpstan-ignore argument.type */
             $deserializedNodes[] = $this->deserializeNode($item);
         }
 
         return $deserializedNodes;
     }
 
+    /**
+     * @phpstan-ignore missingType.iterableValue
+     */
     private function deserializeNode(array $item): BreadcrumbNode
     {
         return new BreadcrumbNode(
+            /* @phpstan-ignore match.unhandled */
             match ($item['definition'][self::NODE_TYPE]) {
                 self::NODE_TYPE_ROUTE => new RouteBreadcrumbDefinition(
                     $item['definition']['route'],

@@ -31,6 +31,7 @@ class Route extends \Symfony\Component\Routing\Attribute\Route
         ?bool $utf8 = null,
         ?bool $stateless = null,
         ?string $env = null,
+        /** @var array<string, mixed> */
         private readonly array $breadcrumb = []
     ) {
         parent::__construct(
@@ -52,6 +53,9 @@ class Route extends \Symfony\Component\Routing\Attribute\Route
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getBreadcrumb(): array
     {
         return $this->breadcrumb;

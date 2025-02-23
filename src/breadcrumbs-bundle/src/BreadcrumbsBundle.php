@@ -13,6 +13,9 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
  */
 class BreadcrumbsBundle extends AbstractBundle
 {
+    /**
+     * @phpstan-ignore missingType.iterableValue
+     */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.php');

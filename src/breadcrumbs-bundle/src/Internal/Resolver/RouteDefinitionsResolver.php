@@ -39,12 +39,12 @@ class RouteDefinitionsResolver
             $this->validator->validate($route);
             $definitions[] = new RouteBreadcrumbDefinition(
                 $name,
-                $expression,
-                $route->getBreadcrumb()[Route::PARENT_ROUTE] ?? null,
-                $route->getBreadcrumb()[Route::ROOT] ?? null,
-                $route->getBreadcrumb()[Route::PASS_PARAMETERS_TO_EXPRESSION] ?? $this->passParametersToExpression,
-                $this->variablesResolver->getVariables($expression),
-                $this->parametersResolver->getParameters($route->getPath())
+                $expression, /* @phpstan-ignore argument.type */
+                $route->getBreadcrumb()[Route::PARENT_ROUTE] ?? null, /* @phpstan-ignore argument.type */
+                $route->getBreadcrumb()[Route::ROOT] ?? null, /* @phpstan-ignore argument.type */
+                $route->getBreadcrumb()[Route::PASS_PARAMETERS_TO_EXPRESSION] ?? $this->passParametersToExpression, /* @phpstan-ignore argument.type */
+                $this->variablesResolver->getVariables($expression), /* @phpstan-ignore argument.type */
+                $this->parametersResolver->getParameters($route->getPath()) /* @phpstan-ignore argument.type */
             );
         }
 
@@ -52,11 +52,11 @@ class RouteDefinitionsResolver
     }
 
     /**
-     * @return array<int, Route>
+     * @return array<string, Route>
      */
     public function getRoutes(): array
     {
-        /** @var array<string, Route> $definitions */
+        /** @var array<string, Route> $routes */
         $routes = [];
 
         // I've decided to use an inline listener in this case because I don't want to introduce any storage singleton

@@ -40,17 +40,21 @@ class BreadcrumbsBuilder
         return array_reverse($this->doBuild($node));
     }
 
-    private function doBuild(?BreadcrumbNode $node): array
+    /**
+     * @return array<int, Breadcrumb>
+     */
+    private function doBuild(BreadcrumbNode $node): array
     {
-        $builtBreadcrumbs = [];
-        $builtBreadcrumbs[] = new Breadcrumb(
+        $breadcrumbs = [];
+        $breadcrumbs[] = new Breadcrumb(
             $this->labelGenerator->generate($node->getDefinition()),
             $this->urlGenerator->generate($node->getDefinition())
         );
-        if ($node->getParent()) {
-            $builtBreadcrumbs = [...$builtBreadcrumbs, ...$this->doBuild($node->getParent())];
+        $parent = $node->getParent();
+        if ($parent) {
+            $breadcrumbs = array_merge($breadcrumbs, $this->doBuild($parent));
         }
 
-        return $builtBreadcrumbs;
+        return $breadcrumbs;
     }
 }
