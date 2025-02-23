@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal;
 
 use R1n0x\BreadcrumbsBundle\Exception\UnknownRootException;
+use R1n0x\BreadcrumbsBundle\Exception\UnknownRouteException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
@@ -17,6 +20,7 @@ class DefinitionToNodeTransformer
      * @param array<int, BreadcrumbDefinition> $definitions
      *
      * @throws UnknownRootException
+     * @throws UnknownRouteException
      */
     public function transform(RouteBreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
     {
@@ -27,25 +31,27 @@ class DefinitionToNodeTransformer
      * @param array<int, BreadcrumbDefinition> $definitions
      *
      * @throws UnknownRootException
+     * @throws UnknownRouteException
      */
     public function getParentDefinition(RouteBreadcrumbDefinition $definition, array $definitions): ?BreadcrumbNode
     {
         $parentRoute = $definition->getParentRoute();
-        if ($parentRoute) {
+        if (null !== $parentRoute) {
             $parentRouteDefinition = $this->getRouteDefinition($parentRoute, $definitions);
-            if (!$parentRouteDefinition) {
-                return new BreadcrumbNode(
-                    $definition,
-                    null
-                );
+            if (null === $parentRouteDefinition) {
+                throw new UnknownRouteException(sprintf(
+                    'Referenced route "%s" in route "%s" doesn\'t exist',
+                    $parentRoute,
+                    $definition->getRouteName()
+                ));
             }
 
             return $this->doTransform($parentRouteDefinition, $definitions);
         }
         $rootName = $definition->getRoot();
-        if ($rootName) {
+        if (null !== $rootName) {
             $rootDefinition = $this->getRootDefinition($rootName, $definitions);
-            if (!$rootDefinition) {
+            if (null === $rootDefinition) {
                 throw new UnknownRootException(sprintf(
                     'Referenced root "%s" for route "%s" doesn\'t exist',
                     $rootName,
@@ -63,6 +69,7 @@ class DefinitionToNodeTransformer
      * @param array<int, BreadcrumbDefinition> $definitions
      *
      * @throws UnknownRootException
+     * @throws UnknownRouteException
      */
     private function doTransform(BreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
     {

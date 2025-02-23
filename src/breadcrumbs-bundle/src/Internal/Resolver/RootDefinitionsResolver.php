@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
+use R1n0x\BreadcrumbsBundle\Exception\InvalidConfigurationException;
+use R1n0x\BreadcrumbsBundle\Exception\VariablesResolverException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -20,6 +23,9 @@ class RootDefinitionsResolver
 
     /**
      * @return array<int, RootBreadcrumbDefinition>
+     *
+     * @throws InvalidConfigurationException
+     * @throws VariablesResolverException
      */
     public function getDefinitions(): array
     {
@@ -29,9 +35,9 @@ class RootDefinitionsResolver
         foreach ($this->rootsResolver->getRoots() as $root) {
             $expression = $root->getExpression();
             $routeName = $root->getRouteName();
-            if ($routeName) {
+            if (null !== $routeName) {
                 $route = $this->router->getRouteCollection()->get($routeName);
-                if (!$route) {
+                if (null === $route) {
                     throw new InvalidConfigurationException(sprintf(
                         'Route "%s" referenced in breadcrumbs root "%s" doesn\'t exist.',
                         $routeName,

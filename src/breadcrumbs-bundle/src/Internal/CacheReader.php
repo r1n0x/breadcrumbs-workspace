@@ -1,14 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal;
 
 use R1n0x\BreadcrumbsBundle\Exception\FileAccessException;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class CacheReader
 {
+    /**
+     * @throws FileAccessException
+     */
     public function write(string $cacheDir, string $contents): void
     {
         $status = file_put_contents($this->getFilePath($cacheDir), $contents);
@@ -17,6 +24,9 @@ class CacheReader
         }
     }
 
+    /**
+     * @throws FileAccessException
+     */
     public function read(string $cacheDir): string
     {
         $contents = @file_get_contents($this->getFilePath($cacheDir));

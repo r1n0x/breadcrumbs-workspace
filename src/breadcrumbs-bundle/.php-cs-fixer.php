@@ -2,7 +2,8 @@
 
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__ . '/src')
-    ->in(__DIR__ . '/tests');
+    ->in(__DIR__ . '/tests')
+    ->in(__DIR__ . '/tools/src');
 
 return (new PhpCsFixer\Config())
     // override @PhpCsFixer set
@@ -112,9 +113,11 @@ return (new PhpCsFixer\Config())
         'no_unused_imports' => true,
         'global_namespace_import' => true,
         'ordered_types' => true,
-        'single_line_comment_style' => false // crucial for phpstan types
+        'single_line_comment_style' => false, // crucial for phpstan types
+        'declare_strict_types' => true
     ])
     ->setFinder($finder)
     ->setIndent("    ")
     ->setUsingCache(false)
-    ->setLineEnding("\r\n");
+    ->setLineEnding("\r\n")
+    ->setRiskyAllowed(true);

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
+use R1n0x\BreadcrumbsBundle\Exception\VariablesResolverException;
 use Symfony\Component\ExpressionLanguage\Lexer;
 use Symfony\Component\ExpressionLanguage\Parser;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
@@ -12,27 +15,34 @@ use Symfony\Component\ExpressionLanguage\SyntaxError;
 class VariablesResolver
 {
     public function __construct(
-        private readonly Lexer $lexer
+        private readonly Lexer $lexer,
+        private readonly Parser $parser
     ) {}
 
     /**
      * @return array<int, string>
+     *
+     * @throws VariablesResolverException
      */
     public function getVariables(string $expression): array
     {
-        $parser = new Parser([]);
         $variables = [];
 
-        // not clean but hey, it works and only when building cache, so I don't feel like this will improve anything
+        // not clean but hey, it works and only when building cache, so I don't feel like this will cause any major problems
         while (true) {
             try {
                 $stream = $this->lexer->tokenize($expression);
-                $parser->parse($stream, $variables);
+                $this->parser->parse($stream, $variables);
             } catch (SyntaxError $e) {
-                $variableName = explode('"', $e->getMessage())[1];
-                $variables[] = $variableName;
+                $message = $e->getMessage();
+                if (0 === mb_strpos($message, 'Variable')) {
+                    $variableName = explode('"', $message)[1];
+                    $variables[] = $variableName;
 
-                continue;
+                    continue;
+                }
+
+                throw new VariablesResolverException(previous: $e);
             }
 
             break;

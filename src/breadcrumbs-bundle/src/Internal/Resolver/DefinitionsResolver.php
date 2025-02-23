@@ -1,7 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
+use R1n0x\BreadcrumbsBundle\Exception\InvalidConfigurationException;
+use R1n0x\BreadcrumbsBundle\Exception\RouteValidationException;
+use R1n0x\BreadcrumbsBundle\Exception\VariablesResolverException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 
 /**
@@ -16,6 +21,10 @@ class DefinitionsResolver
 
     /**
      * @return array<int, BreadcrumbDefinition>
+     *
+     * @throws RouteValidationException
+     * @throws InvalidConfigurationException
+     * @throws VariablesResolverException
      */
     public function getDefinitions(): array
     {

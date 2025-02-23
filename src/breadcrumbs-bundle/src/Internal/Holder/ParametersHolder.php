@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Holder;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
@@ -23,7 +25,7 @@ class ParametersHolder
 
     public function getValue(string $name, ?string $routeName = null): ?string
     {
-        if ($routeName) {
+        if (null !== $routeName) {
             foreach ($this->parameters as $parameter) {
                 if ($parameter->getRouteName() === $routeName && $parameter->getName() === $name) {
                     return $parameter->getValue() ?? self::OPTIONAL_PARAMETER;

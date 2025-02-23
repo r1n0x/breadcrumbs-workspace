@@ -1,19 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Attribute;
 
 use Attribute;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 class Route extends \Symfony\Component\Routing\Attribute\Route
 {
-    public const EXPRESSION = 'expression';
-    public const PARENT_ROUTE = 'parent_route';
-    public const PASS_PARAMETERS_TO_EXPRESSION = 'pass_parameters_to_expression';
-    public const ROOT = 'root';
+    public const string EXPRESSION = 'expression';
+    public const string PARENT_ROUTE = 'parent_route';
+    public const string PASS_PARAMETERS_TO_EXPRESSION = 'pass_parameters_to_expression';
+    public const string ROOT = 'root';
 
     public function __construct(
         null|array|string $path = null,

@@ -3,6 +3,7 @@
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return function (ContainerConfigurator $configurator) {
     $services = $configurator->services();
@@ -72,16 +73,48 @@ return function (ContainerConfigurator $configurator) {
     $services
         ->alias(R1n0x\BreadcrumbsBundle\Internal\BreadcrumbsBuilder::class, 'r1n0x.breadcrumbs.builder');
 
+
+    $services
+        ->set('r1n0x.breadcrumbs.expression_language.functions_provider', R1n0x\BreadcrumbsBundle\Internal\FunctionsProvider::class)
+        ->args([
+            tagged_iterator('r1n0x.breadcrumbs.expression_language.function_provider')
+        ]);
+
+    $services
+        ->set('r1n0x.breadcrumbs.expression_language.functions', 'array')
+        ->factory([
+            service('r1n0x.breadcrumbs.expression_language.functions_provider'),
+            'getFunctions'
+        ]);
+
+    $services
+        ->set('r1n0x.breadcrumbs.expression_language.providers', 'array')
+        ->factory([
+            service('r1n0x.breadcrumbs.expression_language.functions_provider'),
+            'getProviders'
+        ]);
+
     $services
         ->set('r1n0x.breadcrumbs.expression_language.lexer', Symfony\Component\ExpressionLanguage\Lexer::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.expression_language.engine', Symfony\Component\ExpressionLanguage\ExpressionLanguage::class);
+        ->set('r1n0x.breadcrumbs.expression_language.parser', Symfony\Component\ExpressionLanguage\Parser::class)
+        ->args([
+            service('r1n0x.breadcrumbs.expression_language.functions')
+        ]);
+
+    $services
+        ->set('r1n0x.breadcrumbs.expression_language.engine', Symfony\Component\ExpressionLanguage\ExpressionLanguage::class)
+        ->args([
+            null,
+            service('r1n0x.breadcrumbs.expression_language.providers')
+        ]);
 
     $services
         ->set('r1n0x.breadcrumbs.resolver.variables', R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver::class)
         ->args([
-            service('r1n0x.breadcrumbs.expression_language.lexer')
+            service('r1n0x.breadcrumbs.expression_language.lexer'),
+            service('r1n0x.breadcrumbs.expression_language.parser')
         ]);
 
     $services

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Generator;
 
-use R1n0x\BreadcrumbsBundle\Exception\LogicException;
+use Exception;
+use R1n0x\BreadcrumbsBundle\Exception\RouteGenerationException;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
@@ -19,19 +22,24 @@ class UrlGenerator
         private readonly RouterInterface $router
     ) {}
 
+    /**
+     * @throws RouteGenerationException
+     */
     public function generate(BreadcrumbDefinition $definition): ?string
     {
         $routeName = $definition->getRouteName();
-        if ($definition instanceof RootBreadcrumbDefinition && !$routeName) {
+        if ($definition instanceof RootBreadcrumbDefinition && null === $routeName) {
             return null;
         }
 
-        /* @phpstan-ignore argument.type */
-        return $this->router->generate($routeName, match (true) {
-            $definition instanceof RouteBreadcrumbDefinition => $this->getParameters($definition),
-            $definition instanceof RootBreadcrumbDefinition => [],
-            default => throw new LogicException(sprintf('Unexpected breadcrumb type of \'%s\'', get_class($definition)))
-        });
+        try {
+            return match (true) {
+                $definition instanceof RootBreadcrumbDefinition => $this->router->generate($routeName),
+                $definition instanceof RouteBreadcrumbDefinition => $this->router->generate($definition->getRouteName(), $this->getParameters($definition))
+            };
+        } catch (Exception $e) {
+            throw new RouteGenerationException(previous: $e);
+        }
     }
 
     /**

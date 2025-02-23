@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Model;
+
+use Override;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -44,5 +48,12 @@ class RouteBreadcrumbDefinition extends BreadcrumbDefinition
     public function getParameters(): array
     {
         return $this->parameters;
+    }
+
+    #[Override]
+    public function getRouteName(): string
+    {
+        /* @phpstan-ignore return.type */
+        return parent::getRouteName();
     }
 }

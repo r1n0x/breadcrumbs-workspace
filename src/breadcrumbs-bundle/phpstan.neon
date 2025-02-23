@@ -2,3 +2,17 @@ parameters:
 	level: 9
 	paths:
 		- src
+	exceptions:
+	    check:
+	        missingCheckedExceptionInThrows: true
+	        tooWideThrowType: true
+	checkUninitializedProperties: true
+services:
+    -
+        class: R1n0x\BreadcrumbsBundleTools\Phpstan\SealedBreadcrumbDefinition
+        tags:
+            - phpstan.broker.allowedSubTypesClassReflectionExtension
+    -
+        class: R1n0x\BreadcrumbsBundleTools\Phpstan\SealedErrorClass
+        tags:
+            - phpstan.broker.allowedSubTypesClassReflectionExtension

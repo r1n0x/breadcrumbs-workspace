@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Event\RouteInitializedEvent;
+use R1n0x\BreadcrumbsBundle\Exception\RouteValidationException;
+use R1n0x\BreadcrumbsBundle\Exception\VariablesResolverException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -25,6 +29,9 @@ class RouteDefinitionsResolver
 
     /**
      * @return array<int, RouteBreadcrumbDefinition>
+     *
+     * @throws RouteValidationException
+     * @throws VariablesResolverException
      */
     public function getDefinitions(): array
     {
@@ -33,7 +40,7 @@ class RouteDefinitionsResolver
 
         foreach ($this->getRoutes() as $name => $route) {
             $expression = $route->getBreadcrumb()[Route::EXPRESSION] ?? null;
-            if (!$expression) {
+            if (null === $expression) {
                 continue;
             }
             $this->validator->validate($route);

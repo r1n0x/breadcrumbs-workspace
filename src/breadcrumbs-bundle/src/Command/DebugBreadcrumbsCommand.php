@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace R1n0x\BreadcrumbsBundle\Command;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
@@ -12,6 +14,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 #[AsCommand(
@@ -24,6 +28,21 @@ class DebugBreadcrumbsCommand extends Command
         private readonly NodesResolver $resolver
     ) {
         parent::__construct();
+    }
+
+    public function printRootDefinition(OutputInterface $output, string $prefix, int $level, RootBreadcrumbDefinition $definition): void
+    {
+        $output->writeln($prefix . "----> \033[0;33m(root)\033[0m (" . $level . ')');
+        $output->writeln($prefix . '      Name: "' . $definition->getName() . '"');
+        $output->writeln($prefix . '      Route: "' . ($definition->getRouteName() ?? '__UNSET__') . '"');
+        $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
+    }
+
+    public function printRouteDefinition(OutputInterface $output, string $prefix, RouteBreadcrumbDefinition $definition, int $level): void
+    {
+        $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
+        $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
+        $output->writeln($prefix . '      Parameters: [' . implode(', ', $definition->getParameters()) . ']');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -40,19 +59,13 @@ class DebugBreadcrumbsCommand extends Command
     {
         $prefix = str_repeat("\t", $level);
         $definition = $node->getDefinition();
-        if ($definition instanceof RouteBreadcrumbDefinition) {
-            $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
-            $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
-            $output->writeln($prefix . '      Parameters: [' . implode(', ', $definition->getParameters()) . ']');
-        } elseif ($definition instanceof RootBreadcrumbDefinition) {
-            $output->writeln($prefix . "----> \033[0;33m(root)\033[0m (" . $level . ')');
-            $output->writeln($prefix . '      Name: "' . $definition->getName() . '"');
-            $output->writeln($prefix . '      Route: "' . ($definition->getRouteName() ?? '__UNSET__') . '"');
-            $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
-        }
+        match (true) {
+            $definition instanceof RouteBreadcrumbDefinition => $this->printRouteDefinition($output, $prefix, $definition, $level),
+            $definition instanceof RootBreadcrumbDefinition => $this->printRootDefinition($output, $prefix, $level, $definition)
+        };
         $output->writeln($prefix . '      Variables: [' . implode(', ', $definition->getVariables()) . ']');
         $child = $node->getParent();
-        if ($child) {
+        if (null !== $child) {
             $this->printNode($child, $output, ++$level);
         }
     }
