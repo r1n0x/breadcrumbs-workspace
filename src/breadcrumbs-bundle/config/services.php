@@ -37,14 +37,12 @@ return function (ContainerConfigurator $configurator) {
     $services
         ->set('r1n0x.breadcrumbs.generator.label', R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator::class)
         ->args([
-            service('r1n0x.breadcrumbs.holder.variables'),
             service('r1n0x.breadcrumbs.expression_language.engine')
         ]);
 
     $services
         ->set('r1n0x.breadcrumbs.generator.url', R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator::class)
         ->args([
-            service('r1n0x.breadcrumbs.holder.parameters'),
             service('router')
         ]);
 
@@ -55,7 +53,7 @@ return function (ContainerConfigurator $configurator) {
         ->set('r1n0x.breadcrumbs.holder.parameters', R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder::class);
 
     $services
-        ->set('r1n0x.breadcrumbs.validator.node', R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeValidator::class)
+        ->set('r1n0x.breadcrumbs.validator.node', R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator::class)
         ->args([
             service('r1n0x.breadcrumbs.holder.parameters'),
             service('r1n0x.breadcrumbs.holder.variables')
@@ -197,7 +195,8 @@ return function (ContainerConfigurator $configurator) {
     $services->set('r1n0x.breadcrumbs.twig.extension', R1n0x\BreadcrumbsBundle\Twig\BreadcrumbsExtension::class)
         ->args([
             service('request_stack'),
-            service('r1n0x.breadcrumbs.builder')
+            service('r1n0x.breadcrumbs.builder'),
+            service('r1n0x.breadcrumbs.context')
         ])
         ->tag('twig.extension');
 };

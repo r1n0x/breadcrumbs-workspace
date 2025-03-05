@@ -11,7 +11,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
-use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeValidator;
+use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -23,7 +23,7 @@ class Builder
         private readonly NodesResolver $resolver,
         private readonly UrlGenerator $urlGenerator,
         private readonly LabelGenerator $labelGenerator,
-        private readonly NodeValidator $validator
+        private readonly NodeContextValidator $validator
     ) {}
 
     /**
@@ -33,16 +33,16 @@ class Builder
      * @throws LabelGenerationException
      * @throws RouteGenerationException
      */
-    public function build(Request $request): array
+    public function build(Request $request, Context $context): array
     {
         $routeName = $request->attributes->getString('_route');
         $node = $this->resolver->get($routeName);
         if (null === $node) {
             return [];
         }
-        $this->validator->validate($node);
+        $this->validator->validate($node, $context);
 
-        return array_reverse($this->doBuild($node));
+        return array_reverse($this->doBuild($node, $context));
     }
 
     /**
@@ -51,16 +51,16 @@ class Builder
      * @throws LabelGenerationException
      * @throws RouteGenerationException
      */
-    private function doBuild(BreadcrumbNode $node): array
+    private function doBuild(BreadcrumbNode $node, Context $context): array
     {
         $breadcrumbs = [];
         $breadcrumbs[] = new Breadcrumb(
-            $this->labelGenerator->generate($node->getDefinition()),
-            $this->urlGenerator->generate($node->getDefinition())
+            $this->labelGenerator->generate($node->getDefinition(), $context->getVariablesHolder()),
+            $this->urlGenerator->generate($node->getDefinition(), $context->getParametersHolder())
         );
         $parent = $node->getParent();
         if (null !== $parent) {
-            $breadcrumbs = array_merge($breadcrumbs, $this->doBuild($parent));
+            $breadcrumbs = array_merge($breadcrumbs, $this->doBuild($parent, $context));
         }
 
         return $breadcrumbs;

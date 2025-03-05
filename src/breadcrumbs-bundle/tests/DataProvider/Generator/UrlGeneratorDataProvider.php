@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Generator;
 
-use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Context;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
@@ -52,7 +52,7 @@ class UrlGeneratorDataProvider
                 },
             ],
             'Route definition with parameters' => [
-                function (RouterStub $router, ParametersHolder $holder) {
+                function (RouterStub $router, Context $context) {
                     $definition = new RouteBreadcrumbDefinition(
                         'animal_details',
                         "''",
@@ -63,7 +63,7 @@ class UrlGeneratorDataProvider
                             'name',
                         ]
                     );
-                    $holder
+                    $context->getParametersHolder()
                         ->set(new Parameter('name', 'duck'))
                     ;
                     $router

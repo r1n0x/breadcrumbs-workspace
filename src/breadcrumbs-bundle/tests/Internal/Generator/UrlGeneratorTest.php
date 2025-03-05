@@ -9,8 +9,10 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use R1n0x\BreadcrumbsBundle\Context;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
@@ -31,6 +33,7 @@ use Symfony\Component\Routing\RouterInterface;
 #[UsesClass(ParametersResolver::class)]
 #[UsesClass(ParametersHolder::class)]
 #[UsesClass(Parameter::class)]
+#[UsesClass(Context::class)]
 #[UsesClass(RouteBreadcrumbDefinition::class)]
 class UrlGeneratorTest extends TestCase
 {
@@ -38,14 +41,14 @@ class UrlGeneratorTest extends TestCase
     #[DataProviderExternal(UrlGeneratorDataProvider::class, 'getGeneratesTestScenarios')]
     public function generates(callable $scenarioBuilder): void
     {
-        $holder = new ParametersHolder();
+        $context = new Context(new ParametersHolder(), new VariablesHolder());
         $router = new RouterStub();
-        [$definition, $expected] = $scenarioBuilder($router, $holder);
-        $this->assertEquals($expected, $this->getUrlGenerator($holder, $router)->generate($definition));
+        [$definition, $expected] = $scenarioBuilder($router, $context);
+        $this->assertEquals($expected, $this->getUrlGenerator($router)->generate($definition, $context->getParametersHolder()));
     }
 
-    public function getUrlGenerator(ParametersHolder $holder, RouterInterface $router): UrlGenerator
+    public function getUrlGenerator(RouterInterface $router): UrlGenerator
     {
-        return new UrlGenerator($holder, $router);
+        return new UrlGenerator($router);
     }
 }

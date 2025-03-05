@@ -7,8 +7,6 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Generator;
 use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Throwable;
 
@@ -18,44 +16,32 @@ use Throwable;
 class LabelGenerator
 {
     public function __construct(
-        private readonly VariablesHolder $holder,
         private readonly ExpressionLanguage $expressionLanguage
     ) {}
 
     /**
      * @throws LabelGenerationException
      */
-    public function generate(BreadcrumbDefinition $definition): string
+    public function generate(BreadcrumbDefinition $definition, VariablesHolder $holder): string
     {
         try {
             /* @phpstan-ignore return.type */
-            return $this->expressionLanguage->evaluate($definition->getExpression(), $this->getVariables($definition));
+            return $this->expressionLanguage->evaluate($definition->getExpression(), $this->getVariables($definition, $holder));
         } catch (Throwable $e) {
-            match (true) {
-                $definition instanceof RouteBreadcrumbDefinition => throw new LabelGenerationException(sprintf(
-                    'Error occurred when evaluating breadcrumb expression "%s" for route "%s"',
-                    $definition->getExpression(),
-                    $definition->getRouteName()
-                ), 0, $e),
-                $definition instanceof RootBreadcrumbDefinition => throw new LabelGenerationException(sprintf(
-                    'Error occurred when evaluating breadcrumb expression "%s" for root "%s"',
-                    $definition->getExpression(),
-                    $definition->getName()
-                ), 0, $e)
-            };
+            throw new LabelGenerationException($definition, previous: $e);
         }
     }
 
     /**
      * @return array<string, mixed>
      */
-    public function getVariables(BreadcrumbDefinition $definition): array
+    public function getVariables(BreadcrumbDefinition $definition, VariablesHolder $holder): array
     {
         $routeName = $definition->getRouteName();
         $variables = [];
         foreach ($definition->getVariables() as $variableName) {
-            $value = $this->holder->getValue($variableName, $routeName)
-                ?? $this->holder->getValue($variableName);
+            $value = $holder->getValue($variableName, $routeName)
+                ?? $holder->getValue($variableName);
             $variables[$variableName] = VariablesHolder::OPTIONAL_VARIABLE === $value ? null : $value;
         }
 

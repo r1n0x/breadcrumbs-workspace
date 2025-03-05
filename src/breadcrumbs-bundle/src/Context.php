@@ -32,4 +32,14 @@ class Context
 
         return $this;
     }
+
+    public function getParametersHolder(): ParametersHolder
+    {
+        return $this->parametersHolder;
+    }
+
+    public function getVariablesHolder(): VariablesHolder
+    {
+        return $this->variablesHolder;
+    }
 }

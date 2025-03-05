@@ -18,14 +18,13 @@ use Symfony\Component\Routing\RouterInterface;
 class UrlGenerator
 {
     public function __construct(
-        private readonly ParametersHolder $holder,
         private readonly RouterInterface $router
     ) {}
 
     /**
      * @throws RouteGenerationException
      */
-    public function generate(BreadcrumbDefinition $definition): ?string
+    public function generate(BreadcrumbDefinition $definition, ParametersHolder $holder): ?string
     {
         $routeName = $definition->getRouteName();
         if ($definition instanceof RootBreadcrumbDefinition && null === $routeName) {
@@ -35,7 +34,10 @@ class UrlGenerator
         try {
             return match (true) {
                 $definition instanceof RootBreadcrumbDefinition => $this->router->generate($routeName),
-                $definition instanceof RouteBreadcrumbDefinition => $this->router->generate($definition->getRouteName(), $this->getParameters($definition))
+                $definition instanceof RouteBreadcrumbDefinition => $this->router->generate(
+                    $definition->getRouteName(),
+                    $this->getParameters($definition, $holder)
+                )
             };
         } catch (Exception $e) {
             throw new RouteGenerationException(previous: $e);
@@ -45,12 +47,12 @@ class UrlGenerator
     /**
      * @return array<string, null|string>
      */
-    public function getParameters(RouteBreadcrumbDefinition $definition): array
+    public function getParameters(RouteBreadcrumbDefinition $definition, ParametersHolder $holder): array
     {
         $routeName = $definition->getRouteName();
         $parameters = [];
         foreach ($definition->getParameters() as $parameterName) {
-            $value = $this->holder->getValue($parameterName, $routeName) ?? $this->holder->getValue($parameterName);
+            $value = $holder->getValue($parameterName, $routeName) ?? $holder->getValue($parameterName);
             $parameters[$parameterName] = ParametersHolder::OPTIONAL_PARAMETER === $value ? null : $value;
         }
 
