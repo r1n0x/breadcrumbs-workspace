@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Internal;
+namespace R1n0x\BreadcrumbsBundle;
 
-use R1n0x\BreadcrumbsBundle\Breadcrumb;
 use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
 use R1n0x\BreadcrumbsBundle\Exception\RouteGenerationException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
@@ -18,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbsBuilder
+class Builder
 {
     public function __construct(
         private readonly NodesResolver $resolver,
@@ -34,7 +33,7 @@ class BreadcrumbsBuilder
      * @throws LabelGenerationException
      * @throws RouteGenerationException
      */
-    public function getBreadcrumbs(Request $request): array
+    public function build(Request $request): array
     {
         $routeName = $request->attributes->getString('_route');
         $node = $this->resolver->get($routeName);

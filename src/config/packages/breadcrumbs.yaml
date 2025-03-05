@@ -1,9 +1,7 @@
 breadcrumbs:
-  defaults:
-    pass_parameters_to_expression: true
   roots:
     product:
       expression: "'Shopping Center'"
     animal:
-      expression: "'AniLove'"
+      expression: "'Animals'"
       route: 'animal_list'

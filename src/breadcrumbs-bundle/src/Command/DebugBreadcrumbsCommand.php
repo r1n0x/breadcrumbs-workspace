@@ -30,19 +30,19 @@ class DebugBreadcrumbsCommand extends Command
         parent::__construct();
     }
 
+    public function printRouteDefinition(OutputInterface $output, string $prefix, RouteBreadcrumbDefinition $definition, int $level): void
+    {
+        $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
+        $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
+        $output->writeln($prefix . '      Parameters: [' . implode(', ', $definition->getParameters()) . ']');
+    }
+
     public function printRootDefinition(OutputInterface $output, string $prefix, int $level, RootBreadcrumbDefinition $definition): void
     {
         $output->writeln($prefix . "----> \033[0;33m(root)\033[0m (" . $level . ')');
         $output->writeln($prefix . '      Name: "' . $definition->getName() . '"');
         $output->writeln($prefix . '      Route: "' . ($definition->getRouteName() ?? '__UNSET__') . '"');
         $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
-    }
-
-    public function printRouteDefinition(OutputInterface $output, string $prefix, RouteBreadcrumbDefinition $definition, int $level): void
-    {
-        $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
-        $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
-        $output->writeln($prefix . '      Parameters: [' . implode(', ', $definition->getParameters()) . ']');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

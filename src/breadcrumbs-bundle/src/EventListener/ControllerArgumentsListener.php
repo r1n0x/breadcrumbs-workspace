@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\EventListener;
 
-use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
+use R1n0x\BreadcrumbsBundle\Context;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 class ControllerArgumentsListener
 {
     public function __construct(
-        private readonly BreadcrumbsManager $manager,
+        private readonly Context $context,
         private readonly NodesResolver $resolver
     ) {}
 
@@ -42,9 +42,9 @@ class ControllerArgumentsListener
             if (ParametersHolder::OPTIONAL_PARAMETER === $value) {
                 continue;
             }
-            $this->manager->setParameter($parameterName, $value, $routeName);
+            $this->context->setParameter($parameterName, $value, $routeName);
             if ($definition->getPassParametersToExpression()) {
-                $this->manager->setVariable($parameterName, $values[$parameterName] ?? $parameterValues[$parameterName], $routeName);
+                $this->context->setVariable($parameterName, $values[$parameterName] ?? $parameterValues[$parameterName], $routeName);
             }
         }
     }

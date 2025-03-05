@@ -51,7 +51,7 @@ class RouteDefinitionsResolver
                 $route->getBreadcrumb()[Route::ROOT] ?? null, /* @phpstan-ignore argument.type */
                 $route->getBreadcrumb()[Route::PASS_PARAMETERS_TO_EXPRESSION] ?? $this->passParametersToExpression, /* @phpstan-ignore argument.type */
                 $this->variablesResolver->getVariables($expression), /* @phpstan-ignore argument.type */
-                $this->parametersResolver->getParameters($route->getPath()) /* @phpstan-ignore argument.type */
+                $this->parametersResolver->getParameters($route->getPath())/* @phpstan-ignore argument.type */
             );
         }
 

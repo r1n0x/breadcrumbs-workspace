@@ -40,6 +40,11 @@ class DefinitionToNodeTransformerTest extends TestCase
         $this->assertEquals($node, $transformer->transform($definition, $definitions));
     }
 
+    public function getDefinitionToNodeTransformer(): DefinitionToNodeTransformer
+    {
+        return new DefinitionToNodeTransformer();
+    }
+
     #[Test]
     #[TestDox('Throws exception, when unknown root is provided')]
     public function throwsExceptionWhenUnknownRootIsProvided(): void
@@ -74,10 +79,5 @@ class DefinitionToNodeTransformerTest extends TestCase
             []
         );
         $transformer->transform($definition, [$definition]);
-    }
-
-    public function getDefinitionToNodeTransformer(): DefinitionToNodeTransformer
-    {
-        return new DefinitionToNodeTransformer();
     }
 }

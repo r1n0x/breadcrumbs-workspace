@@ -19,7 +19,8 @@
   "require": {
     "php": ">=8.3",
     "symfony/framework-bundle": "6.4.*",
-    "symfony/expression-language": "6.4.*"
+    "symfony/expression-language": "6.4.*",
+    "symfony/twig-bundle": "^7.2"
   },
   "scripts": {
     "phpunit": "composer install && composer install --working-dir=tools && tools/vendor/bin/phpunit --testdox --coverage-html coverege_report",

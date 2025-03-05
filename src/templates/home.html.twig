@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Home
+{% endblock title %}
+
+{% block content %}
+    <div class="d-flex flex-column gap-2">
+        <a href="{{ path('product_list') }}">ROOT USAGE EXAMPLE</a>
+        <a href="{{ path('book_list') }}">PARENT ROUTE EXAMPLE</a>
+        <a href="{{ path('animal_list') }}">ROOT AND PARENT ROUTE USAGE EXAMPLE</a>
+    </div>
+{% endblock %}

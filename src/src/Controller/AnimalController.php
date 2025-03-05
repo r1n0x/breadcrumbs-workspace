@@ -5,13 +5,8 @@ namespace App\Controller;
 use App\Entity\Animal;
 use App\Repository\AnimalRepository;
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
-use R1n0x\BreadcrumbsBundle\Breadcrumb;
-use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
-use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,18 +17,11 @@ class AnimalController extends AbstractController
 {
     #[Route(path: '/list', name: 'list', breadcrumb: [Route::EXPRESSION => '\'List\'', Route::ROOT => 'animal'])]
     public function list(
-        Request            $request,
-        AnimalRepository   $repository,
-        BreadcrumbsManager $manager
-    ): JsonResponse
+        AnimalRepository $repository,
+    ): Response
     {
-        $items = [];
-        foreach ($repository->findAll() as $product) {
-            $items[] = $this->transformEntity($product);
-        }
-        return $this->json([
-            'breadcrumbs' => $this->transformBreadcrumbs($manager, $request),
-            'items' => $items
+        return $this->render('animal/list.html.twig', [
+            'animals' => $repository->findAll()
         ]);
     }
 
@@ -42,38 +30,12 @@ class AnimalController extends AbstractController
         Route::PARENT_ROUTE => 'animal_list',
         Route::PASS_PARAMETERS_TO_EXPRESSION => true
     ])]
-    public function one(
-        #[MapEntity(id: 'animal')] Animal $animal,
-        Request                           $request,
-        BreadcrumbsManager                $manager
+    public function details(
+        #[MapEntity(id: 'animal')] Animal $animal
     ): Response
     {
-        return $this->json([
-            'breadcrumbs' => $this->transformBreadcrumbs($manager, $request),
-            'details' => $this->transformEntity($animal)
+        return $this->render('animal/details.html.twig', [
+            'animal' => $animal
         ]);
-    }
-
-    private function transformEntity(Animal $animal): array
-    {
-        return [
-            'id' => $animal->getId(),
-            'name' => $animal->getName(),
-            'url' => $this->generateUrl('animal_details', ['animal' => $animal->getId()])
-        ];
-    }
-
-    /**
-     * @param BreadcrumbsManager $manager
-     * @param Request $request
-     * @return array
-     * @throws ValidationException
-     */
-    private function transformBreadcrumbs(BreadcrumbsManager $manager, Request $request): array
-    {
-        return array_map(fn(Breadcrumb $breadcrumb) => [
-            'label' => $breadcrumb->getLabel(),
-            'url' => $breadcrumb->getUrl()
-        ], $manager->build($request));
     }
 }

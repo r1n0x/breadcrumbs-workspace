@@ -11,7 +11,7 @@ return function (ContainerConfigurator $configurator) {
     $services
         ->set('r1n0x.breadcrumbs.listener.controller_arguments', R1n0x\BreadcrumbsBundle\EventListener\ControllerArgumentsListener::class)
         ->args([
-            service('r1n0x.breadcrumbs.manager'),
+            service('r1n0x.breadcrumbs.context'),
             service('r1n0x.breadcrumbs.resolver.nodes')
         ])
         ->tag('kernel.event_listener');
@@ -62,7 +62,7 @@ return function (ContainerConfigurator $configurator) {
         ]);
 
     $services
-        ->set('r1n0x.breadcrumbs.builder', R1n0x\BreadcrumbsBundle\Internal\BreadcrumbsBuilder::class)
+        ->set('r1n0x.breadcrumbs.builder', R1n0x\BreadcrumbsBundle\Builder::class)
         ->args([
             service('r1n0x.breadcrumbs.resolver.nodes'),
             service('r1n0x.breadcrumbs.generator.url'),
@@ -71,7 +71,7 @@ return function (ContainerConfigurator $configurator) {
         ]);
 
     $services
-        ->alias(R1n0x\BreadcrumbsBundle\Internal\BreadcrumbsBuilder::class, 'r1n0x.breadcrumbs.builder');
+        ->alias(R1n0x\BreadcrumbsBundle\Builder::class, 'r1n0x.breadcrumbs.builder');
 
 
     $services
@@ -124,7 +124,7 @@ return function (ContainerConfigurator $configurator) {
         ]);
 
     $services
-        ->set('r1n0x.breadcrumbs.manager', R1n0x\BreadcrumbsBundle\BreadcrumbsManager::class)
+        ->set('r1n0x.breadcrumbs.context', R1n0x\BreadcrumbsBundle\Context::class)
         ->args([
             service('r1n0x.breadcrumbs.holder.parameters'),
             service('r1n0x.breadcrumbs.holder.variables'),
@@ -132,7 +132,7 @@ return function (ContainerConfigurator $configurator) {
         ]);
 
     $services
-        ->alias(R1n0x\BreadcrumbsBundle\BreadcrumbsManager::class, 'r1n0x.breadcrumbs.manager');
+        ->alias(R1n0x\BreadcrumbsBundle\Context::class, 'r1n0x.breadcrumbs.context');
 
     $services
         ->set('r1n0x.breadcrumbs.validator.route', R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator::class);
@@ -193,4 +193,11 @@ return function (ContainerConfigurator $configurator) {
             service('r1n0x.breadcrumbs.resolver.parameters'),
             service('r1n0x.breadcrumbs.resolver.roots')
         ]);
+
+    $services->set('r1n0x.breadcrumbs.twig.extension', R1n0x\BreadcrumbsBundle\Twig\BreadcrumbsExtension::class)
+        ->args([
+            service('request_stack'),
+            service('r1n0x.breadcrumbs.builder')
+        ])
+        ->tag('twig.extension');
 };

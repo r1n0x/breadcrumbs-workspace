@@ -1,0 +1,22 @@
+{% set breadcrumbs = build_breadcrumbs() %}
+{% if breadcrumbs is not empty %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+                {% if loop.last %}
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ breadcrumb.label }}
+                    </li>
+                {% else %}
+                    <li class="breadcrumb-item" aria-current="page">
+                        {% if breadcrumb.url %}
+                            <a href="{{ breadcrumb.url }}">{{ breadcrumb.label }}</a>
+                        {% else %}
+                            <span class="fw-bold">{{ breadcrumb.label }}</span>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </nav>
+{% endif %}

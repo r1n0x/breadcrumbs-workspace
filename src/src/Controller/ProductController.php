@@ -5,13 +5,8 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
-use R1n0x\BreadcrumbsBundle\Breadcrumb;
-use R1n0x\BreadcrumbsBundle\BreadcrumbsManager;
-use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,18 +17,11 @@ class ProductController extends AbstractController
 {
     #[Route(path: '/list', name: 'list', breadcrumb: [Route::EXPRESSION => '\'List\'', Route::ROOT => 'product'])]
     public function list(
-        Request            $request,
-        ProductRepository  $repository,
-        BreadcrumbsManager $manager
-    ): JsonResponse
+        ProductRepository $repository
+    ): Response
     {
-        $items = [];
-        foreach ($repository->findAll() as $product) {
-            $items[] = $this->transformEntity($product);
-        }
-        return $this->json([
-            'breadcrumbs' => $this->transformBreadcrumbs($manager, $request),
-            'items' => $items
+        return $this->render('product/list.html.twig', [
+            'products' => $repository->findAll()
         ]);
     }
 
@@ -42,38 +30,12 @@ class ProductController extends AbstractController
         Route::ROOT => 'product',
         Route::PASS_PARAMETERS_TO_EXPRESSION => true
     ])]
-    public function one(
-        #[MapEntity(id: 'product')] Product $product,
-        Request                             $request,
-        BreadcrumbsManager                  $manager
+    public function details(
+        #[MapEntity(id: 'product')] Product $product
     ): Response
     {
-        return $this->json([
-            'breadcrumbs' => $this->transformBreadcrumbs($manager, $request),
-            'details' => $this->transformEntity($product)
+        return $this->render('product/details.html.twig', [
+            'product' => $product
         ]);
-    }
-
-    public function transformEntity(Product $product): array
-    {
-        return [
-            'id' => $product->getId(),
-            'name' => $product->getName(),
-            'url' => $this->generateUrl('product_details', ['product' => $product->getId()])
-        ];
-    }
-
-    /**
-     * @param BreadcrumbsManager $manager
-     * @param Request $request
-     * @return array
-     * @throws ValidationException
-     */
-    public function transformBreadcrumbs(BreadcrumbsManager $manager, Request $request): array
-    {
-        return array_map(fn(Breadcrumb $breadcrumb) => [
-            'label' => $breadcrumb->getLabel(),
-            'url' => $breadcrumb->getUrl()
-        ], $manager->build($request));
     }
 }

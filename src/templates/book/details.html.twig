@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Book - {{ book.name }}
+{% endblock %}
+{% block content %}
+    <div class="d-flex flex-column gap-1">
+        <div class="d-flex flex-row gap-2">
+            <div class="fw-bold">
+                #
+            </div>
+            <div>
+                {{ book.id }}
+            </div>
+        </div>
+        <div class="d-flex flex-row gap-2">
+            <div class="fw-bold">
+                Name
+            </div>
+            <div>
+                {{ book.name }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
