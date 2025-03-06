@@ -54,7 +54,7 @@ class NodeContextValidatorTest extends TestCase
     public function throwsException(BreadcrumbNode $node, Context $context): void
     {
         $this->expectException(ValidationException::class);
-        $this->getNodeContextValidator()->validate($node, $context);
+        $this->getService()->validate($node, $context);
     }
 
     #[Test]
@@ -62,10 +62,10 @@ class NodeContextValidatorTest extends TestCase
     public function validates(BreadcrumbNode $node, Context $context): void
     {
         $this->expectNotToPerformAssertions();
-        $this->getNodeContextValidator()->validate($node, $context);
+        $this->getService()->validate($node, $context);
     }
 
-    private function getNodeContextValidator(): NodeContextValidator
+    private function getService(): NodeContextValidator
     {
         return new NodeContextValidator();
     }

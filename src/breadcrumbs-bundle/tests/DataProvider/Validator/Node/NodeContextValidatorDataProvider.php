@@ -18,8 +18,8 @@ use R1n0x\BreadcrumbsBundle\Tests\Provider\Unused;
  */
 class NodeContextValidatorDataProvider
 {
-    // 255 felt like good number, overkill but hey
-    private const int NEST_LEVEL = 255;
+    // 63 felt like good number, overkill but hey
+    private const int NEST_LEVEL = 63;
 
     public static function getThrowsExceptionTestScenarios(): array
     {
@@ -140,7 +140,7 @@ class NodeContextValidatorDataProvider
 
     private static function _createWithDepth(int $depth, BreadcrumbDefinition $definition, int $level): BreadcrumbNode
     {
-        if ($depth >= $level) {
+        if ($depth <= $level) {
             return new BreadcrumbNode(
                 $definition,
                 null

@@ -32,7 +32,7 @@ class NodeSerializerTest extends TestCase
     #[DataProviderExternal(NodeSerializerDataProvider::class, 'getSerializesTestScenarios')]
     public function serializes(BreadcrumbNode $node, string $serialized): void
     {
-        $serializer = $this->getNodeSerializer();
+        $serializer = $this->getService();
         $this->assertEquals($serialized, $serializer->serialize([$node]));
     }
 
@@ -40,11 +40,11 @@ class NodeSerializerTest extends TestCase
     #[DataProviderExternal(NodeSerializerDataProvider::class, 'getDeserializesTestScenarios')]
     public function deserializes(string $serialized, BreadcrumbNode $deserialized): void
     {
-        $serializer = $this->getNodeSerializer();
+        $serializer = $this->getService();
         $this->assertEquals([$deserialized], $serializer->deserialize($serialized));
     }
 
-    private function getNodeSerializer(): NodeSerializer
+    private function getService(): NodeSerializer
     {
         return new NodeSerializer();
     }

@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Generator;
 
-use R1n0x\BreadcrumbsBundle\Context;
 use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Provider\RouteProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\Unused;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
+ * Used UUIDs for tracking purposes - if tests break at any time.
  */
 class UrlGeneratorDataProvider
 {
@@ -20,103 +22,182 @@ class UrlGeneratorDataProvider
     {
         return [
             'Root definition without route name' => [
-                function () {
-                    $definition = new RootBreadcrumbDefinition(
-                        null,
-                        "'static-value-6d9adf11-470a-438d-a36c-d6f8f2656fad'",
-                        'root_name-94bb3a28-8cd8-443b-a705-a8bc6961599c',
-                        []
-                    );
-
-                    return [
-                        $definition,
-                        null,
-                    ];
-                },
+                ContextProvider::provide(),
+                self::createRouterStub(),
+                new RootBreadcrumbDefinition(
+                    null,
+                    Unused::string(),
+                    Unused::string(),
+                    []
+                ),
+                null,
             ],
             'Root definition with route name' => [
-                function (RouterStub $router) {
-                    $definition = new RootBreadcrumbDefinition(
-                        'root-ccb35d2f-b3f8-4217-8876-776c8af84773',
-                        "'static-value-22c69e0c-3008-4463-8879-476599389234'",
-                        'root_name-94bb3a28-8cd8-443b-a705-a8bc6961599c',
-                        []
-                    );
-
-                    $router
+                ...(function () {
+                    $router = self::createRouterStub()
                         ->addRouteStub(RouteProvider::provide('root-ccb35d2f-b3f8-4217-8876-776c8af84773', '/root/admin'));
 
                     return [
-                        $definition,
+                        ContextProvider::provide(),
+                        $router,
+                        new RootBreadcrumbDefinition(
+                            'root-ccb35d2f-b3f8-4217-8876-776c8af84773',
+                            Unused::string(),
+                            Unused::string(),
+                            []
+                        ),
                         '/root/admin',
                     ];
-                },
+                })(),
             ],
-            'Route definition with parameters' => [
-                function (RouterStub $router, Context $context) {
-                    $definition = new RouteBreadcrumbDefinition(
-                        'animal_details-db9f8db7-728f-44c7-a19e-d408242e6f3e',
-                        "'static-value-8b41bd87-80fe-424c-aa2d-bfd2cf85a50a'",
-                        null,
-                        null,
-                        true,
-                        [
-                            new ParameterDefinition(
-                                'animal_name-b93a871d-55e7-4813-93bf-15e0772311dc',
-                                false,
-                                null
-                            ),
-                        ]
-                    );
+            'Route definition with global parameters' => [
+                ...(function () {
+                    $context = ContextProvider::provide()
+                        ->setParameter('parameter-7469179f-b8a5-45a7-b676-66796e2e156a', 'duck');
 
-                    $context->setParameter('animal_name-b93a871d-55e7-4813-93bf-15e0772311dc', 'duck');
-
-                    $router
+                    $router = self::createRouterStub()
                         ->addRouteStub(RouteProvider::provide(
-                            'animal_details-db9f8db7-728f-44c7-a19e-d408242e6f3e',
-                            '/animal/{animal_name-b93a871d-55e7-4813-93bf-15e0772311dc}'
+                            'route-cbeb8187-435c-410c-a974-94622921d691',
+                            '/animal/{parameter-7469179f-b8a5-45a7-b676-66796e2e156a}'
                         ));
 
                     return [
-                        $definition,
+                        $context,
+                        $router,
+                        new RouteBreadcrumbDefinition(
+                            'route-cbeb8187-435c-410c-a974-94622921d691',
+                            Unused::string(),
+                            null,
+                            null,
+                            Unused::bool(),
+                            [
+                                new ParameterDefinition(
+                                    'parameter-7469179f-b8a5-45a7-b676-66796e2e156a',
+                                    false,
+                                    null
+                                ),
+                            ]
+                        ),
                         '/animal/duck',
                     ];
-                },
+                })(),
+            ],
+            'Route definition with scoped parameters' => [
+                ...(function () {
+                    $context = ContextProvider::provide()
+                        ->setParameter(
+                            'parameter-31b8dcbc-9df9-4cef-a420-6bea4b4a1e1d',
+                            'owl',
+                            'route-58cbb011-b2b0-4457-b204-5ae060f4c1d3'
+                        );
+
+                    $router = self::createRouterStub()
+                        ->addRouteStub(RouteProvider::provide(
+                            'route-58cbb011-b2b0-4457-b204-5ae060f4c1d3',
+                            '/animal/{parameter-31b8dcbc-9df9-4cef-a420-6bea4b4a1e1d}'
+                        ));
+
+                    return [
+                        $context,
+                        $router,
+                        new RouteBreadcrumbDefinition(
+                            'route-58cbb011-b2b0-4457-b204-5ae060f4c1d3',
+                            Unused::string(),
+                            null,
+                            null,
+                            Unused::bool(),
+                            [
+                                new ParameterDefinition(
+                                    'parameter-31b8dcbc-9df9-4cef-a420-6bea4b4a1e1d',
+                                    false,
+                                    null
+                                ),
+                            ]
+                        ),
+                        '/animal/owl',
+                    ];
+                })(),
+            ],
+            'Prioritizes route parameters above global parameters' => [
+                ...(function () {
+                    $context = ContextProvider::provide()
+                        ->setParameter(
+                            'parameter-8cf18f39-e7cc-40ad-a86d-e805c7b1020a',
+                            'wolf',
+                        )
+                        ->setParameter(
+                            'parameter-8cf18f39-e7cc-40ad-a86d-e805c7b1020a',
+                            'deer',
+                            'route-e6a60f0c-ecf8-4d0e-a1c1-1f20e917becd'
+                        );
+
+                    $router = self::createRouterStub()
+                        ->addRouteStub(RouteProvider::provide(
+                            'route-e6a60f0c-ecf8-4d0e-a1c1-1f20e917becd',
+                            '/animal/{parameter-8cf18f39-e7cc-40ad-a86d-e805c7b1020a}'
+                        ));
+
+                    return [
+                        $context,
+                        $router,
+                        new RouteBreadcrumbDefinition(
+                            'route-e6a60f0c-ecf8-4d0e-a1c1-1f20e917becd',
+                            Unused::string(),
+                            null,
+                            null,
+                            Unused::bool(),
+                            [
+                                new ParameterDefinition(
+                                    'parameter-8cf18f39-e7cc-40ad-a86d-e805c7b1020a',
+                                    false,
+                                    null
+                                ),
+                            ]
+                        ),
+                        '/animal/deer',
+                    ];
+                })(),
             ],
             'Route definition with optional parameters' => [
-                function (RouterStub $router, Context $context) {
-                    $definition = new RouteBreadcrumbDefinition(
-                        'animal_details-41ddb257-5f31-4730-b06a-1d2d4a844fa5',
-                        "'static-value-68c9a4f0-7eb9-4e76-9962-3e60a9df0ee1'",
-                        null,
-                        null,
-                        true,
-                        [
-                            new ParameterDefinition(
-                                'animal_name-dd12e1c3-774b-423d-9f40-0fc548e3a83e',
-                                true,
-                                null
-                            ),
-                        ]
-                    );
-
+                ...(function () {
                     /*
                      * this will be set by symfony framework at runtime {@see ControllerArgumentsListener}
                      */
-                    $context->setParameter('animal_name-dd12e1c3-774b-423d-9f40-0fc548e3a83e', null);
+                    $context = ContextProvider::provide()
+                        ->setParameter('parameter-aa9e68e8-6826-4fc1-9c31-c8199a4ce291', null);
 
-                    $router
+                    $router = self::createRouterStub()
                         ->addRouteStub(RouteProvider::provide(
-                            'animal_details-41ddb257-5f31-4730-b06a-1d2d4a844fa5',
-                            '/animal/{animal_name-dd12e1c3-774b-423d-9f40-0fc548e3a83e}'
+                            'route-752ab06d-0457-4fde-83b8-9c2240069364',
+                            '/animal/{parameter-aa9e68e8-6826-4fc1-9c31-c8199a4ce291}'
                         ));
 
                     return [
-                        $definition,
+                        $context,
+                        $router,
+                        new RouteBreadcrumbDefinition(
+                            'route-752ab06d-0457-4fde-83b8-9c2240069364',
+                            Unused::string(),
+                            Unused::string(),
+                            Unused::string(),
+                            Unused::bool(),
+                            [
+                                new ParameterDefinition(
+                                    'parameter-aa9e68e8-6826-4fc1-9c31-c8199a4ce291',
+                                    true,
+                                    null
+                                ),
+                            ]
+                        ),
                         '/animal/',
                     ];
-                },
+                })(),
             ],
         ];
+    }
+
+    private static function createRouterStub(): RouterStub
+    {
+        return new RouterStub();
     }
 }

@@ -7,9 +7,11 @@ namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\Unused;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
+ * Used UUIDs for tracking purposes - if tests break at any time.
  */
 class DefinitionToNodeTransformerDataProvider
 {
@@ -18,47 +20,50 @@ class DefinitionToNodeTransformerDataProvider
         return [
             'Tree with root node' => [
                 ...(function () {
-                    $rootDefinition = new RootBreadcrumbDefinition(
-                        null,
-                        "'Root'",
-                        'root_name',
+                    $root = new RootBreadcrumbDefinition(
+                        Unused::string(),
+                        Unused::string(),
+                        'root-749f6abe-58f0-46a1-a8a5-7035417681d6',
                         []
                     );
-                    $secondRouteDefinition = new RouteBreadcrumbDefinition(
-                        'second_route',
-                        "'2'",
+
+                    $secondRoute = new RouteBreadcrumbDefinition(
+                        'route-58ed6f71-25d2-458f-8fdd-85d23064bb74',
+                        Unused::string(),
                         null,
-                        'root_name',
-                        true,
+                        'root-749f6abe-58f0-46a1-a8a5-7035417681d6',
+                        Unused::bool(),
                         [],
                         []
                     );
-                    $firstRouteDefinition = new RouteBreadcrumbDefinition(
-                        'first_route',
-                        "'1'",
-                        'second_route',
+
+                    $firstRoute = new RouteBreadcrumbDefinition(
+                        Unused::string(),
+                        Unused::string(),
+                        'route-58ed6f71-25d2-458f-8fdd-85d23064bb74',
                         null,
-                        true,
+                        Unused::bool(),
                         [],
                         []
                     );
+
                     $node = new BreadcrumbNode(
-                        $firstRouteDefinition,
+                        $firstRoute,
                         new BreadcrumbNode(
-                            $secondRouteDefinition,
+                            $secondRoute,
                             new BreadcrumbNode(
-                                $rootDefinition,
+                                $root,
                                 null
                             )
                         )
                     );
 
                     return [
-                        $firstRouteDefinition,
+                        $firstRoute,
                         [
-                            $secondRouteDefinition,
-                            $firstRouteDefinition,
-                            $rootDefinition,
+                            $secondRoute,
+                            $firstRoute,
+                            $root,
                         ],
                         $node,
                     ];
@@ -66,79 +71,84 @@ class DefinitionToNodeTransformerDataProvider
             ],
             'Tree without root node' => [
                 ...(function () {
-                    $secondRouteDefinition = new RouteBreadcrumbDefinition(
-                        'second_route',
-                        "'2'",
+                    $secondRoute = new RouteBreadcrumbDefinition(
+                        'route-80a38497-c618-440e-bf10-5bb3bf74a551',
+                        Unused::string(),
                         null,
                         null,
-                        true,
+                        Unused::bool(),
                         [],
                         []
                     );
-                    $firstRouteDefinition = new RouteBreadcrumbDefinition(
-                        'first_route',
-                        "'1'",
-                        'second_route',
+
+                    $firstRoute = new RouteBreadcrumbDefinition(
+                        Unused::string(),
+                        Unused::string(),
+                        'route-80a38497-c618-440e-bf10-5bb3bf74a551',
                         null,
-                        true,
+                        Unused::bool(),
                         [],
                         []
                     );
+
                     $node = new BreadcrumbNode(
-                        $firstRouteDefinition,
+                        $firstRoute,
                         new BreadcrumbNode(
-                            $secondRouteDefinition,
+                            $secondRoute,
                             null
                         )
                     );
 
                     return [
-                        $firstRouteDefinition,
+                        $firstRoute,
                         [
-                            $secondRouteDefinition,
-                            $firstRouteDefinition,
+                            $secondRoute,
+                            $firstRoute,
                         ],
                         $node,
                     ];
                 })(),
             ],
-            'Singular node with unrelated definitions' => [
+            'Singular node with multiple unrelated definitions' => [
                 ...(function () {
-                    $secondRouteDefinition = new RouteBreadcrumbDefinition(
-                        'second_route',
-                        "'2'",
+                    $secondRoute = new RouteBreadcrumbDefinition(
+                        'route-15a83aaa-a0e9-47fc-81de-90c8dc85d2cc',
+                        Unused::string(),
                         null,
                         null,
-                        true,
+                        Unused::bool(),
                         [],
                         []
                     );
-                    $firstRouteDefinition = new RouteBreadcrumbDefinition(
-                        'first_route',
-                        "'1'",
+
+                    $firstRoute = new RouteBreadcrumbDefinition(
+                        'route-a47794b6-dbe3-4e48-be27-63ae5622ee3b',
+                        Unused::string(),
                         null,
                         null,
-                        true,
+                        Unused::bool(),
                         [],
                         []
                     );
-                    $rootDefinition = new RootBreadcrumbDefinition(
-                        null,
-                        "'Root'",
-                        'root_name',
+
+                    $root = new RootBreadcrumbDefinition(
+                        Unused::string(),
+                        Unused::string(),
+                        'root-51f7390d-ed7e-426a-83fc-7a18b0f7817f',
                         []
                     );
+
                     $node = new BreadcrumbNode(
-                        $firstRouteDefinition,
+                        $firstRoute,
                         null
                     );
 
                     return [
-                        $firstRouteDefinition,
+                        $firstRoute,
                         [
-                            $secondRouteDefinition,
-                            $firstRouteDefinition,
-                            $rootDefinition,
+                            $secondRoute,
+                            $firstRoute,
+                            $root,
                         ],
                         $node,
                     ];
@@ -146,24 +156,26 @@ class DefinitionToNodeTransformerDataProvider
             ],
             'Singular node' => [
                 ...(function () {
-                    $definition = new RouteBreadcrumbDefinition(
-                        'second_route',
-                        "'2'",
+                    $route = new RouteBreadcrumbDefinition(
+                        'route-2b245794-c390-4a17-be56-c3caf65cb564',
+                        Unused::string(),
                         null,
                         null,
-                        true,
+                        Unused::bool(),
                         [],
                         []
                     );
-                    $definitions = [$definition];
+
                     $node = new BreadcrumbNode(
-                        $definition,
+                        $route,
                         null
                     );
 
                     return [
-                        $definition,
-                        $definitions,
+                        $route,
+                        [
+                            $route,
+                        ],
                         $node,
                     ];
                 })(),

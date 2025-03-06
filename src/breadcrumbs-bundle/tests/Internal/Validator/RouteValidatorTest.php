@@ -25,10 +25,18 @@ class RouteValidatorTest extends TestCase
     public function throwsException(Route $route, int $expectedErrorCode): void
     {
         $this->expectExceptionCode($expectedErrorCode);
-        $this->getRouteValidator()->validate($route);
+        $this->getService()->validate($route);
     }
 
-    private function getRouteValidator(): RouteValidator
+    #[Test]
+    #[DataProviderExternal(RouteValidatorDataProvider::class, 'getValidatesTestScenarios')]
+    public function validates(Route $route): void
+    {
+        $this->expectNotToPerformAssertions();
+        $this->getService()->validate($route);
+    }
+
+    private function getService(): RouteValidator
     {
         return new RouteValidator();
     }

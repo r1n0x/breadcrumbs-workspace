@@ -9,6 +9,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
+ * Used UUIDs for tracking purposes - if tests break at any time.
  */
 class RouteValidatorDataProvider
 {
@@ -113,6 +114,35 @@ class RouteValidatorDataProvider
                     Route::ROOT => '',
                 ]),
                 RouteValidator::ERROR_CODE_ROOT_AND_PARENT_ROUTE_DEFINED,
+            ],
+        ];
+    }
+
+    public static function getValidatesTestScenarios(): array
+    {
+        return [
+            'Root reference within breadcrumbs' => [
+                new Route(
+                    breadcrumb: [
+                        Route::ROOT => 'root-0bc831b8-4eef-4f28-848c-c92899221ca7',
+                        Route::EXPRESSION => 'expression-4a1856c8-2626-4e3f-b4a6-32265a592811',
+                    ]
+                ),
+            ],
+            'Parent route reference within breadcrumbs' => [
+                new Route(
+                    breadcrumb: [
+                        Route::PARENT_ROUTE => 'parent-route-d2cdb404-9a25-438c-8df4-03c77caa1f72',
+                        Route::EXPRESSION => 'expression-fc8a8dce-bcb6-451b-ad5d-81e30a16cb6e',
+                    ]
+                ),
+            ],
+            'Standalone breadcrumb' => [
+                new Route(
+                    breadcrumb: [
+                        Route::EXPRESSION => 'expression-e7d4a7d2-2ea9-4224-a82f-26a1fd36a28a',
+                    ]
+                ),
             ],
         ];
     }

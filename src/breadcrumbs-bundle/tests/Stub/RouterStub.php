@@ -38,9 +38,11 @@ class RouterStub implements RouterInterface
         return new RouteCollection();
     }
 
-    public function addRouteStub(Route $route): void
+    public function addRouteStub(Route $route): static
     {
         $this->routes[$route->getName()] = $route;
+
+        return $this;
     }
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string

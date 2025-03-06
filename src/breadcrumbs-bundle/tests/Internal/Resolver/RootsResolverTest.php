@@ -27,7 +27,7 @@ class RootsResolverTest extends TestCase
         $expression = "'Animals'";
         $routeName = 'animal_home';
 
-        $roots = $this->getRootsResolver([
+        $roots = $this->getService([
             $name => [
                 Route::EXPRESSION => $expression,
                 'route' => $routeName,
@@ -42,7 +42,7 @@ class RootsResolverTest extends TestCase
         $this->assertEquals($routeName, $root->getRouteName());
     }
 
-    private function getRootsResolver(array $config): RootsResolver
+    private function getService(array $config): RootsResolver
     {
         return new RootsResolver($config);
     }

@@ -36,13 +36,8 @@ class DefinitionToNodeTransformerTest extends TestCase
     #[DataProviderExternal(DefinitionToNodeTransformerDataProvider::class, 'getTransformsTestScenarios')]
     public function transforms(RouteBreadcrumbDefinition $definition, array $definitions, BreadcrumbNode $node): void
     {
-        $transformer = $this->getDefinitionToNodeTransformer();
+        $transformer = $this->getService();
         $this->assertEquals($node, $transformer->transform($definition, $definitions));
-    }
-
-    public function getDefinitionToNodeTransformer(): DefinitionToNodeTransformer
-    {
-        return new DefinitionToNodeTransformer();
     }
 
     #[Test]
@@ -50,12 +45,12 @@ class DefinitionToNodeTransformerTest extends TestCase
     public function throwsExceptionWhenUnknownRootIsProvided(): void
     {
         $this->expectException(UnknownRootException::class);
-        $transformer = $this->getDefinitionToNodeTransformer();
+        $transformer = $this->getService();
         $definition = new RouteBreadcrumbDefinition(
-            'second_route',
-            "'2'",
+            'route-b25f0a42-9e30-4c74-9087-1faab483395f',
+            'expression-27f03c17-a499-4b9e-8c29-2c5e4a75e897',
             null,
-            'unknown_root_name',
+            'root-41152337-a058-427b-9083-a56cd90a8e14',
             true,
             [],
             []
@@ -68,16 +63,21 @@ class DefinitionToNodeTransformerTest extends TestCase
     public function throwsExceptionWhenUnknownRouteIsProvided(): void
     {
         $this->expectException(UnknownRouteException::class);
-        $transformer = $this->getDefinitionToNodeTransformer();
+        $transformer = $this->getService();
         $definition = new RouteBreadcrumbDefinition(
-            'second_route',
-            "'2'",
-            'unknown_parent_route',
+            'route-e6816270-29a2-44d9-a848-0ecbbd500934',
+            'expression-965460b8-1064-441c-b2c1-506a25e80068',
+            'route-65d38e38-f6f5-42eb-885b-18e9af84777e',
             null,
             true,
             [],
             []
         );
         $transformer->transform($definition, [$definition]);
+    }
+
+    private function getService(): DefinitionToNodeTransformer
+    {
+        return new DefinitionToNodeTransformer();
     }
 }

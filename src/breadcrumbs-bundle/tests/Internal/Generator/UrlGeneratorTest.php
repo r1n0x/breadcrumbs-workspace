@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Context;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
-use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
@@ -20,7 +19,6 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Generator\UrlGeneratorDataProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -41,20 +39,16 @@ class UrlGeneratorTest extends TestCase
 {
     #[Test]
     #[DataProviderExternal(UrlGeneratorDataProvider::class, 'getGeneratesTestScenarios')]
-    public function generates(callable $scenarioBuilder): void
-    {
-        $context = new Context(new ParametersHolder(), new VariablesHolder());
-        $router = new RouterStub();
-
-        /**
-         * @var BreadcrumbDefinition $definition
-         * @var string $expectedPath
-         */
-        [$definition, $expectedPath] = $scenarioBuilder($router, $context);
-        $this->assertEquals($expectedPath, $this->getUrlGenerator($router)->generate($definition, $context->getParametersHolder()));
+    public function generates(
+        Context $context,
+        RouterInterface $router,
+        BreadcrumbDefinition $definition,
+        ?string $path
+    ): void {
+        $this->assertEquals($path, $this->getService($router)->generate($definition, $context->getParametersHolder()));
     }
 
-    public function getUrlGenerator(RouterInterface $router): UrlGenerator
+    public function getService(RouterInterface $router): UrlGenerator
     {
         return new UrlGenerator($router);
     }
