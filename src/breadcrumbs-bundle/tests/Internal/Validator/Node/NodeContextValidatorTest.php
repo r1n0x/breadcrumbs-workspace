@@ -1,0 +1,72 @@
+<?php
+
+declare(strict_types=1);
+
+namespace R1n0x\BreadcrumbsBundle\Tests\Internal\Validator\Node;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
+use R1n0x\BreadcrumbsBundle\Context;
+use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
+use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\Error;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RootError;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RouteError;
+use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator;
+use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
+use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Validator\Node\NodeContextValidatorDataProvider;
+
+/**
+ * @author r1n0x <r1n0x-dev@proton.me>
+ *
+ * @internal
+ */
+#[CoversClass(NodeContextValidator::class)]
+#[UsesClass(ParametersHolder::class)]
+#[UsesClass(VariablesHolder::class)]
+#[UsesClass(BreadcrumbDefinition::class)]
+#[UsesClass(BreadcrumbNode::class)]
+#[UsesClass(ParameterDefinition::class)]
+#[UsesClass(RouteBreadcrumbDefinition::class)]
+#[UsesClass(RootBreadcrumbDefinition::class)]
+#[UsesClass(Error::class)]
+#[UsesClass(RouteError::class)]
+#[UsesClass(RootError::class)]
+#[UsesClass(ValidationContext::class)]
+#[UsesClass(Context::class)]
+#[UsesClass(Parameter::class)]
+#[UsesClass(Variable::class)]
+class NodeContextValidatorTest extends TestCase
+{
+    #[Test]
+    #[DataProviderExternal(NodeContextValidatorDataProvider::class, 'getThrowsExceptionTestScenarios')]
+    public function throwsException(BreadcrumbNode $node, Context $context): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->getNodeContextValidator()->validate($node, $context);
+    }
+
+    #[Test]
+    #[DataProviderExternal(NodeContextValidatorDataProvider::class, 'getValidatesTestScenarios')]
+    public function validates(BreadcrumbNode $node, Context $context): void
+    {
+        $this->expectNotToPerformAssertions();
+        $this->getNodeContextValidator()->validate($node, $context);
+    }
+
+    private function getNodeContextValidator(): NodeContextValidator
+    {
+        return new NodeContextValidator();
+    }
+}

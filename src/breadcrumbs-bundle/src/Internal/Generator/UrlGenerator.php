@@ -54,8 +54,8 @@ class UrlGenerator
         foreach ($definition->getParameters() as $parameterDefinition) {
             $parameterName = $parameterDefinition->getName();
             $value = $holder->getValue($parameterName, $routeName) ?? $holder->getValue($parameterName);
-            $parameters[$parameterName] = $parameterDefinition->isDefaultValue($value)
-                ? $parameterDefinition->getDefaultValue()
+            $parameters[$parameterName] = $parameterDefinition->isOptionalValue($value)
+                ? $parameterDefinition->getOptionalValue()
                 : $value;
         }
 

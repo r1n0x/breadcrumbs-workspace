@@ -38,7 +38,7 @@ class ControllerArgumentsListener
         $definition = $node->getDefinition();
         foreach ($definition->getParameters() as $parameterDefinition) {
             $parameterName = $parameterDefinition->getName();
-            $value = $pathValues[$parameterName] ?? $parameterDefinition->getDefaultValue();
+            $value = $pathValues[$parameterName] ?? $parameterDefinition->getOptionalValue();
             $this->context->setParameter($parameterName, $value, $routeName);
             if ($definition->getPassParametersToExpression()) {
                 $this->context->setVariable($parameterName, $autowiredValues[$parameterName] ?? $pathValues[$parameterName], $routeName);

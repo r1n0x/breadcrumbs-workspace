@@ -47,7 +47,7 @@ return (new PhpCsFixer\Config())
         'method_chaining_indentation' => true,
         'multiline_comment_opening_closing' => true,
         'multiline_whitespace_before_semicolons' => [
-            'strategy' => 'new_line_for_chained_calls',
+            'strategy' => 'no_multi_line',
         ],
         'no_extra_blank_lines' => [
             'tokens' => [
@@ -114,7 +114,7 @@ return (new PhpCsFixer\Config())
         'global_namespace_import' => true,
         'ordered_types' => true,
         'single_line_comment_style' => false, // crucial for phpstan types
-        'declare_strict_types' => true
+        'declare_strict_types' => true,
     ])
     ->setFinder($finder)
     ->setIndent("    ")

@@ -9,9 +9,6 @@ use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\ErrorType;
-use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RootError;
-use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RouteError;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -26,7 +23,7 @@ class NodeContextValidator
         $validationContext = new ValidationContext();
         $this->doValidate($validationContext, $node, $context);
         if ($validationContext->hasErrors()) {
-            throw new ValidationException($this->buildMessage($validationContext));
+            throw new ValidationException($validationContext);
         }
     }
 
@@ -42,8 +39,8 @@ class NodeContextValidator
         foreach ($definition->getParameters() as $parameterDefinition) {
             $parameterName = $parameterDefinition->getName();
             $value = $context->getParametersHolder()->getValue($parameterName, $definition->getRouteName())
-                ?? $context->getParametersHolder()->getValue($parameterName) ?? $parameterDefinition->getDefaultValue();
-            if (null === $value && !$parameterDefinition->isDefaultValue($value)) {
+                ?? $context->getParametersHolder()->getValue($parameterName) ?? $parameterDefinition->getOptionalValue();
+            if (null === $value && !$parameterDefinition->isOptionalValue($value)) {
                 $validationContext->addRouteParameterViolation($definition->getRouteName(), $parameterName);
             }
         }
@@ -72,32 +69,5 @@ class NodeContextValidator
         if (null !== $parent) {
             $this->doValidate($validationContext, $parent, $context);
         }
-    }
-
-    private function buildMessage(ValidationContext $context): string
-    {
-        $message = 'Breadcrumb validation failed:' . PHP_EOL;
-        foreach ($context->getErrors() as $error) {
-            $type = match ($error->getType()) {
-                ErrorType::Parameter => 'Parameters',
-                ErrorType::Variable => 'Variables',
-            };
-            $message .= match (true) {
-                $error instanceof RouteError => sprintf(
-                    '%s [%s] required by route "%s" were not set.' . PHP_EOL,
-                    $type,
-                    implode(', ', $error->getNames()),
-                    $error->getRouteName()
-                ),
-                $error instanceof RootError => sprintf(
-                    '%s [%s] required by root "%s" were not set.' . PHP_EOL,
-                    $type,
-                    implode(', ', $error->getNames()),
-                    $error->getName()
-                )
-            };
-        }
-
-        return $message;
     }
 }

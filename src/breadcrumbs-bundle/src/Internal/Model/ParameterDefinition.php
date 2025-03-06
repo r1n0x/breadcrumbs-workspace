@@ -12,8 +12,8 @@ class ParameterDefinition
     public function __construct(
         private readonly string $name,
         // required for properly handling nullable default values
-        private readonly bool $hasDefaultValue,
-        private readonly null|int|string $defaultValue
+        private readonly bool $isOptional,
+        private readonly null|int|string $optionalValue
     ) {}
 
     public function getName(): string
@@ -21,18 +21,18 @@ class ParameterDefinition
         return $this->name;
     }
 
-    public function hasDefaultValue(): bool
+    public function isOptional(): bool
     {
-        return $this->hasDefaultValue;
+        return $this->isOptional;
     }
 
-    public function getDefaultValue(): null|int|string
+    public function getOptionalValue(): null|int|string
     {
-        return $this->defaultValue;
+        return $this->optionalValue;
     }
 
-    public function isDefaultValue(mixed $value): bool
+    public function isOptionalValue(mixed $value): bool
     {
-        return $this->hasDefaultValue() && $this->defaultValue === $value;
+        return $this->isOptional() && $this->optionalValue === $value;
     }
 }

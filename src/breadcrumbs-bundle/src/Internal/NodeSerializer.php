@@ -54,8 +54,8 @@ class NodeSerializer
                     'parameters' => array_map(function (ParameterDefinition $definition) {
                         return [
                             'name' => $definition->getName(),
-                            'hasDefaultValue' => $definition->hasDefaultValue(),
-                            'defaultValue' => $definition->getDefaultValue(),
+                            'isOptional' => $definition->isOptional(),
+                            'value' => $definition->getOptionalValue(),
                         ];
                     }, $definition->getParameters()),
                     'variables' => $definition->getVariables(),
@@ -107,8 +107,8 @@ class NodeSerializer
                     array_map(function (array $definition) {
                         return new ParameterDefinition(
                             $definition['name'],
-                            $definition['hasDefaultValue'],
-                            $definition['defaultValue']
+                            $definition['isOptional'],
+                            $definition['value']
                         );
                     }, $item['definition']['parameters']),
                     $item['definition']['variables'],

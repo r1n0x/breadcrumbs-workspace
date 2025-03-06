@@ -36,8 +36,8 @@ class DebugBreadcrumbsCommand extends Command
         $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
         $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
         $output->writeln($prefix . '      Parameters: [' . implode(', ', array_map(function (ParameterDefinition $definition) {
-            if ($definition->hasDefaultValue()) {
-                return sprintf('%s (optional - default value: "%s")', $definition->getName(), $definition->getDefaultValue() ?? 'null');
+            if ($definition->isOptional()) {
+                return sprintf('%s (optional - default value: "%s")', $definition->getName(), $definition->getOptionalValue() ?? 'null');
             }
 
             return $definition->getName();

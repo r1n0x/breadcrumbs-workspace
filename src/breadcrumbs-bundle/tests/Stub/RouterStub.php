@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Stub;
 
+use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Exception\RuntimeException;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver;
 use Symfony\Component\Routing\RequestContext;
@@ -17,7 +18,7 @@ class RouterStub implements RouterInterface
 {
     private ParametersResolver $resolver;
 
-    /** @var array<string, RouteStub> */
+    /** @var array<string, Route> */
     private array $routes = [];
 
     public function __construct()
@@ -37,7 +38,7 @@ class RouterStub implements RouterInterface
         return new RouteCollection();
     }
 
-    public function addRouteStub(RouteStub $route): void
+    public function addRouteStub(Route $route): void
     {
         $this->routes[$route->getName()] = $route;
     }
