@@ -15,6 +15,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
+use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver;
@@ -35,6 +36,7 @@ use Symfony\Component\Routing\RouterInterface;
 #[UsesClass(Parameter::class)]
 #[UsesClass(Context::class)]
 #[UsesClass(RouteBreadcrumbDefinition::class)]
+#[UsesClass(ParameterDefinition::class)]
 class UrlGeneratorTest extends TestCase
 {
     #[Test]
@@ -43,8 +45,13 @@ class UrlGeneratorTest extends TestCase
     {
         $context = new Context(new ParametersHolder(), new VariablesHolder());
         $router = new RouterStub();
-        [$definition, $expected] = $scenarioBuilder($router, $context);
-        $this->assertEquals($expected, $this->getUrlGenerator($router)->generate($definition, $context->getParametersHolder()));
+
+        /**
+         * @var BreadcrumbDefinition $definition
+         * @var string $expectedPath
+         */
+        [$definition, $expectedPath] = $scenarioBuilder($router, $context);
+        $this->assertEquals($expectedPath, $this->getUrlGenerator($router)->generate($definition, $context->getParametersHolder()));
     }
 
     public function getUrlGenerator(RouterInterface $router): UrlGenerator

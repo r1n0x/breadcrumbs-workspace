@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Animal;
 use App\Repository\AnimalRepository;
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
+use R1n0x\BreadcrumbsBundle\Context;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

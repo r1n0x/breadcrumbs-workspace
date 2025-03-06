@@ -17,7 +17,7 @@ class RouterStub implements RouterInterface
 {
     private ParametersResolver $resolver;
 
-    /** @var array<string, string> */
+    /** @var array<string, RouteStub> */
     private array $routes = [];
 
     public function __construct()
@@ -37,17 +37,19 @@ class RouterStub implements RouterInterface
         return new RouteCollection();
     }
 
-    public function addRouteStub(string $name, string $path): void
+    public function addRouteStub(RouteStub $route): void
     {
-        $this->routes[$name] = $path;
+        $this->routes[$route->getName()] = $route;
     }
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        $path = $this->routes[$name] ?? throw new RuntimeException(sprintf('ROUTE "%s" WAS NOT ADDED TO ROUTER STUB', $name));
+        $route = $this->routes[$name] ?? throw new RuntimeException(sprintf('ROUTE "%s" WAS NOT ADDED TO ROUTER STUB', $name));
 
-        foreach ($this->resolver->getParameters($path) as $parameterName) {
-            $path = str_replace(sprintf('{%s}', $parameterName), $parameters[$parameterName], $path);
+        $path = $route->getPath();
+        foreach ($this->resolver->getParameters($route) as $parameterDefinition) {
+            $parameterName = $parameterDefinition->getName();
+            $path = str_replace(sprintf('{%s}', $parameterName), $parameters[$parameterName] ?? '', $path);
         }
 
         return $path;

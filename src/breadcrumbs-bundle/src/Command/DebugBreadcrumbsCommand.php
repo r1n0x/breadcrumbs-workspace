@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace R1n0x\BreadcrumbsBundle\Command;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
@@ -34,7 +35,13 @@ class DebugBreadcrumbsCommand extends Command
     {
         $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
         $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
-        $output->writeln($prefix . '      Parameters: [' . implode(', ', $definition->getParameters()) . ']');
+        $output->writeln($prefix . '      Parameters: [' . implode(', ', array_map(function (ParameterDefinition $definition) {
+            if ($definition->hasDefaultValue()) {
+                return sprintf('%s (optional - default value: "%s")', $definition->getName(), $definition->getDefaultValue() ?? 'null');
+            }
+
+            return $definition->getName();
+        }, $definition->getParameters())) . ']');
     }
 
     public function printRootDefinition(OutputInterface $output, string $prefix, int $level, RootBreadcrumbDefinition $definition): void

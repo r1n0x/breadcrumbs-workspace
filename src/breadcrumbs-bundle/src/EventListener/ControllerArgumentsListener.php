@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace R1n0x\BreadcrumbsBundle\EventListener;
 
 use R1n0x\BreadcrumbsBundle\Context;
-use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
@@ -31,20 +30,18 @@ class ControllerArgumentsListener
             return;
         }
 
-        /** @var array<string, string> $parameterValues */
-        $parameterValues = $request->attributes->get('_route_params');
-        $values = $event->getNamedArguments();
+        /** @var array<string, string> $pathValues */
+        $pathValues = $request->attributes->get('_route_params');
+        $autowiredValues = $event->getNamedArguments();
 
         /** @var RouteBreadcrumbDefinition $definition */
         $definition = $node->getDefinition();
-        foreach ($definition->getParameters() as $parameterName) {
-            $value = array_key_exists($parameterName, $parameterValues) ? $parameterValues[$parameterName] : ParametersHolder::OPTIONAL_PARAMETER;
-            if (ParametersHolder::OPTIONAL_PARAMETER === $value) {
-                continue;
-            }
+        foreach ($definition->getParameters() as $parameterDefinition) {
+            $parameterName = $parameterDefinition->getName();
+            $value = $pathValues[$parameterName] ?? $parameterDefinition->getDefaultValue();
             $this->context->setParameter($parameterName, $value, $routeName);
             if ($definition->getPassParametersToExpression()) {
-                $this->context->setVariable($parameterName, $values[$parameterName] ?? $parameterValues[$parameterName], $routeName);
+                $this->context->setVariable($parameterName, $autowiredValues[$parameterName] ?? $pathValues[$parameterName], $routeName);
             }
         }
     }

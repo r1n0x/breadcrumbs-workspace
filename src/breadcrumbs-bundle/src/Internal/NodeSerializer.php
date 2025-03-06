@@ -6,6 +6,7 @@ namespace R1n0x\BreadcrumbsBundle\Internal;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 
@@ -50,7 +51,13 @@ class NodeSerializer
                     Route::PARENT_ROUTE => $definition->getParentRoute(),
                     Route::ROOT => $definition->getRoot(),
                     Route::PASS_PARAMETERS_TO_EXPRESSION => $definition->getPassParametersToExpression(),
-                    'parameters' => $definition->getParameters(),
+                    'parameters' => array_map(function (ParameterDefinition $definition) {
+                        return [
+                            'name' => $definition->getName(),
+                            'hasDefaultValue' => $definition->hasDefaultValue(),
+                            'defaultValue' => $definition->getDefaultValue(),
+                        ];
+                    }, $definition->getParameters()),
                     'variables' => $definition->getVariables(),
                 ],
                 $definition instanceof RootBreadcrumbDefinition => [
@@ -97,8 +104,14 @@ class NodeSerializer
                     $item['definition'][Route::PARENT_ROUTE],
                     $item['definition'][Route::ROOT],
                     $item['definition'][Route::PASS_PARAMETERS_TO_EXPRESSION],
+                    array_map(function (array $definition) {
+                        return new ParameterDefinition(
+                            $definition['name'],
+                            $definition['hasDefaultValue'],
+                            $definition['defaultValue']
+                        );
+                    }, $item['definition']['parameters']),
                     $item['definition']['variables'],
-                    $item['definition']['parameters']
                 ),
                 self::NODE_TYPE_ROOT => new RootBreadcrumbDefinition(
                     $item['definition']['route'],

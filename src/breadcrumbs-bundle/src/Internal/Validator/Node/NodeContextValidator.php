@@ -39,10 +39,11 @@ class NodeContextValidator
                 $validationContext->addRouteVariableViolation($definition->getRouteName(), $variableName);
             }
         }
-        foreach ($definition->getParameters() as $parameterName) {
+        foreach ($definition->getParameters() as $parameterDefinition) {
+            $parameterName = $parameterDefinition->getName();
             $value = $context->getParametersHolder()->getValue($parameterName, $definition->getRouteName())
-                ?? $context->getParametersHolder()->getValue($parameterName);
-            if (null === $value) {
+                ?? $context->getParametersHolder()->getValue($parameterName) ?? $parameterDefinition->getDefaultValue();
+            if (null === $value && !$parameterDefinition->isDefaultValue($value)) {
                 $validationContext->addRouteParameterViolation($definition->getRouteName(), $parameterName);
             }
         }

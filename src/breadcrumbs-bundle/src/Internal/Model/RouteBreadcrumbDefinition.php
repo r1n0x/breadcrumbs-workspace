@@ -12,7 +12,7 @@ use Override;
 class RouteBreadcrumbDefinition extends BreadcrumbDefinition
 {
     /**
-     * @param array<int, string> $parameters
+     * @param array<int, ParameterDefinition> $parameters
      * @param array<int, string> $variables
      */
     public function __construct(
@@ -43,7 +43,7 @@ class RouteBreadcrumbDefinition extends BreadcrumbDefinition
     }
 
     /**
-     * @return array<int, string>
+     * @return array<int, ParameterDefinition>
      */
     public function getParameters(): array
     {

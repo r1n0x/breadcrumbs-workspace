@@ -45,15 +45,18 @@ class UrlGenerator
     }
 
     /**
-     * @return array<string, null|string>
+     * @return array<string, null|int|string>
      */
     public function getParameters(RouteBreadcrumbDefinition $definition, ParametersHolder $holder): array
     {
         $routeName = $definition->getRouteName();
         $parameters = [];
-        foreach ($definition->getParameters() as $parameterName) {
+        foreach ($definition->getParameters() as $parameterDefinition) {
+            $parameterName = $parameterDefinition->getName();
             $value = $holder->getValue($parameterName, $routeName) ?? $holder->getValue($parameterName);
-            $parameters[$parameterName] = ParametersHolder::OPTIONAL_PARAMETER === $value ? null : $value;
+            $parameters[$parameterName] = $parameterDefinition->isDefaultValue($value)
+                ? $parameterDefinition->getDefaultValue()
+                : $value;
         }
 
         return $parameters;

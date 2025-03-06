@@ -44,7 +44,7 @@ class RootDefinitionsResolver
                         $root->getName()
                     ));
                 }
-                if (count($this->parametersResolver->getParameters($route->getPath())) > 0) {
+                if (count($this->parametersResolver->getParameters($route)) > 0) {
                     throw new InvalidConfigurationException(sprintf(
                         'Route "%s" referenced in breadcrumbs root "%s" cannot be dynamic.',
                         $routeName,
