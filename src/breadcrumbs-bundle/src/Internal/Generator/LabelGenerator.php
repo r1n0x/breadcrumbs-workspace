@@ -25,8 +25,8 @@ class LabelGenerator
     public function generate(BreadcrumbDefinition $definition, VariablesHolder $holder): string
     {
         try {
-            /* @phpstan-ignore return.type */
-            return $this->expressionLanguage->evaluate($definition->getExpression(), $this->getVariables($definition, $holder));
+            /* @phpstan-ignore cast.string */
+            return (string) $this->expressionLanguage->evaluate($definition->getExpression(), $this->getVariables($definition, $holder));
         } catch (Throwable $e) {
             throw new LabelGenerationException($definition, previous: $e);
         }
@@ -35,7 +35,7 @@ class LabelGenerator
     /**
      * @return array<string, mixed>
      */
-    public function getVariables(BreadcrumbDefinition $definition, VariablesHolder $holder): array
+    private function getVariables(BreadcrumbDefinition $definition, VariablesHolder $holder): array
     {
         $routeName = $definition->getRouteName();
         $variables = [];

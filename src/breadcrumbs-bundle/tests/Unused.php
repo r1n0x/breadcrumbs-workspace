@@ -41,4 +41,12 @@ class Unused
     {
         return 1 === rand(0, 1);
     }
+
+    /**
+     * Usage of this means that test does not use it within the actual tests.
+     */
+    public static function null(): null
+    {
+        return null;
+    }
 }
