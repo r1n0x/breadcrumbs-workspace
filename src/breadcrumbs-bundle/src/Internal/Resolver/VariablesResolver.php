@@ -42,7 +42,11 @@ class VariablesResolver
                     continue;
                 }
 
-                throw new VariablesResolverException(previous: $e);
+                // will occur when expression has invalid syntax (example: "'1' ~ 2' ~ '3'")
+                throw new VariablesResolverException(sprintf(
+                    'Error occurred when resolving variables for expression "%s"',
+                    $expression
+                ), previous: $e);
             }
 
             break;
