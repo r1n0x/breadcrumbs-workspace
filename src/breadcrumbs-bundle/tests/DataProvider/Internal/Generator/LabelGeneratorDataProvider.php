@@ -39,6 +39,26 @@ class LabelGeneratorDataProvider
                     ];
                 })(),
             ],
+            'Using optional variables' => [
+                ...(function () {
+                    $holder = new VariablesHolder();
+                    $holder
+                        ->set(new Variable('some_value1', null));
+
+                    return [
+                        $holder,
+                        new RootBreadcrumbDefinition(
+                            Unused::null(),
+                            'some_value1 ~ "fi"',
+                            Unused::string(),
+                            [
+                                'some_value1',
+                            ]
+                        ),
+                        'fi',
+                    ];
+                })(),
+            ],
             'Using scoped variables' => [
                 ...(function () {
                     $holder = new VariablesHolder();

@@ -42,7 +42,7 @@ class LabelGenerator
         foreach ($definition->getVariables() as $variableName) {
             $value = $holder->getValue($variableName, $routeName)
                 ?? $holder->getValue($variableName);
-            $variables[$variableName] = VariablesHolder::OPTIONAL_VARIABLE === $value ? null : $value;
+            $variables[$variableName] = $value;
         }
 
         return $variables;

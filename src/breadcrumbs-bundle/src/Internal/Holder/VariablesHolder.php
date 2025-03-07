@@ -11,8 +11,6 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
  */
 class VariablesHolder
 {
-    public const OPTIONAL_VARIABLE = '28a07711-8dba-49c5-924a-6259ef670407';
-
     /**
      * @var array<int, Variable>
      */
@@ -28,7 +26,7 @@ class VariablesHolder
         if (null !== $routeName) {
             foreach ($this->variables as $variable) {
                 if ($variable->getRouteName() === $routeName && $variable->getName() === $name) {
-                    return $variable->getValue() ?? self::OPTIONAL_VARIABLE;
+                    return $variable->getValue();
                 }
             }
 
@@ -36,7 +34,7 @@ class VariablesHolder
         }
         foreach ($this->variables as $variable) {
             if (null === $variable->getRouteName() && $variable->getName() === $name) {
-                return $variable->getValue() ?? self::OPTIONAL_VARIABLE;
+                return $variable->getValue();
             }
         }
 
