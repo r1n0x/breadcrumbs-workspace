@@ -11,7 +11,6 @@ use R1n0x\BreadcrumbsBundle\Tests\Provider\Unused;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
- * Used UUIDs for tracking purposes - if tests break at any time.
  */
 class DefinitionToNodeTransformerDataProvider
 {
