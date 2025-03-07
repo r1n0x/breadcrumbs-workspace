@@ -119,5 +119,5 @@ return (new PhpCsFixer\Config())
     ->setFinder($finder)
     ->setIndent("    ")
     ->setUsingCache(false)
-    ->setLineEnding("\r\n")
+    ->setLineEnding("\n")
     ->setRiskyAllowed(true);

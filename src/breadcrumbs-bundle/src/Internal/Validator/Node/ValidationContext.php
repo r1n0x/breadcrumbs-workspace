@@ -45,7 +45,7 @@ class ValidationContext
      */
     public function getErrors(): array
     {
-        return array_merge($this->routeErrors, $this->routeErrors);
+        return array_merge($this->routeErrors, $this->rootErrors);
     }
 
     private function getRouteViolation(string $routeName, ErrorType $type): RouteError
