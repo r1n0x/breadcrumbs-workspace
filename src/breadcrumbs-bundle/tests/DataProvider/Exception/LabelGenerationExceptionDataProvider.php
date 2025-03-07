@@ -6,14 +6,14 @@ namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Exception;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\Unused;
+use R1n0x\BreadcrumbsBundle\Tests\Unused;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class LabelGenerationExceptionDataProvider
 {
-    public static function getIsGoodMessageTestScenarios(): array
+    public static function getMessageIsReadableTestScenarios(): array
     {
         return [
             'Route breadcrumb' => [

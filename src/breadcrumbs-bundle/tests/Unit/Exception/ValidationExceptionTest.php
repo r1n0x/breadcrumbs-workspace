@@ -29,10 +29,12 @@ use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Exception\ValidationExceptionData
 class ValidationExceptionTest extends TestCase
 {
     #[Test]
-    #[DataProviderExternal(ValidationExceptionDataProvider::class, 'getIsGoodMessageTestScenarios')]
-    public function isReadableMessage(ValidationContext $context, string $message): void
-    {
+    #[DataProviderExternal(ValidationExceptionDataProvider::class, 'getMessageIsReadableTestScenarios')]
+    public function messageIsReadable(
+        ValidationContext $context,
+        string $expectedMessage
+    ): void {
         $exception = new ValidationException($context);
-        $this->assertEquals(mb_trim($message), mb_trim($exception->getMessage()));
+        $this->assertEquals($expectedMessage, $exception->getMessage());
     }
 }

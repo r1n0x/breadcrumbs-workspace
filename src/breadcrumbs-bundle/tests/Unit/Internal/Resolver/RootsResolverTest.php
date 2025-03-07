@@ -6,6 +6,7 @@ namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Resolver;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Root;
@@ -17,15 +18,15 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\RootsResolver;
  * @internal
  */
 #[CoversClass(RootsResolver::class)]
-#[CoversClass(Root::class)]
+#[UsesClass(Root::class)]
 class RootsResolverTest extends TestCase
 {
     #[Test]
-    public function resolves(): void
+    public function deserializesArrayIntoObjects(): void
     {
-        $name = 'animal';
-        $expression = "'Animals'";
-        $routeName = 'animal_home';
+        $name = 'name-d64ba0cf-8872-4e43-81af-c5f9baf4c3b3';
+        $expression = 'expression-da385892-3e96-4b27-bfff-10772096df8d';
+        $routeName = 'route-52d14737-989c-4274-b857-431ad1026d93';
 
         $roots = $this->getService([
             $name => [

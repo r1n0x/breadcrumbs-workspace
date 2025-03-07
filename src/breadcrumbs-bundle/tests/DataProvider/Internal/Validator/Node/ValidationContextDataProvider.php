@@ -14,10 +14,10 @@ use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
  */
 class ValidationContextDataProvider
 {
-    public static function getHasContentsTestScenarios(): array
+    public static function getContainsErrorsTestScenarios(): array
     {
         return [
-            'Route parameters errors' => [
+            'Invalid route parameters errors' => [
                 ...(function () {
                     return [
                         function (ValidationContext $context) {
@@ -60,7 +60,7 @@ class ValidationContextDataProvider
                     ];
                 })(),
             ],
-            'Route variables errors' => [
+            'Invalid route variables errors' => [
                 ...(function () {
                     return [
                         function (ValidationContext $context) {
@@ -105,7 +105,7 @@ class ValidationContextDataProvider
                     ];
                 })(),
             ],
-            'Root variables errors' => [
+            'Invalid root variables errors' => [
                 ...(function () {
                     return [
                         function (ValidationContext $context) {
@@ -146,7 +146,7 @@ class ValidationContextDataProvider
                     ];
                 })(),
             ],
-            'Mixed errors' => [
+            'Invalid route and root errors' => [
                 ...(function () {
                     return [
                         function (ValidationContext $context) {

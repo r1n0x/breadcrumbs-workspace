@@ -27,8 +27,8 @@ use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\Node\Validatio
 class ValidationContextTest extends TestCase
 {
     #[Test]
-    #[DataProviderExternal(ValidationContextDataProvider::class, 'getHasContentsTestScenarios')]
-    public function hasContents(
+    #[DataProviderExternal(ValidationContextDataProvider::class, 'getContainsErrorsTestScenarios')]
+    public function containsErrors(
         /* @var callable(ValidationContext): void $contextBuilder */
         callable $contextBuilder,
         int $expectedErrorsCount,

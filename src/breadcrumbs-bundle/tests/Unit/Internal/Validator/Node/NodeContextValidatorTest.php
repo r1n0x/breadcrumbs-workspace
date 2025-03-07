@@ -52,16 +52,20 @@ class NodeContextValidatorTest extends TestCase
 {
     #[Test]
     #[DataProviderExternal(NodeContextValidatorDataProvider::class, 'getThrowsExceptionTestScenarios')]
-    public function throwsException(BreadcrumbNode $node, Context $context): void
-    {
+    public function throwsException(
+        BreadcrumbNode $node,
+        Context $context
+    ): void {
         $this->expectException(ValidationException::class);
         $this->getService()->validate($node, $context);
     }
 
     #[Test]
-    #[DataProviderExternal(NodeContextValidatorDataProvider::class, 'getValidatesTestScenarios')]
-    public function validates(BreadcrumbNode $node, Context $context): void
-    {
+    #[DataProviderExternal(NodeContextValidatorDataProvider::class, 'getValidatesContextTestScenarios')]
+    public function validatesContext(
+        BreadcrumbNode $node,
+        Context $context
+    ): void {
         $this->expectNotToPerformAssertions();
         $this->getService()->validate($node, $context);
     }

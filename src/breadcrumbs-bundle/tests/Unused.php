@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\Provider;
+namespace R1n0x\BreadcrumbsBundle\Tests;
 
 use Random\Randomizer;
 

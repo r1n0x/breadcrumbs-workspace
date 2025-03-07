@@ -22,16 +22,19 @@ class RouteValidatorTest extends TestCase
 {
     #[Test]
     #[DataProviderExternal(RouteValidatorDataProvider::class, 'getThrowsExceptionTestScenarios')]
-    public function throwsException(Route $route, int $expectedErrorCode): void
-    {
+    public function throwsException(
+        Route $route,
+        int $expectedErrorCode
+    ): void {
         $this->expectExceptionCode($expectedErrorCode);
         $this->getService()->validate($route);
     }
 
     #[Test]
-    #[DataProviderExternal(RouteValidatorDataProvider::class, 'getValidatesTestScenarios')]
-    public function validates(Route $route): void
-    {
+    #[DataProviderExternal(RouteValidatorDataProvider::class, 'getValidatesRouteTestScenarios')]
+    public function validatesRoute(
+        Route $route
+    ): void {
         $this->expectNotToPerformAssertions();
         $this->getService()->validate($route);
     }

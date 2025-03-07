@@ -27,10 +27,12 @@ use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Exception\LabelGenerationExceptio
 class LabelGenerationExceptionTest extends TestCase
 {
     #[Test]
-    #[DataProviderExternal(LabelGenerationExceptionDataProvider::class, 'getIsGoodMessageTestScenarios')]
-    public function isReadableMessage(BreadcrumbDefinition $definition, string $message): void
-    {
+    #[DataProviderExternal(LabelGenerationExceptionDataProvider::class, 'getMessageIsReadableTestScenarios')]
+    public function messageIsReadable(
+        BreadcrumbDefinition $definition,
+        string $expectedMessage
+    ): void {
         $exception = new LabelGenerationException($definition);
-        $this->assertEquals($message, $exception->getMessage());
+        $this->assertEquals($expectedMessage, $exception->getMessage());
     }
 }

@@ -31,19 +31,23 @@ use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\NodeSerializerDataProvid
 class NodeSerializerTest extends TestCase
 {
     #[Test]
-    #[DataProviderExternal(NodeSerializerDataProvider::class, 'getSerializesTestScenarios')]
-    public function serializes(BreadcrumbNode $node, string $serialized): void
-    {
+    #[DataProviderExternal(NodeSerializerDataProvider::class, 'getSerializesNodesTestScenarios')]
+    public function serializesNodes(
+        BreadcrumbNode $node,
+        string $expectedSerializedNode
+    ): void {
         $serializer = $this->getService();
-        $this->assertEquals($serialized, $serializer->serialize([$node]));
+        $this->assertEquals($expectedSerializedNode, $serializer->serialize([$node]));
     }
 
     #[Test]
-    #[DataProviderExternal(NodeSerializerDataProvider::class, 'getDeserializesTestScenarios')]
-    public function deserializes(string $serialized, BreadcrumbNode $deserialized): void
-    {
+    #[DataProviderExternal(NodeSerializerDataProvider::class, 'getDeserializesNodesTestScenarios')]
+    public function deserializesNodes(
+        string $serializedNode,
+        BreadcrumbNode $expectedDeserializedNode
+    ): void {
         $serializer = $this->getService();
-        $this->assertEquals([$deserialized], $serializer->deserialize($serialized));
+        $this->assertEquals([$expectedDeserializedNode], $serializer->deserialize($serializedNode));
     }
 
     private function getService(): NodeSerializer

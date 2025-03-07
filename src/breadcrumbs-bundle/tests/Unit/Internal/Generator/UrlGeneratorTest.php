@@ -38,14 +38,14 @@ use Symfony\Component\Routing\RouterInterface;
 class UrlGeneratorTest extends TestCase
 {
     #[Test]
-    #[DataProviderExternal(UrlGeneratorDataProvider::class, 'getGeneratesTestScenarios')]
-    public function generates(
+    #[DataProviderExternal(UrlGeneratorDataProvider::class, 'getGeneratesUrlTestScenarios')]
+    public function generatesUrl(
         Context $context,
         RouterInterface $router,
         BreadcrumbDefinition $definition,
-        ?string $path
+        ?string $expectedPath
     ): void {
-        $this->assertEquals($path, $this->getService($router)->generate($definition, $context->getParametersHolder()));
+        $this->assertEquals($expectedPath, $this->getService($router)->generate($definition, $context->getParametersHolder()));
     }
 
     public function getService(RouterInterface $router): UrlGenerator

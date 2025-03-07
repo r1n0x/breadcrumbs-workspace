@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Exception\UnknownRootException;
 use R1n0x\BreadcrumbsBundle\Exception\UnknownRouteException;
@@ -24,20 +25,23 @@ use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\DefinitionToNodeTransfor
  * @internal
  */
 #[CoversClass(DefinitionToNodeTransformer::class)]
-#[CoversClass(BreadcrumbNode::class)]
-#[CoversClass(RouteBreadcrumbDefinition::class)]
-#[CoversClass(RootBreadcrumbDefinition::class)]
+#[UsesClass(BreadcrumbNode::class)]
+#[UsesClass(RouteBreadcrumbDefinition::class)]
+#[UsesClass(RootBreadcrumbDefinition::class)]
 class DefinitionToNodeTransformerTest extends TestCase
 {
     /**
      * @param array<int, BreadcrumbDefinition> $definitions
      */
     #[Test]
-    #[DataProviderExternal(DefinitionToNodeTransformerDataProvider::class, 'getTransformsTestScenarios')]
-    public function transforms(RouteBreadcrumbDefinition $definition, array $definitions, BreadcrumbNode $node): void
-    {
+    #[DataProviderExternal(DefinitionToNodeTransformerDataProvider::class, 'getTransformsDefinitionToNodeTestScenarios')]
+    public function transformsDefinitionToNode(
+        RouteBreadcrumbDefinition $definition,
+        array $definitions,
+        BreadcrumbNode $expectedNode
+    ): void {
         $transformer = $this->getService();
-        $this->assertEquals($node, $transformer->transform($definition, $definitions));
+        $this->assertEquals($expectedNode, $transformer->transform($definition, $definitions));
     }
 
     #[Test]

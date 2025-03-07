@@ -117,10 +117,10 @@ class RouteValidatorDataProvider
         ];
     }
 
-    public static function getValidatesTestScenarios(): array
+    public static function getValidatesRouteTestScenarios(): array
     {
         return [
-            'Root reference within breadcrumbs' => [
+            'Root usage' => [
                 new Route(
                     breadcrumb: [
                         Route::ROOT => 'root-0bc831b8-4eef-4f28-848c-c92899221ca7',
@@ -128,7 +128,7 @@ class RouteValidatorDataProvider
                     ]
                 ),
             ],
-            'Parent route reference within breadcrumbs' => [
+            'Parent route usage' => [
                 new Route(
                     breadcrumb: [
                         Route::PARENT_ROUTE => 'parent-route-d2cdb404-9a25-438c-8df4-03c77caa1f72',
@@ -136,7 +136,7 @@ class RouteValidatorDataProvider
                     ]
                 ),
             ],
-            'Standalone breadcrumb' => [
+            'Standalone breadcrumb usage' => [
                 new Route(
                     breadcrumb: [
                         Route::EXPRESSION => 'expression-e7d4a7d2-2ea9-4224-a82f-26a1fd36a28a',

@@ -11,10 +11,10 @@ use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
  */
 class ValidationExceptionDataProvider
 {
-    public static function getIsGoodMessageTestScenarios(): array
+    public static function getMessageIsReadableTestScenarios(): array
     {
         return [
-            'Route parameters' => [
+            'Invalid route parameters' => [
                 (function () {
                     $context = new ValidationContext();
                     $context
@@ -42,7 +42,7 @@ Parameters [parameter-50cd1bd9-4862-4cdc-83eb-6422ebf4562b] required by route "r
 
 TEXT,
             ],
-            'Route variables' => [
+            'Invalid route variables' => [
                 (function () {
                     $context = new ValidationContext();
                     $context
@@ -70,7 +70,7 @@ Variables [variable-e1620779-b947-47a9-b9c5-e3050afd8b60] required by route "rou
 
 TEXT,
             ],
-            'Root variables' => [
+            'Invalid root variables' => [
                 (function () {
                     $context = new ValidationContext();
                     $context

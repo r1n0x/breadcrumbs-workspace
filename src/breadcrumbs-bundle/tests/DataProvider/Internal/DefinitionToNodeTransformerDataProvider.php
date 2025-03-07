@@ -7,14 +7,14 @@ namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\Unused;
+use R1n0x\BreadcrumbsBundle\Tests\Unused;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class DefinitionToNodeTransformerDataProvider
 {
-    public static function getTransformsTestScenarios(): array
+    public static function getTransformsDefinitionToNodeTestScenarios(): array
     {
         return [
             'Tree with root node' => [
@@ -108,7 +108,7 @@ class DefinitionToNodeTransformerDataProvider
                     ];
                 })(),
             ],
-            'Singular node with multiple unrelated definitions' => [
+            'Standalone node with multiple unrelated definitions' => [
                 ...(function () {
                     $secondRoute = new RouteBreadcrumbDefinition(
                         'route-15a83aaa-a0e9-47fc-81de-90c8dc85d2cc',
@@ -153,7 +153,7 @@ class DefinitionToNodeTransformerDataProvider
                     ];
                 })(),
             ],
-            'Singular node' => [
+            'Standalone node' => [
                 ...(function () {
                     $route = new RouteBreadcrumbDefinition(
                         'route-2b245794-c390-4a17-be56-c3caf65cb564',

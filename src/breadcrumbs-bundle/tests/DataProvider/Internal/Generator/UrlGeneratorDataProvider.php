@@ -9,18 +9,18 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Provider\RouteProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\Unused;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
+use R1n0x\BreadcrumbsBundle\Tests\Unused;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class UrlGeneratorDataProvider
 {
-    public static function getGeneratesTestScenarios(): array
+    public static function getGeneratesUrlTestScenarios(): array
     {
         return [
-            'Root definition without route name' => [
+            'Root without route name' => [
                 ContextProvider::provide(),
                 self::createRouterStub(),
                 new RootBreadcrumbDefinition(
@@ -31,7 +31,7 @@ class UrlGeneratorDataProvider
                 ),
                 null,
             ],
-            'Root definition with route name' => [
+            'Root with route name' => [
                 ...(function () {
                     $router = self::createRouterStub()
                         ->addRouteStub(RouteProvider::provide('root-ccb35d2f-b3f8-4217-8876-776c8af84773', '/root/admin'));
@@ -49,7 +49,7 @@ class UrlGeneratorDataProvider
                     ];
                 })(),
             ],
-            'Route definition with global parameters' => [
+            'Route with global parameters' => [
                 ...(function () {
                     $context = ContextProvider::provide()
                         ->setParameter('parameter-7469179f-b8a5-45a7-b676-66796e2e156a', 'duck');
@@ -81,7 +81,7 @@ class UrlGeneratorDataProvider
                     ];
                 })(),
             ],
-            'Route definition with scoped parameters' => [
+            'Route with scoped parameters' => [
                 ...(function () {
                     $context = ContextProvider::provide()
                         ->setParameter(
@@ -117,7 +117,7 @@ class UrlGeneratorDataProvider
                     ];
                 })(),
             ],
-            'Prioritizes route parameters above global parameters' => [
+            'Route with scoped parameters and global parameters (prioritizes scoped parameters)' => [
                 ...(function () {
                     $context = ContextProvider::provide()
                         ->setParameter(
@@ -157,7 +157,7 @@ class UrlGeneratorDataProvider
                     ];
                 })(),
             ],
-            'Route definition with optional parameters' => [
+            'Route with optional parameters' => [
                 ...(function () {
                     /*
                      * this will be set by symfony framework at runtime {@see ControllerArgumentsListener}

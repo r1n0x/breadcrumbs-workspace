@@ -16,7 +16,7 @@ use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
  */
 class NodeSerializerDataProvider
 {
-    public static function getSerializesTestScenarios(): array
+    public static function getSerializesNodesTestScenarios(): array
     {
         return [
             'Tree with root node' => [
@@ -152,7 +152,7 @@ class NodeSerializerDataProvider
                     ],
                 ], JSON_PRETTY_PRINT),
             ],
-            'Singular node' => [
+            'Standalone node' => [
                 new BreadcrumbNode(
                     new RouteBreadcrumbDefinition(
                         'route-c0662791-a9bf-4b88-b38e-b5dbadd430d8',
@@ -184,7 +184,7 @@ class NodeSerializerDataProvider
         ];
     }
 
-    public static function getDeserializesTestScenarios(): array
+    public static function getDeserializesNodesTestScenarios(): array
     {
         return [
             'Tree with root node' => [
@@ -320,7 +320,7 @@ class NodeSerializerDataProvider
                     )
                 ),
             ],
-            'Singular node' => [
+            'Standalone node' => [
                 json_encode([
                     [
                         'definition' => [

@@ -10,7 +10,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\Unused;
+use R1n0x\BreadcrumbsBundle\Tests\Unused;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -23,7 +23,7 @@ class NodeContextValidatorDataProvider
     public static function getThrowsExceptionTestScenarios(): array
     {
         return [
-            'Value of parameter not set on route node' => (function () {
+            'Undefined value of parameter on route node' => (function () {
                 $node = self::createNested(self::createRoute([
                     new ParameterDefinition(
                         'parameter-e7340724-46de-4a72-93c0-eb3c32e7f4e1',
@@ -37,7 +37,7 @@ class NodeContextValidatorDataProvider
                     ContextProvider::provide(),
                 ];
             })(),
-            'Value of variable not set on route node' => (function () {
+            'Undefined value of variable on route node' => (function () {
                 $node = self::createNested(self::createRoute([], [
                     'variable-43e824ca-76fc-4d9b-bf71-84ee7ad7a6e2',
                 ]));
@@ -47,7 +47,7 @@ class NodeContextValidatorDataProvider
                     ContextProvider::provide(),
                 ];
             })(),
-            'Value of variable not set on root node' => (function () {
+            'Undefined value of variable on root node' => (function () {
                 $node = self::createNested(self::createRoot([
                     'variable-84b9324b-657e-4b9c-adef-f97595774043',
                 ]));
@@ -60,10 +60,10 @@ class NodeContextValidatorDataProvider
         ];
     }
 
-    public static function getValidatesTestScenarios(): array
+    public static function getValidatesContextTestScenarios(): array
     {
         return [
-            'Value of parameter set on route node' => (function () {
+            'Parameter on route node' => (function () {
                 $node = self::createNested(self::createRoute([
                     new ParameterDefinition(
                         'parameter-2adacdf1-b453-4839-8665-f329b2f82537',
@@ -83,7 +83,7 @@ class NodeContextValidatorDataProvider
                     $context,
                 ];
             })(),
-            'Optional value of parameter set on route node' => (function () {
+            'Parameter with optional value on route node' => (function () {
                 $node = self::createNested(self::createRoute([
                     new ParameterDefinition(
                         'parameter-1ddb50f3-6539-4d70-8a11-55923f3861c4',
@@ -97,7 +97,7 @@ class NodeContextValidatorDataProvider
                     ContextProvider::provide(),
                 ];
             })(),
-            'Value of variable set on route node' => (function () {
+            'Variable on route node' => (function () {
                 $node = self::createNested(self::createRoute([], [
                     'variable-2aceadf3-820a-42eb-bf37-16e68d4f8596',
                 ]));
@@ -113,7 +113,7 @@ class NodeContextValidatorDataProvider
                     $context,
                 ];
             })(),
-            'Value of variable set on root node' => (function () {
+            'Variable on root node' => (function () {
                 $node = self::createNested(self::createRoot([
                     'variable-f45cef06-9829-4cc7-bb5c-bbf8b2ed0036',
                 ]));

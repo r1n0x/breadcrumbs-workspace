@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace R1n0x\BreadcrumbsBundle\Internal\Model\Violation;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 abstract class Error
