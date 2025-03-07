@@ -6,6 +6,7 @@ namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
@@ -27,7 +28,13 @@ class NodeSerializerDataProvider
                         null,
                         null,
                         true,
-                        [],
+                        [
+                            new ParameterDefinition(
+                                'parameter-969f390a-ef87-46f7-a246-51dc597ed0e1',
+                                false,
+                                null
+                            ),
+                        ],
                         []
                     ),
                     new BreadcrumbNode(
@@ -60,7 +67,13 @@ class NodeSerializerDataProvider
                             Route::PARENT_ROUTE => null,
                             Route::ROOT => null,
                             Route::PASS_PARAMETERS_TO_EXPRESSION => true,
-                            'parameters' => [],
+                            'parameters' => [
+                                [
+                                    'name' => 'parameter-969f390a-ef87-46f7-a246-51dc597ed0e1',
+                                    'isOptional' => false,
+                                    'value' => null,
+                                ],
+                            ],
                             'variables' => [],
                         ],
                         'parent' => [
@@ -185,7 +198,13 @@ class NodeSerializerDataProvider
                             Route::PARENT_ROUTE => null,
                             Route::ROOT => null,
                             Route::PASS_PARAMETERS_TO_EXPRESSION => true,
-                            'parameters' => [],
+                            'parameters' => [
+                                [
+                                    'name' => 'parameter-8348a27a-056a-49df-8f41-d2f1f16436fc',
+                                    'isOptional' => true,
+                                    'value' => 'value-e2270255-06a0-456d-be35-000d234fdd93',
+                                ],
+                            ],
                             'variables' => [],
                         ],
                         'parent' => [
@@ -219,7 +238,13 @@ class NodeSerializerDataProvider
                         null,
                         null,
                         true,
-                        [],
+                        [
+                            new ParameterDefinition(
+                                'parameter-8348a27a-056a-49df-8f41-d2f1f16436fc',
+                                true,
+                                'value-e2270255-06a0-456d-be35-000d234fdd93'
+                            ),
+                        ],
                         []
                     ),
                     new BreadcrumbNode(

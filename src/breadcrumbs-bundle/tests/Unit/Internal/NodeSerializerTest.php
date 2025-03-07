@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
@@ -26,6 +27,7 @@ use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\NodeSerializerDataProvid
 #[UsesClass(BreadcrumbNode::class)]
 #[UsesClass(RootBreadcrumbDefinition::class)]
 #[UsesClass(RouteBreadcrumbDefinition::class)]
+#[UsesClass(ParameterDefinition::class)]
 class NodeSerializerTest extends TestCase
 {
     #[Test]
