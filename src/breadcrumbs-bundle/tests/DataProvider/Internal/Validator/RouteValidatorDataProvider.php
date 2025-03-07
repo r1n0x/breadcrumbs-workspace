@@ -105,7 +105,7 @@ class RouteValidatorDataProvider
                 ]),
                 RouteValidator::ERROR_CODE_ROOT_SCALAR,
             ],
-            'Defining both parent route and root' => [
+            'Defining parent route and root at the same time' => [
                 new Route(breadcrumb: [
                     Route::PARENT_ROUTE => '',
                     Route::EXPRESSION => '',
@@ -120,7 +120,7 @@ class RouteValidatorDataProvider
     public static function getValidatesRouteTestScenarios(): array
     {
         return [
-            'Root usage' => [
+            'Using root' => [
                 new Route(
                     breadcrumb: [
                         Route::ROOT => 'root-0bc831b8-4eef-4f28-848c-c92899221ca7',
@@ -128,7 +128,7 @@ class RouteValidatorDataProvider
                     ]
                 ),
             ],
-            'Parent route usage' => [
+            'Using parent route' => [
                 new Route(
                     breadcrumb: [
                         Route::PARENT_ROUTE => 'parent-route-d2cdb404-9a25-438c-8df4-03c77caa1f72',
@@ -136,7 +136,7 @@ class RouteValidatorDataProvider
                     ]
                 ),
             ],
-            'Standalone breadcrumb usage' => [
+            'Using standalone breadcrumb' => [
                 new Route(
                     breadcrumb: [
                         Route::EXPRESSION => 'expression-e7d4a7d2-2ea9-4224-a82f-26a1fd36a28a',

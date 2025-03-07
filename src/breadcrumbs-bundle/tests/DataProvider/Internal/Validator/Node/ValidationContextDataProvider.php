@@ -17,7 +17,7 @@ class ValidationContextDataProvider
     public static function getContainsErrorsTestScenarios(): array
     {
         return [
-            'Invalid route parameters errors' => [
+            'Invalid route parameters' => [
                 ...(function () {
                     return [
                         function (ValidationContext $context) {
@@ -60,7 +60,7 @@ class ValidationContextDataProvider
                     ];
                 })(),
             ],
-            'Invalid route variables errors' => [
+            'Invalid route variables' => [
                 ...(function () {
                     return [
                         function (ValidationContext $context) {
@@ -105,7 +105,7 @@ class ValidationContextDataProvider
                     ];
                 })(),
             ],
-            'Invalid root variables errors' => [
+            'Invalid root variables' => [
                 ...(function () {
                     return [
                         function (ValidationContext $context) {
@@ -146,7 +146,7 @@ class ValidationContextDataProvider
                     ];
                 })(),
             ],
-            'Invalid route and root errors' => [
+            'Invalid route and root' => [
                 ...(function () {
                     return [
                         function (ValidationContext $context) {
