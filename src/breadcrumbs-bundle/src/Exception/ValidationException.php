@@ -11,8 +11,6 @@ use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
 use Throwable;
 
 /**
- * @codeCoverageIgnore
- *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class ValidationException extends BreadcrumbsException

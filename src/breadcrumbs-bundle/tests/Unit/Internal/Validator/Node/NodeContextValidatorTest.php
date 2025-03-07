@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\Internal\Validator\Node;
+namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Validator\Node;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
@@ -25,7 +25,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RootError;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RouteError;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
-use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Validator\Node\NodeContextValidatorDataProvider;
+use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\Node\NodeContextValidatorDataProvider;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -47,6 +47,7 @@ use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Validator\Node\NodeContextValidat
 #[UsesClass(Context::class)]
 #[UsesClass(Parameter::class)]
 #[UsesClass(Variable::class)]
+#[UsesClass(ValidationException::class)]
 class NodeContextValidatorTest extends TestCase
 {
     #[Test]

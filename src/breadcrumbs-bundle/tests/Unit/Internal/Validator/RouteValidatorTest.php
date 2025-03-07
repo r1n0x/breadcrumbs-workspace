@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\Internal\Validator;
+namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Validator;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
-use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Validator\RouteValidatorDataProvider;
+use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\RouteValidatorDataProvider;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>

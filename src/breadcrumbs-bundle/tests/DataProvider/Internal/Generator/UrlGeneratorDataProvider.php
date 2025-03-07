@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Generator;
+namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Generator;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;

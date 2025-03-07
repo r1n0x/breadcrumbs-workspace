@@ -24,6 +24,19 @@ class Unused
     /**
      * Usage of this means that test does not use it within the actual tests.
      */
+    public static function array(): array
+    {
+        $array = [];
+        for ($i = 0; $i <= 5; ++$i) {
+            $array[] = self::string();
+        }
+
+        return $array;
+    }
+
+    /**
+     * Usage of this means that test does not use it within the actual tests.
+     */
     public static function bool(): bool
     {
         return 1 === rand(0, 1);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Validator\Node;
+namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\Node;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;

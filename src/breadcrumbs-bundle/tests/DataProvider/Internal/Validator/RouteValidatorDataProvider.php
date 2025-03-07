@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Validator;
+namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;

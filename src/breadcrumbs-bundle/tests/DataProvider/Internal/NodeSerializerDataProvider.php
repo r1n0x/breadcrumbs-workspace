@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider;
+namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;

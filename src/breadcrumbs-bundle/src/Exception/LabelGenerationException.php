@@ -10,8 +10,6 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use Throwable;
 
 /**
- * @codeCoverageIgnore
- *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class LabelGenerationException extends Exception
@@ -23,7 +21,7 @@ class LabelGenerationException extends Exception
 
     private function buildMessage(BreadcrumbDefinition $definition): string
     {
-        match (true) {
+        return match (true) {
             $definition instanceof RouteBreadcrumbDefinition => sprintf(
                 'Error occurred when evaluating breadcrumb expression "%s" for route "%s"',
                 $definition->getExpression(),
@@ -35,8 +33,5 @@ class LabelGenerationException extends Exception
                 $definition->getName()
             )
         };
-
-        /* @phpstan-ignore missingType.checkedException */
-        throw new RuntimeException();
     }
 }

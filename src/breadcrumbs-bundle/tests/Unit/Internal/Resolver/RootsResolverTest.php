@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\Internal\Resolver;
+namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Resolver;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
