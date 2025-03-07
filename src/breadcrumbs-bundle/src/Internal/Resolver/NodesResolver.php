@@ -40,18 +40,17 @@ class NodesResolver
      */
     public function all(): array
     {
-        if (null === $this->nodes) {
-            $this->initializeNodes();
-        }
-
-        /* @phpstan-ignore return.type */
-        return $this->nodes;
+        return $this->nodes ??= $this->getNodes();
     }
 
-    public function initializeNodes(): void
+    /**
+     * @return array<int, BreadcrumbNode>
+     */
+    public function getNodes(): array
     {
         /** @phpstan-ignore missingType.checkedException */
         $nodes = $this->cacheReader->read($this->cacheDir);
-        $this->nodes = $this->serializer->deserialize($nodes);
+
+        return $this->serializer->deserialize($nodes);
     }
 }

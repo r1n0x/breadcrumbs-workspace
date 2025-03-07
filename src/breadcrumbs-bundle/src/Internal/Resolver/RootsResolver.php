@@ -25,19 +25,19 @@ class RootsResolver
      */
     public function getRoots(): array
     {
-        if (null === $this->roots) {
-            $this->initializeRoots();
-        }
-
-        /* @phpstan-ignore return.type */
-        return $this->roots;
+        return $this->roots ??= $this->parseRoots();
     }
 
-    private function initializeRoots(): void
+    /**
+     * @return array<int, Root>
+     */
+    private function parseRoots(): array
     {
-        $this->roots = [];
+        $roots = [];
         foreach ($this->rootsConfig as $name => $root) {
-            $this->roots[] = new Root($name, $root[Route::EXPRESSION], $root['route']);
+            $roots[] = new Root($name, $root[Route::EXPRESSION], $root['route']);
         }
+
+        return $roots;
     }
 }
