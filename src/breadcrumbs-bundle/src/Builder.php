@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
-use R1n0x\BreadcrumbsBundle\Exception\RouteGenerationException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator;
@@ -31,7 +30,6 @@ class Builder
      *
      * @throws ValidationException
      * @throws LabelGenerationException
-     * @throws RouteGenerationException
      */
     public function build(Request $request, Context $context): array
     {
@@ -49,7 +47,6 @@ class Builder
      * @return array<int, Breadcrumb>
      *
      * @throws LabelGenerationException
-     * @throws RouteGenerationException
      */
     private function doBuild(BreadcrumbNode $node, Context $context): array
     {

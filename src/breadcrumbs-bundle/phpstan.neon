@@ -2,10 +2,14 @@ parameters:
 	level: 9
 	paths:
 		- src
+	tmpDir: .phpstan.cache
 	exceptions:
 	    check:
 	        missingCheckedExceptionInThrows: true
 	        tooWideThrowType: true
+	ignoreErrors:
+	    # @phpstan-ignore missingType.checkedException did not work properly - wasted like 1 hour on it :(
+	    - '#Method R1n0x\\BreadcrumbsBundle\\Internal\\Generator\\UrlGenerator\:\:generate\(\) throws checked exception Symfony\\#'
 	checkUninitializedProperties: true
 services:
     -

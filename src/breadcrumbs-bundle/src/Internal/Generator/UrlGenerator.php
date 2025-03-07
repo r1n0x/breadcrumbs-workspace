@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Internal\Generator;
 
-use Exception;
-use R1n0x\BreadcrumbsBundle\Exception\RouteGenerationException;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
@@ -21,9 +19,6 @@ class UrlGenerator
         private readonly RouterInterface $router
     ) {}
 
-    /**
-     * @throws RouteGenerationException
-     */
     public function generate(BreadcrumbDefinition $definition, ParametersHolder $holder): ?string
     {
         $routeName = $definition->getRouteName();
@@ -31,17 +26,13 @@ class UrlGenerator
             return null;
         }
 
-        try {
-            return match (true) {
-                $definition instanceof RootBreadcrumbDefinition => $this->router->generate($routeName),
-                $definition instanceof RouteBreadcrumbDefinition => $this->router->generate(
-                    $definition->getRouteName(),
-                    $this->getParameters($definition, $holder)
-                )
-            };
-        } catch (Exception $e) {
-            throw new RouteGenerationException(previous: $e);
-        }
+        return match (true) {
+            $definition instanceof RootBreadcrumbDefinition => $this->router->generate($routeName),
+            $definition instanceof RouteBreadcrumbDefinition => $this->router->generate(
+                $definition->getRouteName(),
+                $this->getParameters($definition, $holder)
+            )
+        };
     }
 
     /**
