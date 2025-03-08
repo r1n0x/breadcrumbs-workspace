@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedVariableException;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
@@ -40,6 +41,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 #[UsesClass(ContextParameterProvider::class)]
 #[UsesClass(ContextVariableProvider::class)]
 #[UsesClass(LabelVariablesProvider::class)]
+#[UsesClass(UndefinedVariableException::class)]
 class LabelGeneratorTest extends TestCase
 {
     #[Test]
@@ -47,16 +49,35 @@ class LabelGeneratorTest extends TestCase
     public function throwsExceptionWhenInvalidVariableValueIsProvided(): void
     {
         $this->expectException(LabelGenerationException::class);
-        $this->getService(LabelVariablesProviderProvider::createWithVariables([
-            new Variable('expected_object1', 'obviously_not_an_object'),
-        ]))->generate(new RootBreadcrumbDefinition(
-            Unused::null(),
-            'expected_object1.property_name',
-            Unused::string(),
-            [
-                'expected_object1',
-            ]
-        ));
+        $this
+            ->getService(LabelVariablesProviderProvider::createWithVariables([
+                new Variable('expected_object1', 'obviously_not_an_object'),
+            ]))
+            ->generate(new RootBreadcrumbDefinition(
+                Unused::null(),
+                'expected_object1.property_name',
+                Unused::string(),
+                [
+                    'expected_object1',
+                ]
+            ));
+    }
+
+    #[Test]
+    #[TestDox('Throws exception, when no variable is provided')]
+    public function throwsExceptionWhenNoVariableIsProvided(): void
+    {
+        $this->expectException(UndefinedVariableException::class);
+        $this
+            ->getService(LabelVariablesProviderProvider::empty())
+            ->generate(new RootBreadcrumbDefinition(
+                Unused::null(),
+                'some_variable',
+                Unused::string(),
+                [
+                    'some_variable',
+                ]
+            ));
     }
 
     #[Test]

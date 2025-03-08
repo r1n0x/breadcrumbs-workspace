@@ -23,6 +23,11 @@ class LabelVariablesProviderProvider
         return new LabelVariablesProvider($provider);
     }
 
+    public static function empty(): LabelVariablesProvider
+    {
+        return self::createWithVariables();
+    }
+
     public static function createWithVariables(array $variables = []): LabelVariablesProvider
     {
         return self::create(
