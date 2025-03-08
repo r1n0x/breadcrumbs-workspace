@@ -29,7 +29,7 @@ class ParameterAlreadyDefinedException extends Exception
 
     private function buildMessage(Parameter $parameter): string
     {
-        if (null === $parameter->getRouteName()) {
+        if (null !== $parameter->getRouteName()) {
             return sprintf(
                 'Scoped parameter named "%s" for route "%s" is already defined',
                 $parameter->getName(),
