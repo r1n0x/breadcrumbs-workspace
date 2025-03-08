@@ -22,6 +22,11 @@ class ParametersHolderProvider
         return new ParametersHolder();
     }
 
+    public static function empty(): ParametersHolder
+    {
+        return self::createWithParameters();
+    }
+
     /**
      * @param array<int, Parameter> $parameters
      */

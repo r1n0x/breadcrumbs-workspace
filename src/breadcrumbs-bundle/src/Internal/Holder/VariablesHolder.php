@@ -30,24 +30,29 @@ class VariablesHolder
 
     public function get(string $name, ?string $routeName = null): ?Variable
     {
-        return $this->getVariable($name, $routeName);
+        return $this->getVariable($name, $routeName, true);
     }
 
-    public function has(string $name, ?string $routeName = null): bool
+    private function has(string $name, ?string $routeName = null): bool
     {
-        return $this->getVariable($name, $routeName) instanceof Variable;
+        return $this->getVariable($name, $routeName, false) instanceof Variable;
     }
 
-    private function getVariable(string $name, ?string $routeName = null): ?Variable
+    private function getVariable(string $name, ?string $routeName, bool $fallback): ?Variable
     {
         if (null !== $routeName) {
-            return $this->getGlobal($name, $routeName);
+            $scoped = $this->getScoped($name, $routeName);
+            if (null === $scoped && $fallback) {
+                return $this->getGlobal($name);
+            }
+
+            return $scoped;
         }
 
-        return $this->getScoped($name);
+        return $this->getGlobal($name);
     }
 
-    private function getGlobal(string $name, string $routeName): ?Variable
+    private function getScoped(string $name, string $routeName): ?Variable
     {
         foreach ($this->variables as $variable) {
             if ($variable->getRouteName() === $routeName && $variable->getName() === $name) {
@@ -58,7 +63,7 @@ class VariablesHolder
         return null;
     }
 
-    private function getScoped(string $name): ?Variable
+    private function getGlobal(string $name): ?Variable
     {
         foreach ($this->variables as $variable) {
             if (null === $variable->getRouteName() && $variable->getName() === $name) {

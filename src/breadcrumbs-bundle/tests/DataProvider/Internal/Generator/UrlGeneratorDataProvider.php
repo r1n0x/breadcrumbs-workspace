@@ -97,39 +97,6 @@ class UrlGeneratorDataProvider
                 ),
                 '/animal/owl',
             ],
-            'Route with scoped parameters and global parameters (prioritizes scoped parameters)' => [
-                UrlParametersProviderProvider::createWithParameters([
-                    new Parameter(
-                        'parameter-8cf18f39-e7cc-40ad-a86d-e805c7b1020a',
-                        null,
-                        'wolf',
-                        Unused::null()
-                    ),
-                    new Parameter(
-                        'parameter-8cf18f39-e7cc-40ad-a86d-e805c7b1020a',
-                        'route-e6a60f0c-ecf8-4d0e-a1c1-1f20e917becd',
-                        'deer',
-                        Unused::null()
-                    ),
-                ]),
-                RouterStub::create()
-                    ->addRouteStub('route-e6a60f0c-ecf8-4d0e-a1c1-1f20e917becd', '/animal/{parameter-8cf18f39-e7cc-40ad-a86d-e805c7b1020a}'),
-                new RouteBreadcrumbDefinition(
-                    'route-e6a60f0c-ecf8-4d0e-a1c1-1f20e917becd',
-                    Unused::string(),
-                    null,
-                    null,
-                    Unused::bool(),
-                    [
-                        new ParameterDefinition(
-                            'parameter-8cf18f39-e7cc-40ad-a86d-e805c7b1020a',
-                            false,
-                            null
-                        ),
-                    ]
-                ),
-                '/animal/deer',
-            ],
             'Route with optional parameters' => [
                 UrlParametersProviderProvider::createWithParameters([
                     new Parameter(

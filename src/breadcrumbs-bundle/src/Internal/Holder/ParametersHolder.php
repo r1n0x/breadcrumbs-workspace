@@ -30,18 +30,23 @@ class ParametersHolder
 
     public function get(string $name, ?string $routeName = null): ?Parameter
     {
-        return $this->getParameter($name, $routeName);
+        return $this->getParameter($name, $routeName, true);
     }
 
-    public function has(string $name, ?string $routeName = null): bool
+    private function has(string $name, ?string $routeName = null): bool
     {
-        return $this->getParameter($name, $routeName) instanceof Parameter;
+        return $this->getParameter($name, $routeName, false) instanceof Parameter;
     }
 
-    private function getParameter(string $name, ?string $routeName = null): ?Parameter
+    private function getParameter(string $name, ?string $routeName, bool $fallback): ?Parameter
     {
         if (null !== $routeName) {
-            return $this->getScoped($name, $routeName);
+            $scoped = $this->getScoped($name, $routeName);
+            if (null === $scoped && $fallback) {
+                return $this->getGlobal($name);
+            }
+
+            return $scoped;
         }
 
         return $this->getGlobal($name);

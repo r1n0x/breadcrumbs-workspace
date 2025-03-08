@@ -26,16 +26,9 @@ final readonly class ContextVariableProvider
      */
     public function get(BreadcrumbDefinition $definition, string $name, ?string $routeName): Variable
     {
-        // get scoped
-        if ($this->holder->has($name, $routeName)) {
-            /* @phpstan-ignore return.type */
-            return $this->holder->get($name, $routeName);
-        }
-
-        // get global
-        if ($this->holder->has($name)) {
-            /* @phpstan-ignore return.type */
-            return $this->holder->get($name);
+        $variable = $this->holder->get($name, $routeName);
+        if (null !== $variable) {
+            return $variable;
         }
 
         if ($definition instanceof RouteBreadcrumbDefinition && $definition->getPassParametersToExpression()) {

@@ -131,6 +131,51 @@ class ParametersHolderTest extends TestCase
         $this->assertEquals('route-cdf35504-d123-445f-98fb-25282b38cc8c', $parameter->getRouteName(), self::MESSAGE_UNEXPECTED_PARAMETER_ROUTE_NAME);
     }
 
+    #[Test]
+    public function allowsSettingScopedParameterWithTheSameNameAsGlobalParameter(
+    ): void {
+        $this->expectNotToPerformAssertions();
+        $this->getService([
+            new Parameter(
+                'parameter-dc7b3e63-f541-43e1-9e57-ab6818b3875b',
+                'route-ed9c19cd-5034-4a18-8622-bdba473d07b9',
+                'path-value-13b6016f-b116-45a8-8c26-2fcb701db0fc',
+                'autowired-value-5c45ab2e-a17d-40c1-8e69-b5d50eb88583'
+            ),
+            new Parameter(
+                'parameter-dc7b3e63-f541-43e1-9e57-ab6818b3875b',
+                null,
+                'path-value-ccf5dda5-fef7-4b0e-accc-1b167f70890f',
+                'autowired-value-6bca569a-340b-4170-81ce-6104eea78d53'
+            ),
+        ]);
+    }
+
+    #[Test]
+    #[TestDox('Fallbacks to global parameter, if scoped parameter is undefined')]
+    public function fallbacksToGlobalParameterIfScopedParameterIsUndefined(
+    ): void {
+        $parameter = $this->getService([
+            new Parameter(
+                'parameter-5513127f-dc2b-48f4-a15d-12a59a94917c',
+                'route-cdf35504-d123-445f-98fb-25282b38cc8c',
+                'path-value-1710f10b-1970-4433-b36c-1d61279b9aeb',
+                'autowired-value-f60d9f5f-9b02-4d82-86b9-bae92b2d08df'
+            ),
+            new Parameter(
+                'parameter-5513127f-dc2b-48f4-a15d-12a59a94917c',
+                null,
+                'path-value-b5ec3e50-b4c8-4354-80dd-469fab0cdd98',
+                'autowired-value-ccb8137a-f7aa-4924-b0b5-b181fb7a169d'
+            ),
+        ])->get('parameter-5513127f-dc2b-48f4-a15d-12a59a94917c', 'route-cdf35504-d123-445f-98fb-25282b38cc8c');
+
+        $this->assertEquals('path-value-1710f10b-1970-4433-b36c-1d61279b9aeb', $parameter->getPathValue(), self::MESSAGE_UNEXPECTED_PARAMETER_PATH_VALUE);
+        $this->assertEquals('autowired-value-f60d9f5f-9b02-4d82-86b9-bae92b2d08df', $parameter->getAutowiredValue(), self::MESSAGE_UNEXPECTED_PARAMETER_AUTOWIRED_VALUE);
+        $this->assertEquals('parameter-5513127f-dc2b-48f4-a15d-12a59a94917c', $parameter->getName(), self::MESSAGE_UNEXPECTED_PARAMETER_NAME);
+        $this->assertEquals('route-cdf35504-d123-445f-98fb-25282b38cc8c', $parameter->getRouteName(), self::MESSAGE_UNEXPECTED_PARAMETER_ROUTE_NAME);
+    }
+
     /**
      * @param array<int, Parameter> $parameters
      */

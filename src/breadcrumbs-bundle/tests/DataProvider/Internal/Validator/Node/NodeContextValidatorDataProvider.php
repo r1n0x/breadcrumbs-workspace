@@ -22,6 +22,7 @@ class NodeContextValidatorDataProvider
 {
     // 63 felt like good number, overkill but hey
     private const int NEST_LEVEL = 63;
+    private const string ROUTE_NONE = 'ROUTE_NONE';
 
     public static function getThrowsExceptionTestScenarios(): array
     {
@@ -117,7 +118,7 @@ class NodeContextValidatorDataProvider
             'Variable on route node' => (function () {
                 $node = self::createNested(self::createRoute([], [
                     'variable-2aceadf3-820a-42eb-bf37-16e68d4f8596',
-                ]));
+                ], 'route-149d083c-25c9-48a4-8b04-0bcc72dc973c'));
 
                 $parameterProvider = ContextParameterProviderProvider::empty();
 
@@ -126,7 +127,8 @@ class NodeContextValidatorDataProvider
                     ContextVariableProviderProvider::createWithVariables([
                         new Variable(
                             'variable-2aceadf3-820a-42eb-bf37-16e68d4f8596',
-                            'value-2f817683-3089-414b-b00b-c31460c739a3'
+                            'value-2f817683-3089-414b-b00b-c31460c739a3',
+                            'route-149d083c-25c9-48a4-8b04-0bcc72dc973c'
                         ),
                     ], $parameterProvider),
                     $parameterProvider,
@@ -135,7 +137,7 @@ class NodeContextValidatorDataProvider
             'Variable on root node' => (function () {
                 $node = self::createNested(self::createRoot([
                     'variable-f45cef06-9829-4cc7-bb5c-bbf8b2ed0036',
-                ]));
+                ], self::ROUTE_NONE));
 
                 $parameterProvider = ContextParameterProviderProvider::empty();
 
@@ -177,10 +179,10 @@ class NodeContextValidatorDataProvider
      * @param array<int, ParameterDefinition> $parameters
      * @param array<int, string> $variables
      */
-    private static function createRoute(array $parameters, array $variables): RouteBreadcrumbDefinition
+    private static function createRoute(array $parameters, array $variables, ?string $routeName = null): RouteBreadcrumbDefinition
     {
         return new RouteBreadcrumbDefinition(
-            Unused::string(),
+            $routeName ?? Unused::string(),
             Unused::string(),
             Unused::string(),
             Unused::string(),
@@ -193,10 +195,10 @@ class NodeContextValidatorDataProvider
     /**
      * @param array<int, string> $variables
      */
-    private static function createRoot(array $variables): RootBreadcrumbDefinition
+    private static function createRoot(array $variables, ?string $routeName = null): RootBreadcrumbDefinition
     {
         return new RootBreadcrumbDefinition(
-            Unused::string(),
+            self::ROUTE_NONE === $routeName ? null : Unused::string(),
             Unused::string(),
             Unused::string(),
             $variables

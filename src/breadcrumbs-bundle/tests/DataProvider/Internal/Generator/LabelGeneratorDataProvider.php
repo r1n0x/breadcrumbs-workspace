@@ -70,37 +70,6 @@ class LabelGeneratorDataProvider
                 ),
                 '321',
             ],
-            'Using scoped and global variables (prioritizes scoped variables)' => [
-                LabelVariablesProviderProvider::createWithVariables([
-                    new Variable(
-                        'array3',
-                        [
-                            '9a7dc4e3-3ab3-4902-98cc-4cbc1b0f7734' => 'c',
-                        ],
-                        'route-88189063-7fc8-4bef-83b2-bddc479a586e'
-                    ),
-                    new Variable('array3', []),
-                    new Variable(
-                        'array4',
-                        [
-                            '4ad44d17-5cf0-4010-80d3-d928d6d0d7d4' => 'd',
-                        ]
-                    ),
-                ]),
-                new RouteBreadcrumbDefinition(
-                    'route-88189063-7fc8-4bef-83b2-bddc479a586e',
-                    "'a' ~ 'b' ~ array3[\"9a7dc4e3-3ab3-4902-98cc-4cbc1b0f7734\"] ~ array4[\"4ad44d17-5cf0-4010-80d3-d928d6d0d7d4\"]",
-                    Unused::string(),
-                    Unused::string(),
-                    Unused::bool(),
-                    [],
-                    [
-                        'array3',
-                        'array4',
-                    ]
-                ),
-                'abcd',
-            ],
         ];
     }
 }

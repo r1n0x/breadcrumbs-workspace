@@ -23,16 +23,9 @@ final readonly class ContextParameterProvider
      */
     public function get(string $name, ?string $routeName): Parameter
     {
-        // get scoped
-        if ($this->holder->has($name, $routeName)) {
-            /* @phpstan-ignore return.type */
-            return $this->holder->get($name, $routeName);
-        }
-
-        // get global
-        if ($this->holder->has($name)) {
-            /* @phpstan-ignore return.type */
-            return $this->holder->get($name);
+        $parameter = $this->holder->get($name, $routeName);
+        if (null !== $parameter) {
+            return $parameter;
         }
 
         throw new UndefinedParameterException($name);
