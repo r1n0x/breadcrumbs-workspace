@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle;
 
+use R1n0x\BreadcrumbsBundle\Exception\ParameterAlreadyDefinedException;
+use R1n0x\BreadcrumbsBundle\Exception\VariableAlreadyDefinedException;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
@@ -19,13 +21,22 @@ class Context
         private readonly VariablesHolder $variablesHolder
     ) {}
 
-    public function setParameter(string $name, null|int|string $value, ?string $routeName = null): static
-    {
-        $this->parametersHolder->set(new Parameter($name, $value, $routeName));
+    /**
+     * @throws ParameterAlreadyDefinedException
+     */
+    public function setParameter(
+        string $name,
+        ?string $routeName,
+        null|int|string $value
+    ): static {
+        $this->parametersHolder->set(new Parameter($name, $routeName, $value, null));
 
         return $this;
     }
 
+    /**
+     * @throws VariableAlreadyDefinedException
+     */
     public function setVariable(string $name, mixed $value, ?string $routeName = null): static
     {
         $this->variablesHolder->set(new Variable($name, $value, $routeName));

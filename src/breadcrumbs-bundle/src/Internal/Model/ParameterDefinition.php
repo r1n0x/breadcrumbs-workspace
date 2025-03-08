@@ -32,9 +32,4 @@ class ParameterDefinition
     {
         return $this->optionalValue;
     }
-
-    public function isOptionalValue(mixed $value): bool
-    {
-        return $this->isOptional() && $this->optionalValue === $value;
-    }
 }

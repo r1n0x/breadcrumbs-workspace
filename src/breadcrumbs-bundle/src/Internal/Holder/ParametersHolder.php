@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Internal\Holder;
 
+use R1n0x\BreadcrumbsBundle\Exception\ParameterAlreadyDefinedException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 
 /**
@@ -16,25 +17,52 @@ class ParametersHolder
      */
     private array $parameters = [];
 
+    /**
+     * @throws ParameterAlreadyDefinedException
+     */
     public function set(Parameter $parameter): void
     {
+        if ($this->has($parameter->getName(), $parameter->getRouteName())) {
+            throw new ParameterAlreadyDefinedException($parameter);
+        }
         $this->parameters[] = $parameter;
     }
 
-    public function getValue(string $name, ?string $routeName = null): null|int|string
+    public function get(string $name, ?string $routeName = null): ?Parameter
+    {
+        return $this->getParameter($name, $routeName);
+    }
+
+    public function has(string $name, ?string $routeName = null): bool
+    {
+        return $this->getParameter($name, $routeName) instanceof Parameter;
+    }
+
+    private function getParameter(string $name, ?string $routeName = null): ?Parameter
     {
         if (null !== $routeName) {
-            foreach ($this->parameters as $parameter) {
-                if ($parameter->getRouteName() === $routeName && $parameter->getName() === $name) {
-                    return $parameter->getValue() ?? null;
-                }
-            }
-
-            return null;
+            return $this->getScoped($name, $routeName);
         }
+
+        return $this->getGlobal($name);
+    }
+
+    private function getScoped(string $name, string $routeName): ?Parameter
+    {
+        foreach ($this->parameters as $parameter) {
+            if ($parameter->getRouteName() === $routeName && $parameter->getName() === $name) {
+                return $parameter;
+            }
+        }
+
+        return null;
+    }
+
+    private function getGlobal(string $name): ?Parameter
+    {
         foreach ($this->parameters as $parameter) {
             if (null === $parameter->getRouteName() && $parameter->getName() === $name) {
-                return $parameter->getValue() ?? null;
+                return $parameter;
             }
         }
 

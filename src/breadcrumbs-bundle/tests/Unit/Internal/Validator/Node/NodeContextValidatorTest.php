@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @noinspection PhpUnhandledExceptionInspection
+ * @noinspection PhpDocMissingThrowsInspection
+ */
+
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Validator\Node;
@@ -10,6 +15,8 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Context;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedParameterException;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedVariableException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
@@ -23,6 +30,8 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\Error;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RootError;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RouteError;
+use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
+use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\Node\NodeContextValidatorDataProvider;
@@ -48,30 +57,41 @@ use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\Node\NodeConte
 #[UsesClass(Parameter::class)]
 #[UsesClass(Variable::class)]
 #[UsesClass(ValidationException::class)]
+#[UsesClass(UndefinedParameterException::class)]
+#[UsesClass(UndefinedVariableException::class)]
+#[UsesClass(ContextParameterProvider::class)]
+#[UsesClass(ContextVariableProvider::class)]
 class NodeContextValidatorTest extends TestCase
 {
     #[Test]
     #[DataProviderExternal(NodeContextValidatorDataProvider::class, 'getThrowsExceptionTestScenarios')]
     public function throwsException(
         BreadcrumbNode $node,
-        Context $context
+        ContextVariableProvider $variableProvider,
+        ContextParameterProvider $parameterProvider
     ): void {
         $this->expectException(ValidationException::class);
-        $this->getService()->validate($node, $context);
+        $this->getService($variableProvider, $parameterProvider)->validate($node);
     }
 
     #[Test]
     #[DataProviderExternal(NodeContextValidatorDataProvider::class, 'getValidatesContextTestScenarios')]
     public function validatesContext(
         BreadcrumbNode $node,
-        Context $context
+        ContextVariableProvider $variableProvider,
+        ContextParameterProvider $parameterProvider
     ): void {
         $this->expectNotToPerformAssertions();
-        $this->getService()->validate($node, $context);
+        $this->getService($variableProvider, $parameterProvider)->validate($node);
     }
 
-    private function getService(): NodeContextValidator
-    {
-        return new NodeContextValidator();
+    private function getService(
+        ContextVariableProvider $variableProvider,
+        ContextParameterProvider $parameterProvider
+    ): NodeContextValidator {
+        return new NodeContextValidator(
+            $variableProvider,
+            $parameterProvider
+        );
     }
 }

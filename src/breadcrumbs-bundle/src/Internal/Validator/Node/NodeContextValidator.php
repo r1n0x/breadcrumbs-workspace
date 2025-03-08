@@ -4,70 +4,84 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Internal\Validator\Node;
 
-use R1n0x\BreadcrumbsBundle\Context;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedParameterException;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedVariableException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
+use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class NodeContextValidator
+final readonly class NodeContextValidator
 {
+    public function __construct(
+        private ContextVariableProvider $variableProvider,
+        private ContextParameterProvider $parameterProvider
+    ) {}
+
     /**
      * @throws ValidationException
      */
-    public function validate(BreadcrumbNode $node, Context $context): void
+    public function validate(BreadcrumbNode $node): void
     {
-        $validationContext = new ValidationContext();
-        $this->doValidate($validationContext, $node, $context);
-        if ($validationContext->hasErrors()) {
-            throw new ValidationException($validationContext);
+        $context = new ValidationContext();
+        $this->doValidate($context, $node);
+        if ($context->hasErrors()) {
+            throw new ValidationException($context);
         }
     }
 
-    private function validateRoute(RouteBreadcrumbDefinition $definition, ValidationContext $validationContext, Context $context): void
-    {
-        foreach ($definition->getVariables() as $variableName) {
-            $value = $context->getVariablesHolder()->getValue($variableName, $definition->getRouteName())
-                ?? $context->getVariablesHolder()->getValue($variableName);
-            if (null === $value) {
-                $validationContext->addRouteVariableViolation($definition->getRouteName(), $variableName);
-            }
-        }
-        foreach ($definition->getParameters() as $parameterDefinition) {
-            $parameterName = $parameterDefinition->getName();
-            $value = $context->getParametersHolder()->getValue($parameterName, $definition->getRouteName())
-                ?? $context->getParametersHolder()->getValue($parameterName) ?? $parameterDefinition->getOptionalValue();
-            if (null === $value && !$parameterDefinition->isOptionalValue($value)) {
-                $validationContext->addRouteParameterViolation($definition->getRouteName(), $parameterName);
-            }
-        }
-    }
-
-    private function validateRoot(RootBreadcrumbDefinition $definition, ValidationContext $validationContext, Context $context): void
-    {
-        foreach ($definition->getVariables() as $variableName) {
-            $value = $context->getVariablesHolder()->getValue($variableName);
-            if (null === $value) {
-                $validationContext->addRootVariableViolation($definition->getName(), $variableName);
-            }
-        }
-    }
-
-    private function doValidate(ValidationContext $validationContext, BreadcrumbNode $node, Context $context): void
+    private function doValidate(ValidationContext $context, BreadcrumbNode $node): void
     {
         $definition = $node->getDefinition();
 
         match (true) {
-            $definition instanceof RouteBreadcrumbDefinition => $this->validateRoute($definition, $validationContext, $context),
-            $definition instanceof RootBreadcrumbDefinition => $this->validateRoot($definition, $validationContext, $context)
+            $definition instanceof RouteBreadcrumbDefinition => $this->validateRoute($definition, $context),
+            $definition instanceof RootBreadcrumbDefinition => $this->validateRoot($definition, $context)
         };
 
         $parent = $node->getParent();
         if (null !== $parent) {
-            $this->doValidate($validationContext, $parent, $context);
+            $this->doValidate($context, $parent);
+        }
+    }
+
+    private function validateRoute(RouteBreadcrumbDefinition $definition, ValidationContext $context): void
+    {
+        $routeName = $definition->getRouteName();
+        foreach ($definition->getVariables() as $variableName) {
+            try {
+                $this->variableProvider->get($definition, $variableName, $routeName);
+            } catch (UndefinedVariableException) {
+                $context->addRouteVariableViolation($routeName, $variableName);
+            }
+        }
+        foreach ($definition->getParameters() as $parameterDefinition) {
+            $parameterName = $parameterDefinition->getName();
+
+            try {
+                $this->parameterProvider->get($parameterName, $routeName);
+            } catch (UndefinedParameterException) {
+                if ($parameterDefinition->isOptional()) {
+                    continue;
+                }
+                $context->addRouteParameterViolation($routeName, $parameterName);
+            }
+        }
+    }
+
+    private function validateRoot(RootBreadcrumbDefinition $definition, ValidationContext $context): void
+    {
+        foreach ($definition->getVariables() as $variableName) {
+            try {
+                $this->variableProvider->get($definition, $variableName, $definition->getRouteName());
+            } catch (UndefinedVariableException) {
+                $context->addRootVariableViolation($definition->getName(), $variableName);
+            }
         }
     }
 }

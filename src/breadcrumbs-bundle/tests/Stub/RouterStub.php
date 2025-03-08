@@ -26,6 +26,11 @@ class RouterStub implements RouterInterface
         $this->resolver = new ParametersResolver();
     }
 
+    public static function create(): RouterStub
+    {
+        return new RouterStub();
+    }
+
     public function setContext(RequestContext $context): void {}
 
     public function getContext(): RequestContext
@@ -38,9 +43,13 @@ class RouterStub implements RouterInterface
         return new RouteCollection();
     }
 
-    public function addRouteStub(Route $route): static
+    public function addRouteStub(string $name, string $path, array $defaults = []): static
     {
-        $this->routes[$route->getName()] = $route;
+        $this->routes[$name] = new Route(
+            path: $path,
+            name: $name,
+            defaults: $defaults
+        );
 
         return $this;
     }

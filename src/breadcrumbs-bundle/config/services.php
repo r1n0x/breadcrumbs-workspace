@@ -6,44 +6,25 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return function (ContainerConfigurator $configurator) {
+    $configurator->import('./_services/listeners.php');
+    $configurator->import('./_services/loaders.php');
+    $configurator->import('./_services/commands.php');
+    $configurator->import('./_services/twig.php');
+
     $services = $configurator->services();
-
-    $services
-        ->set('r1n0x.breadcrumbs.listener.controller_arguments', R1n0x\BreadcrumbsBundle\EventListener\ControllerArgumentsListener::class)
-        ->args([
-            service('r1n0x.breadcrumbs.context'),
-            service('r1n0x.breadcrumbs.resolver.nodes')
-        ])
-        ->tag('kernel.event_listener');
-
-    $services
-        ->set('r1n0x.breadcrumbs.command.debug_breadcrumbs', R1n0x\BreadcrumbsBundle\Command\DebugBreadcrumbsCommand::class)
-        ->args([
-            service('r1n0x.breadcrumbs.resolver.nodes')
-        ])
-        ->tag('console.command');
-
-    $services
-        ->set('r1n0x.breadcrumbs.loader.listenable_attribute', R1n0x\BreadcrumbsBundle\Loader\ListenableAttributeRouteControllerLoader::class)
-        ->decorate('routing.loader.attribute', 'r1n0x.breadcrumbs.loader.listenable_attribute');
-
-    $services
-        ->set('r1n0x.breadcrumbs.loader.attribute', R1n0x\BreadcrumbsBundle\Loader\ListenableAttributeRouteControllerLoader::class)
-        ->call('setDispatcher', [
-            service('event_dispatcher')
-        ])
-        ->decorate('routing.loader.attribute');
 
     $services
         ->set('r1n0x.breadcrumbs.generator.label', R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator::class)
         ->args([
-            service('r1n0x.breadcrumbs.expression_language.engine')
+            service('r1n0x.breadcrumbs.expression_language.engine'),
+            service('r1n0x.breadcrumbs.provider.label_variables')
         ]);
 
     $services
         ->set('r1n0x.breadcrumbs.generator.url', R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator::class)
         ->args([
-            service('router')
+            service('router'),
+            service('r1n0x.breadcrumbs.provider.url_parameters')
         ]);
 
     $services
@@ -55,8 +36,8 @@ return function (ContainerConfigurator $configurator) {
     $services
         ->set('r1n0x.breadcrumbs.validator.node', R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator::class)
         ->args([
-            service('r1n0x.breadcrumbs.holder.parameters'),
-            service('r1n0x.breadcrumbs.holder.variables')
+            service('r1n0x.breadcrumbs.provider.context_variable'),
+            service('r1n0x.breadcrumbs.provider.context_parameter')
         ]);
 
     $services
@@ -73,7 +54,7 @@ return function (ContainerConfigurator $configurator) {
 
 
     $services
-        ->set('r1n0x.breadcrumbs.expression_language.functions_provider', R1n0x\BreadcrumbsBundle\Internal\FunctionsProvider::class)
+        ->set('r1n0x.breadcrumbs.provider.expression_language_functions', R1n0x\BreadcrumbsBundle\Internal\Provider\FunctionsProvider::class)
         ->args([
             tagged_iterator('r1n0x.breadcrumbs.expression_language.function_provider')
         ]);
@@ -81,14 +62,14 @@ return function (ContainerConfigurator $configurator) {
     $services
         ->set('r1n0x.breadcrumbs.expression_language.functions', 'array')
         ->factory([
-            service('r1n0x.breadcrumbs.expression_language.functions_provider'),
+            service('r1n0x.breadcrumbs.provider.expression_language_functions'),
             'getFunctions'
         ]);
 
     $services
         ->set('r1n0x.breadcrumbs.expression_language.providers', 'array')
         ->factory([
-            service('r1n0x.breadcrumbs.expression_language.functions_provider'),
+            service('r1n0x.breadcrumbs.provider.expression_language_functions'),
             'getProviders'
         ]);
 
@@ -192,11 +173,29 @@ return function (ContainerConfigurator $configurator) {
             service('r1n0x.breadcrumbs.resolver.roots')
         ]);
 
-    $services->set('r1n0x.breadcrumbs.twig.extension', R1n0x\BreadcrumbsBundle\Twig\BreadcrumbsExtension::class)
+    $services
+        ->set('r1n0x.breadcrumbs.provider.context_parameter', R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider::class)
         ->args([
-            service('request_stack'),
-            service('r1n0x.breadcrumbs.builder'),
-            service('r1n0x.breadcrumbs.context')
-        ])
-        ->tag('twig.extension');
+            service('r1n0x.breadcrumbs.holder.parameters')
+        ]);
+
+    $services
+        ->set('r1n0x.breadcrumbs.provider.url_parameters', R1n0x\BreadcrumbsBundle\Internal\Provider\UrlParametersProvider::class)
+        ->args([
+            service('r1n0x.breadcrumbs.provider.context_parameter')
+        ]);
+
+    $services
+        ->set('r1n0x.breadcrumbs.provider.context_variable', R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider::class)
+        ->args([
+            service('r1n0x.breadcrumbs.holder.variables'),
+            service('r1n0x.breadcrumbs.provider.context_parameter')
+        ]);
+
+    $services
+        ->set('r1n0x.breadcrumbs.provider.label_variables', R1n0x\BreadcrumbsBundle\Internal\Provider\LabelVariablesProvider::class)
+        ->args([
+            service('r1n0x.breadcrumbs.provider.context_variable'),
+            service('r1n0x.breadcrumbs.provider.context_parameter')
+        ]);
 };

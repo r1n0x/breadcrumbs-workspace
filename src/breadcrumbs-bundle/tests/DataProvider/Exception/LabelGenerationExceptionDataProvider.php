@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Exception;
 
+use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Tests\Unused;
@@ -24,6 +25,7 @@ class LabelGenerationExceptionDataProvider
                     Unused::string(),
                     Unused::bool()
                 ),
+                LabelGenerationException::CODE_ROUTE,
                 sprintf(
                     'Error occurred when evaluating breadcrumb expression "%s" for route "%s"',
                     'expression-b66783ae-f1bb-4c52-830a-85f9c152ffb5',
@@ -37,6 +39,7 @@ class LabelGenerationExceptionDataProvider
                     'name-2486b414-6c92-4d50-bbde-05e42337e6d7',
                     Unused::array()
                 ),
+                LabelGenerationException::CODE_ROOT,
                 sprintf(
                     'Error occurred when evaluating breadcrumb expression "%s" for root "%s"',
                     'expression-71215cb4-d74a-47b4-96ad-0b21aa614cb6',

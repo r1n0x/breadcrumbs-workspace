@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace R1n0x\BreadcrumbsBundle;
 
 use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedParameterException;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedVariableException;
 use R1n0x\BreadcrumbsBundle\Exception\ValidationException;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\LabelGenerator;
 use R1n0x\BreadcrumbsBundle\Internal\Generator\UrlGenerator;
@@ -30,34 +32,38 @@ class Builder
      *
      * @throws ValidationException
      * @throws LabelGenerationException
+     * @throws UndefinedParameterException
+     * @throws UndefinedVariableException
      */
-    public function build(Request $request, Context $context): array
+    public function build(Request $request): array
     {
         $routeName = $request->attributes->getString('_route');
         $node = $this->resolver->get($routeName);
         if (null === $node) {
             return [];
         }
-        $this->validator->validate($node, $context);
+        $this->validator->validate($node);
 
-        return array_reverse($this->doBuild($node, $context));
+        return array_reverse($this->doBuild($node));
     }
 
     /**
      * @return array<int, Breadcrumb>
      *
      * @throws LabelGenerationException
+     * @throws UndefinedParameterException
+     * @throws UndefinedVariableException
      */
-    private function doBuild(BreadcrumbNode $node, Context $context): array
+    private function doBuild(BreadcrumbNode $node): array
     {
         $breadcrumbs = [];
         $breadcrumbs[] = new Breadcrumb(
-            $this->labelGenerator->generate($node->getDefinition(), $context->getVariablesHolder()),
-            $this->urlGenerator->generate($node->getDefinition(), $context->getParametersHolder())
+            $this->labelGenerator->generate($node->getDefinition()),
+            $this->urlGenerator->generate($node->getDefinition())
         );
         $parent = $node->getParent();
         if (null !== $parent) {
-            $breadcrumbs = array_merge($breadcrumbs, $this->doBuild($parent, $context));
+            $breadcrumbs = array_merge($breadcrumbs, $this->doBuild($parent));
         }
 
         return $breadcrumbs;

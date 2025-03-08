@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Internal\Generator;
 
-use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedParameterException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Provider\UrlParametersProvider;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class UrlGenerator
+final readonly class UrlGenerator
 {
     public function __construct(
-        private readonly RouterInterface $router
+        private RouterInterface $router,
+        private UrlParametersProvider $provider
     ) {}
 
-    public function generate(BreadcrumbDefinition $definition, ParametersHolder $holder): ?string
+    /**
+     * @throws UndefinedParameterException
+     */
+    public function generate(BreadcrumbDefinition $definition): ?string
     {
         $routeName = $definition->getRouteName();
         if ($definition instanceof RootBreadcrumbDefinition && null === $routeName) {
@@ -30,26 +35,8 @@ class UrlGenerator
             $definition instanceof RootBreadcrumbDefinition => $this->router->generate($routeName),
             $definition instanceof RouteBreadcrumbDefinition => $this->router->generate(
                 $definition->getRouteName(),
-                $this->getParameters($definition, $holder)
+                $this->provider->getParameters($definition)
             )
         };
-    }
-
-    /**
-     * @return array<string, null|int|string>
-     */
-    public function getParameters(RouteBreadcrumbDefinition $definition, ParametersHolder $holder): array
-    {
-        $routeName = $definition->getRouteName();
-        $parameters = [];
-        foreach ($definition->getParameters() as $parameterDefinition) {
-            $parameterName = $parameterDefinition->getName();
-            $value = $holder->getValue($parameterName, $routeName) ?? $holder->getValue($parameterName);
-            $parameters[$parameterName] = $parameterDefinition->isOptionalValue($value)
-                ? $parameterDefinition->getOptionalValue()
-                : $value;
-        }
-
-        return $parameters;
     }
 }

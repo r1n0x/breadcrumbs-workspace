@@ -30,9 +30,11 @@ class LabelGenerationExceptionTest extends TestCase
     #[DataProviderExternal(LabelGenerationExceptionDataProvider::class, 'getMessageIsReadableTestScenarios')]
     public function messageIsReadable(
         BreadcrumbDefinition $definition,
+        int $expectedExceptionCode,
         string $expectedMessage
     ): void {
         $exception = new LabelGenerationException($definition);
+        $this->assertEquals($expectedExceptionCode, $exception->getCode());
         $this->assertEquals($expectedMessage, $exception->getMessage());
     }
 }

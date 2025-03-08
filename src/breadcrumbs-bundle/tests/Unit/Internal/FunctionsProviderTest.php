@@ -8,7 +8,7 @@ use ArrayObject;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use R1n0x\BreadcrumbsBundle\Internal\FunctionsProvider;
+use R1n0x\BreadcrumbsBundle\Internal\Provider\FunctionsProvider;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 
 /**

@@ -5,46 +5,38 @@ declare(strict_types=1);
 namespace R1n0x\BreadcrumbsBundle\Internal\Generator;
 
 use R1n0x\BreadcrumbsBundle\Exception\LabelGenerationException;
-use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
+use R1n0x\BreadcrumbsBundle\Exception\UndefinedVariableException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
+use R1n0x\BreadcrumbsBundle\Internal\Provider\LabelVariablesProvider;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Throwable;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class LabelGenerator
+final readonly class LabelGenerator
 {
     public function __construct(
-        private readonly ExpressionLanguage $expressionLanguage
+        private ExpressionLanguage $expressionLanguage,
+        private LabelVariablesProvider $provider
     ) {}
 
     /**
      * @throws LabelGenerationException
+     * @throws UndefinedVariableException
      */
-    public function generate(BreadcrumbDefinition $definition, VariablesHolder $holder): string
+    public function generate(BreadcrumbDefinition $definition): string
     {
         try {
             /* @phpstan-ignore cast.string */
-            return (string) $this->expressionLanguage->evaluate($definition->getExpression(), $this->getVariables($definition, $holder));
+            return (string) $this->expressionLanguage->evaluate(
+                $definition->getExpression(),
+                $this->provider->getVariables($definition)
+            );
+        } catch (UndefinedVariableException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new LabelGenerationException($definition, previous: $e);
         }
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function getVariables(BreadcrumbDefinition $definition, VariablesHolder $holder): array
-    {
-        $routeName = $definition->getRouteName();
-        $variables = [];
-        foreach ($definition->getVariables() as $variableName) {
-            $value = $holder->getValue($variableName, $routeName)
-                ?? $holder->getValue($variableName);
-            $variables[$variableName] = $value;
-        }
-
-        return $variables;
     }
 }

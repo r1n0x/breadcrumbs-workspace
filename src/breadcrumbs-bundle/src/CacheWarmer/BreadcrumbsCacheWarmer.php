@@ -46,7 +46,6 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
      */
     public function warmUp(string $cacheDir): array
     {
-        // TODO HANDLE FAILURE - REBUILD ON REQUEST IN DEV MODE IF NOT WARMED UP PROPERLY
         $definitions = $this->resolver->getDefinitions();
         $nodes = $this->transform($definitions);
         /* @phpstan-ignore missingType.checkedException */

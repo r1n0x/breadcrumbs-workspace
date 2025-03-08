@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace R1n0x\BreadcrumbsBundle\Twig;
 
 use R1n0x\BreadcrumbsBundle\Builder;
-use R1n0x\BreadcrumbsBundle\Context;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -17,8 +16,7 @@ class BreadcrumbsExtension extends AbstractExtension
 {
     public function __construct(
         private readonly RequestStack $requestStack,
-        private readonly Builder $builder,
-        private readonly Context $context
+        private readonly Builder $builder
     ) {}
 
     /**
@@ -29,7 +27,7 @@ class BreadcrumbsExtension extends AbstractExtension
         return [
             new TwigFunction('build_breadcrumbs', function () {
                 /* @phpstan-ignore argument.type */
-                return $this->builder->build($this->requestStack->getCurrentRequest(), $this->context);
+                return $this->builder->build($this->requestStack->getCurrentRequest());
             }),
         ];
     }

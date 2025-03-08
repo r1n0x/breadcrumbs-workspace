@@ -13,8 +13,9 @@ class Parameter
 {
     public function __construct(
         private readonly string $name,
-        private readonly null|int|string $value,
-        private readonly ?string $routeName = null
+        private readonly ?string $routeName,
+        private readonly null|int|string $pathValue,
+        private readonly mixed $autowiredValue
     ) {}
 
     public function getName(): string
@@ -22,9 +23,14 @@ class Parameter
         return $this->name;
     }
 
-    public function getValue(): null|int|string
+    public function getPathValue(): null|int|string
     {
-        return $this->value;
+        return $this->pathValue;
+    }
+
+    public function getAutowiredValue(): mixed
+    {
+        return $this->autowiredValue;
     }
 
     public function getRouteName(): ?string

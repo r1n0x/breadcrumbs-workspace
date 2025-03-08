@@ -14,9 +14,19 @@ use Throwable;
  */
 class LabelGenerationException extends Exception
 {
-    public function __construct(BreadcrumbDefinition $definition, int $code = 0, ?Throwable $previous = null)
+    public const int CODE_ROUTE = 1;
+    public const int CODE_ROOT = 2;
+
+    public function __construct(BreadcrumbDefinition $definition, ?Throwable $previous = null)
     {
-        parent::__construct($this->buildMessage($definition), $code, $previous);
+        parent::__construct(
+            $this->buildMessage($definition),
+            match (true) {
+                $definition instanceof RouteBreadcrumbDefinition => self::CODE_ROUTE,
+                $definition instanceof RootBreadcrumbDefinition => self::CODE_ROOT
+            },
+            $previous
+        );
     }
 
     private function buildMessage(BreadcrumbDefinition $definition): string

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\EventListener;
 
-use R1n0x\BreadcrumbsBundle\Context;
+use R1n0x\BreadcrumbsBundle\Exception\ParameterAlreadyDefinedException;
+use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
@@ -14,13 +16,16 @@ use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ControllerArgumentsListener
+final readonly class ControllerArgumentsListener
 {
     public function __construct(
-        private readonly Context $context,
-        private readonly NodesResolver $resolver
+        private ParametersHolder $holder,
+        private NodesResolver $resolver
     ) {}
 
+    /**
+     * @throws ParameterAlreadyDefinedException
+     */
     public function __invoke(ControllerArgumentsEvent $event): void
     {
         $request = $event->getRequest();
@@ -38,11 +43,13 @@ class ControllerArgumentsListener
         $definition = $node->getDefinition();
         foreach ($definition->getParameters() as $parameterDefinition) {
             $parameterName = $parameterDefinition->getName();
-            $value = $pathValues[$parameterName] ?? $parameterDefinition->getOptionalValue();
-            $this->context->setParameter($parameterName, $value, $routeName);
-            if ($definition->getPassParametersToExpression()) {
-                $this->context->setVariable($parameterName, $autowiredValues[$parameterName] ?? $pathValues[$parameterName], $routeName);
-            }
+            $pathValue = $pathValues[$parameterName] ?? $parameterDefinition->getOptionalValue();
+            $this->holder->set(new Parameter(
+                $parameterName,
+                $routeName,
+                $pathValue,
+                $autowiredValues[$parameterName] ?? $pathValues[$parameterName]
+            ));
         }
     }
 }

@@ -6,10 +6,13 @@ namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\Node;
 
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextProvider;
+use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextParameterProviderProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextVariableProviderProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Unused;
 
 /**
@@ -24,17 +27,18 @@ class NodeContextValidatorDataProvider
     {
         return [
             'Undefined value of parameter on route node' => (function () {
-                $node = self::createNested(self::createRoute([
-                    new ParameterDefinition(
-                        'parameter-e7340724-46de-4a72-93c0-eb3c32e7f4e1',
-                        false,
-                        null
-                    ),
-                ], []));
+                $parameterProvider = ContextParameterProviderProvider::empty();
 
                 return [
-                    $node,
-                    ContextProvider::provide(),
+                    self::createNested(self::createRoute([
+                        new ParameterDefinition(
+                            'parameter-e7340724-46de-4a72-93c0-eb3c32e7f4e1',
+                            false,
+                            null
+                        ),
+                    ], [])),
+                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    $parameterProvider,
                 ];
             })(),
             'Undefined value of variable on route node' => (function () {
@@ -42,9 +46,12 @@ class NodeContextValidatorDataProvider
                     'variable-43e824ca-76fc-4d9b-bf71-84ee7ad7a6e2',
                 ]));
 
+                $parameterProvider = ContextParameterProviderProvider::empty();
+
                 return [
                     $node,
-                    ContextProvider::provide(),
+                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    $parameterProvider,
                 ];
             })(),
             'Undefined value of variable on root node' => (function () {
@@ -52,9 +59,12 @@ class NodeContextValidatorDataProvider
                     'variable-84b9324b-657e-4b9c-adef-f97595774043',
                 ]));
 
+                $parameterProvider = ContextParameterProviderProvider::empty();
+
                 return [
                     $node,
-                    ContextProvider::provide(),
+                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    $parameterProvider,
                 ];
             })(),
         ];
@@ -72,15 +82,19 @@ class NodeContextValidatorDataProvider
                     ),
                 ], []));
 
-                $context = ContextProvider::provide()
-                    ->setParameter(
+                $parameterProvider = ContextParameterProviderProvider::createWithParameters([
+                    new Parameter(
                         'parameter-2adacdf1-b453-4839-8665-f329b2f82537',
-                        'value-0538095b-0090-44b4-b791-382796ecb37d'
-                    );
+                        null,
+                        'value-0538095b-0090-44b4-b791-382796ecb37d',
+                        Unused::null()
+                    ),
+                ]);
 
                 return [
                     $node,
-                    $context,
+                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    $parameterProvider,
                 ];
             })(),
             'Parameter with optional value on route node' => (function () {
@@ -92,9 +106,12 @@ class NodeContextValidatorDataProvider
                     ),
                 ], []));
 
+                $parameterProvider = ContextParameterProviderProvider::empty();
+
                 return [
                     $node,
-                    ContextProvider::provide(),
+                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    $parameterProvider,
                 ];
             })(),
             'Variable on route node' => (function () {
@@ -102,15 +119,17 @@ class NodeContextValidatorDataProvider
                     'variable-2aceadf3-820a-42eb-bf37-16e68d4f8596',
                 ]));
 
-                $context = ContextProvider::provide()
-                    ->setVariable(
-                        'variable-2aceadf3-820a-42eb-bf37-16e68d4f8596',
-                        'value-2f817683-3089-414b-b00b-c31460c739a3'
-                    );
+                $parameterProvider = ContextParameterProviderProvider::empty();
 
                 return [
                     $node,
-                    $context,
+                    ContextVariableProviderProvider::createWithVariables([
+                        new Variable(
+                            'variable-2aceadf3-820a-42eb-bf37-16e68d4f8596',
+                            'value-2f817683-3089-414b-b00b-c31460c739a3'
+                        ),
+                    ], $parameterProvider),
+                    $parameterProvider,
                 ];
             })(),
             'Variable on root node' => (function () {
@@ -118,15 +137,17 @@ class NodeContextValidatorDataProvider
                     'variable-f45cef06-9829-4cc7-bb5c-bbf8b2ed0036',
                 ]));
 
-                $context = ContextProvider::provide()
-                    ->setVariable(
-                        'variable-f45cef06-9829-4cc7-bb5c-bbf8b2ed0036',
-                        'value-a69056e5-7368-4e2b-a56b-4c1f0bd03b5c'
-                    );
+                $parameterProvider = ContextParameterProviderProvider::empty();
 
                 return [
                     $node,
-                    $context,
+                    ContextVariableProviderProvider::createWithVariables([
+                        new Variable(
+                            'variable-f45cef06-9829-4cc7-bb5c-bbf8b2ed0036',
+                            'value-a69056e5-7368-4e2b-a56b-4c1f0bd03b5c'
+                        ),
+                    ], $parameterProvider),
+                    $parameterProvider,
                 ];
             })(),
         ];
