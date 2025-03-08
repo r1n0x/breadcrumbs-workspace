@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests;
 
+use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use Random\Randomizer;
 
 /**
@@ -18,7 +19,7 @@ class Unused
     {
         $randomizer = new Randomizer();
 
-        return base64_encode($randomizer->getBytes(16));
+        return 'unused-string-' . base64_encode($randomizer->getBytes(16));
     }
 
     /**
@@ -48,5 +49,14 @@ class Unused
     public static function null(): null
     {
         return null;
+    }
+
+    public static function rootBreadcrumb(): RootBreadcrumbDefinition
+    {
+        return new RootBreadcrumbDefinition(
+            self::string(),
+            self::string(),
+            self::string()
+        );
     }
 }

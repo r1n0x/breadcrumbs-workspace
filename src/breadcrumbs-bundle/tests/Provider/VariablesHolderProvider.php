@@ -22,6 +22,11 @@ class VariablesHolderProvider
         return new VariablesHolder();
     }
 
+    public static function empty(): VariablesHolder
+    {
+        return self::createWithVariables();
+    }
+
     /**
      * @param array<int, Variable> $variables
      */
