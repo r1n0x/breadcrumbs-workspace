@@ -157,8 +157,7 @@ return function (ContainerConfigurator $configurator) {
 
     $services->set('r1n0x.breadcrumbs.resolver.route_definitions', R1n0x\BreadcrumbsBundle\Internal\Resolver\RouteDefinitionsResolver::class)
         ->args([
-            service('router'),
-            service('event_dispatcher'),
+            service('r1n0x.breadcrumbs.provider.routes'),
             service('r1n0x.breadcrumbs.resolver.variables'),
             service('r1n0x.breadcrumbs.resolver.parameters'),
             service('r1n0x.breadcrumbs.validator.route'),
@@ -171,6 +170,13 @@ return function (ContainerConfigurator $configurator) {
             service('r1n0x.breadcrumbs.resolver.variables'),
             service('r1n0x.breadcrumbs.resolver.parameters'),
             service('r1n0x.breadcrumbs.resolver.roots')
+        ]);
+
+    $services
+        ->set('r1n0x.breadcrumbs.provider.routes', R1n0x\BreadcrumbsBundle\Internal\Resolver\RoutesProvider::class)
+        ->args([
+            service('router'),
+            service('event_dispatcher'),
         ]);
 
     $services
