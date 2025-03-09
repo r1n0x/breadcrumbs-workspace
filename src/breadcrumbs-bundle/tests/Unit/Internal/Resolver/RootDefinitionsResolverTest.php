@@ -74,6 +74,40 @@ class RootDefinitionsResolverTest extends TestCase
             ->getDefinitions();
     }
 
+    #[Test]
+    public function resolvesDefinitions(): void
+    {
+        $definitions = $this
+            ->getService(
+                RouterStub::create()
+                    ->addRouteStub('route_name_1', '/route/static/1')
+                    ->addRouteStub('route_name_2', '/route/static/2'),
+                RootsResolverProvider::createWithConfig([
+                    'root_name_1' => [
+                        Route::EXPRESSION => 'variable_1 + variable_2',
+                        'route' => 'route_name_1',
+                    ],
+                    'root_name_2' => [
+                        Route::EXPRESSION => 'variable_3 + variable_4',
+                        'route' => 'route_name_2',
+                    ],
+                ])
+            )
+            ->getDefinitions();
+
+        $this->assertCount(2, $definitions);
+
+        $this->assertEquals('root_name_1', $definitions[0]->getName());
+        $this->assertEquals('route_name_1', $definitions[0]->getRouteName());
+        $this->assertEquals(['variable_1', 'variable_2'], $definitions[0]->getVariables());
+        $this->assertEquals('variable_1 + variable_2', $definitions[0]->getExpression());
+
+        $this->assertEquals('root_name_2', $definitions[1]->getName());
+        $this->assertEquals('route_name_2', $definitions[1]->getRouteName());
+        $this->assertEquals(['variable_3', 'variable_4'], $definitions[1]->getVariables());
+        $this->assertEquals('variable_3 + variable_4', $definitions[1]->getExpression());
+    }
+
     private function getService(
         RouterInterface $router,
         RootsResolver $resolver
