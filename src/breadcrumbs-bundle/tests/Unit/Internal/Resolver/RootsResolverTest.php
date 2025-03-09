@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Root;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\RootsResolver;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\RootsResolverProvider;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -45,6 +46,6 @@ class RootsResolverTest extends TestCase
 
     private function getService(array $config): RootsResolver
     {
-        return new RootsResolver($config);
+        return RootsResolverProvider::createWithConfig($config);
     }
 }

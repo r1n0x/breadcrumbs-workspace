@@ -40,7 +40,15 @@ class RouterStub implements RouterInterface
 
     public function getRouteCollection(): RouteCollection
     {
-        return new RouteCollection();
+        $collection = new RouteCollection();
+        foreach ($this->routes as $route) {
+            $collection->add($route->getName(), new \Symfony\Component\Routing\Route(
+                $route->getPath(),
+                $route->getDefaults()
+            ));
+        }
+
+        return $collection;
     }
 
     public function addRouteStub(string $name, string $path, array $defaults = []): static

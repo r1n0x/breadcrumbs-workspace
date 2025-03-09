@@ -10,8 +10,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Exception\VariablesResolverException;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver;
-use Symfony\Component\ExpressionLanguage\Lexer;
-use Symfony\Component\ExpressionLanguage\Parser;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\VariablesResolverProvider;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -40,9 +39,6 @@ class VariablesResolverTest extends TestCase
 
     private function getService(): VariablesResolver
     {
-        return new VariablesResolver(
-            new Lexer(),
-            new Parser([])
-        );
+        return VariablesResolverProvider::create();
     }
 }

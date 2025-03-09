@@ -14,6 +14,9 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class RootDefinitionsResolver
 {
+    public const int ERROR_CODE_UNKNOWN_ROUTE_NAME = 1;
+    public const int ERROR_CODE_DYNAMIC_ROUTE = 2;
+
     public function __construct(
         private readonly RouterInterface $router,
         private readonly VariablesResolver $variablesResolver,
@@ -42,14 +45,14 @@ class RootDefinitionsResolver
                         'Route "%s" referenced in breadcrumbs root "%s" doesn\'t exist.',
                         $routeName,
                         $root->getName()
-                    ));
+                    ), self::ERROR_CODE_UNKNOWN_ROUTE_NAME);
                 }
                 if (count($this->parametersResolver->getParameters($route)) > 0) {
                     throw new InvalidConfigurationException(sprintf(
                         'Route "%s" referenced in breadcrumbs root "%s" cannot be dynamic.',
                         $routeName,
                         $root->getName()
-                    ));
+                    ), self::ERROR_CODE_DYNAMIC_ROUTE);
                 }
             }
             $definitions[] = new RootBreadcrumbDefinition(
