@@ -11,7 +11,7 @@ use R1n0x\BreadcrumbsBundle\Exception\FileAccessException;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class CacheReader
+class CacheReader implements CacheReaderInterface
 {
     /**
      * @throws FileAccessException

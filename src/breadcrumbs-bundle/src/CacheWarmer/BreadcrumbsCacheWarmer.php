@@ -9,7 +9,7 @@ use R1n0x\BreadcrumbsBundle\Exception\RouteValidationException;
 use R1n0x\BreadcrumbsBundle\Exception\UnknownRootException;
 use R1n0x\BreadcrumbsBundle\Exception\UnknownRouteException;
 use R1n0x\BreadcrumbsBundle\Exception\VariablesResolverException;
-use R1n0x\BreadcrumbsBundle\Internal\CacheReader;
+use R1n0x\BreadcrumbsBundle\Internal\CacheReaderInterface;
 use R1n0x\BreadcrumbsBundle\Internal\DefinitionToNodeTransformer;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
@@ -28,7 +28,7 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
     public function __construct(
         private readonly NodeSerializer $serializer,
         private readonly DefinitionToNodeTransformer $transformer,
-        private readonly CacheReader $cacheReader,
+        private readonly CacheReaderInterface $cacheReader,
         private readonly DefinitionsResolver $resolver,
     ) {}
 
@@ -48,7 +48,6 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
     {
         $definitions = $this->resolver->getDefinitions();
         $nodes = $this->transform($definitions);
-        /* @phpstan-ignore missingType.checkedException */
         $this->cacheReader->write($cacheDir, $this->serializer->serialize($nodes));
 
         return [];

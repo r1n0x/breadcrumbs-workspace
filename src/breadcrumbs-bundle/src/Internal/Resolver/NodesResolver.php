@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Internal\Resolver;
 
-use R1n0x\BreadcrumbsBundle\Internal\CacheReader;
+use R1n0x\BreadcrumbsBundle\Internal\CacheReaderInterface;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
 
@@ -19,7 +19,7 @@ class NodesResolver
     private ?array $nodes = null;
 
     public function __construct(
-        private readonly CacheReader $cacheReader,
+        private readonly CacheReaderInterface $cacheReader,
         private readonly NodeSerializer $serializer,
         private readonly string $cacheDir
     ) {}
@@ -46,9 +46,8 @@ class NodesResolver
     /**
      * @return array<int, BreadcrumbNode>
      */
-    public function getNodes(): array
+    private function getNodes(): array
     {
-        /** @phpstan-ignore missingType.checkedException */
         $nodes = $this->cacheReader->read($this->cacheDir);
 
         return $this->serializer->deserialize($nodes);
