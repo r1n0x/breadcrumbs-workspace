@@ -13,6 +13,8 @@ use R1n0x\BreadcrumbsBundle\Exception\VariablesResolverException;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 final readonly class DebugRequestListener

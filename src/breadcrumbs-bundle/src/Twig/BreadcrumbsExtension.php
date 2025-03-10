@@ -10,6 +10,10 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
+ * @codeCoverageIgnore
+ *
+ * @todo MOVE TO SEPARATE PACKAGE
+ *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class BreadcrumbsExtension extends AbstractExtension
