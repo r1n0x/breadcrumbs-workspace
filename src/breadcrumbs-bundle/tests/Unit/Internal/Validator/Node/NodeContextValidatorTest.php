@@ -35,6 +35,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\Node\NodeContextValidatorDataProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\NodeContextValidatorProvider;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -89,9 +90,6 @@ class NodeContextValidatorTest extends TestCase
         ContextVariableProvider $variableProvider,
         ContextParameterProvider $parameterProvider
     ): NodeContextValidator {
-        return new NodeContextValidator(
-            $variableProvider,
-            $parameterProvider
-        );
+        return NodeContextValidatorProvider::create($variableProvider, $parameterProvider);
     }
 }

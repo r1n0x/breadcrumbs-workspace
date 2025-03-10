@@ -22,6 +22,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\UrlParametersProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextParameterProviderProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\UrlParametersProviderProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Unused;
 
 /**
@@ -132,6 +133,6 @@ class UrlParametersProviderTest extends TestCase
 
     private function getService(ContextParameterProvider $provider): UrlParametersProvider
     {
-        return new UrlParametersProvider($provider);
+        return UrlParametersProviderProvider::create($provider);
     }
 }

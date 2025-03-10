@@ -16,14 +16,14 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\DefinitionsResolver;
-use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 
 /**
  * @codeCoverageIgnore
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbsCacheWarmer implements CacheWarmerInterface
+class BreadcrumbsCacheWarmer implements WarmableInterface
 {
     public function __construct(
         private readonly NodeSerializer $serializer,
@@ -44,7 +44,7 @@ class BreadcrumbsCacheWarmer implements CacheWarmerInterface
      * @throws UnknownRootException
      * @throws VariablesResolverException
      */
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         $definitions = $this->resolver->getDefinitions();
         $nodes = $this->transform($definitions);

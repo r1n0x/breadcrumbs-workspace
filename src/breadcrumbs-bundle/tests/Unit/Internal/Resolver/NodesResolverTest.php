@@ -14,9 +14,8 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\NodeSerializerProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\NodesResolverProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\CacheReaderStub;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -69,10 +68,6 @@ class NodesResolverTest extends TestCase
 
     private function getService(CacheReaderInterface $cacheReader): NodesResolver
     {
-        return new NodesResolver(
-            $cacheReader,
-            NodeSerializerProvider::create(),
-            Unused::string()
-        );
+        return NodesResolverProvider::create($cacheReader);
     }
 }

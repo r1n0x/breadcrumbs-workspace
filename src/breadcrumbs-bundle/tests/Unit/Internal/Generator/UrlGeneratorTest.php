@@ -27,6 +27,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\UrlParametersProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Generator\UrlGeneratorDataProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\UrlGeneratorProvider;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -61,6 +62,6 @@ class UrlGeneratorTest extends TestCase
 
     public function getService(RouterInterface $router, UrlParametersProvider $provider): UrlGenerator
     {
-        return new UrlGenerator($router, $provider);
+        return UrlGeneratorProvider::create($router, $provider);
     }
 }

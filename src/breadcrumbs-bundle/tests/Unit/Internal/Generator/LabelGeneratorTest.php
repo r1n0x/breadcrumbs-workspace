@@ -26,9 +26,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\LabelVariablesProvider;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Generator\LabelGeneratorDataProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\LabelGeneratorProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Provider\LabelVariablesProviderProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Unused;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -92,9 +92,6 @@ class LabelGeneratorTest extends TestCase
 
     private function getService(LabelVariablesProvider $provider): LabelGenerator
     {
-        return new LabelGenerator(
-            new ExpressionLanguage(),
-            $provider
-        );
+        return LabelGeneratorProvider::create($provider);
     }
 }
