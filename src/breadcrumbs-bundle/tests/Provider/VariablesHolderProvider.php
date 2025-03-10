@@ -24,7 +24,7 @@ class VariablesHolderProvider
 
     public static function empty(): VariablesHolder
     {
-        return self::createWithVariables();
+        return self::create();
     }
 
     /**

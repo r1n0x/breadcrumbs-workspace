@@ -26,8 +26,8 @@ class Context
      */
     public function setParameter(
         string $name,
-        ?string $routeName,
-        null|int|string $value
+        null|int|string $value,
+        ?string $routeName = null
     ): static {
         $this->parametersHolder->set(new Parameter($name, $routeName, $value, null));
 

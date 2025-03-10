@@ -24,7 +24,7 @@ class ParametersHolderProvider
 
     public static function empty(): ParametersHolder
     {
-        return self::createWithParameters();
+        return self::create();
     }
 
     /**
