@@ -18,6 +18,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\DefinitionToNodeTransformerDataProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\DefinitionToNodeTransformerProvider;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -82,6 +83,6 @@ class DefinitionToNodeTransformerTest extends TestCase
 
     private function getService(): DefinitionToNodeTransformer
     {
-        return new DefinitionToNodeTransformer();
+        return DefinitionToNodeTransformerProvider::create();
     }
 }

@@ -24,10 +24,8 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\RouteDefinitionsResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\RoutesProviderInterface;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ParametersResolverProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Provider\DefinitionsResolverProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Provider\RootsResolverProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\RouteValidatorProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\VariablesResolverProvider;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RoutesProviderStub;
 use Symfony\Component\Routing\RouterInterface;
@@ -85,20 +83,6 @@ class DefinitionsResolverTest extends TestCase
         RouterInterface $router,
         RootsResolver $resolver
     ): DefinitionsResolver {
-        return new DefinitionsResolver(
-            new RouteDefinitionsResolver(
-                $provider,
-                VariablesResolverProvider::create(),
-                ParametersResolverProvider::create(),
-                RouteValidatorProvider::create(),
-                true
-            ),
-            new RootDefinitionsResolver(
-                $router,
-                VariablesResolverProvider::create(),
-                new ParametersResolver(),
-                $resolver
-            )
-        );
+        return DefinitionsResolverProvider::create($provider, $router, $resolver);
     }
 }

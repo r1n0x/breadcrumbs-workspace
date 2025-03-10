@@ -19,8 +19,6 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\DefinitionsResolver;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 
 /**
- * @codeCoverageIgnore
- *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
 class BreadcrumbsCacheWarmer implements WarmableInterface
