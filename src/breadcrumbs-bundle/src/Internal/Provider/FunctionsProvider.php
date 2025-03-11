@@ -10,7 +10,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class FunctionsProvider
+final readonly class FunctionsProvider
 {
     public function __construct(
         /** @var iterable<ExpressionFunctionProviderInterface> */

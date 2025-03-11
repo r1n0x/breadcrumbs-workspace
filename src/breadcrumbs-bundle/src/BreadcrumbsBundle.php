@@ -15,13 +15,16 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbsBundle extends AbstractBundle
+final class BreadcrumbsBundle extends AbstractBundle
 {
     /**
      * @phpstan-ignore missingType.iterableValue
      */
-    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
-    {
+    public function loadExtension(
+        array $config,
+        ContainerConfigurator $container,
+        ContainerBuilder $builder
+    ): void {
         $container->import('../config/services.php');
         $container->parameters()
             ->set('r1n0x.breadcrumbs.config.defaults.pass_parameters_to_expression', $config['defaults'][Route::PASS_PARAMETERS_TO_EXPRESSION])

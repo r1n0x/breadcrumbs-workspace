@@ -13,11 +13,11 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class NodeSerializer
+final readonly class NodeSerializer
 {
-    public const NODE_TYPE = 'node_type';
-    public const NODE_TYPE_ROUTE = 'route';
-    public const NODE_TYPE_ROOT = 'root';
+    public const string NODE_TYPE = 'node_type';
+    public const string NODE_TYPE_ROUTE = 'route';
+    public const string NODE_TYPE_ROOT = 'root';
 
     /**
      * @param array<int, BreadcrumbNode> $nodes
@@ -36,9 +36,27 @@ class NodeSerializer
     }
 
     /**
+     * @return array<int, BreadcrumbNode>
+     */
+    public function deserialize(string $data): array
+    {
+        /** @var array<int, BreadcrumbNode> $deserializedNodes */
+        $deserializedNodes = [];
+
+        $items = json_decode($data, true);
+        /* @phpstan-ignore foreach.nonIterable */
+        foreach ($items as $item) {
+            /* @phpstan-ignore argument.type */
+            $deserializedNodes[] = $this->deserializeNode($item);
+        }
+
+        return $deserializedNodes;
+    }
+
+    /**
      * @phpstan-ignore missingType.iterableValue
      */
-    public function serializeNode(BreadcrumbNode $node): array
+    private function serializeNode(BreadcrumbNode $node): array
     {
         $definition = $node->getDefinition();
 
@@ -70,24 +88,6 @@ class NodeSerializer
             },
             'parent' => null !== $node->getParent() ? $this->serializeNode($node->getParent()) : null,
         ];
-    }
-
-    /**
-     * @return array<int, BreadcrumbNode>
-     */
-    public function deserialize(string $data): array
-    {
-        /** @var array<int, BreadcrumbNode> $deserializedNodes */
-        $deserializedNodes = [];
-
-        $items = json_decode($data, true);
-        /* @phpstan-ignore foreach.nonIterable */
-        foreach ($items as $item) {
-            /* @phpstan-ignore argument.type */
-            $deserializedNodes[] = $this->deserializeNode($item);
-        }
-
-        return $deserializedNodes;
     }
 
     /**

@@ -9,11 +9,11 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbNode
+final readonly class BreadcrumbNode
 {
     public function __construct(
-        private readonly BreadcrumbDefinition $definition,
-        private readonly ?BreadcrumbNode $parent
+        private BreadcrumbDefinition $definition,
+        private ?BreadcrumbNode $parent
     ) {}
 
     public function getDefinition(): BreadcrumbDefinition

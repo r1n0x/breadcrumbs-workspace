@@ -9,7 +9,7 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model\Violation;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class RouteError extends Error
+final class RouteError extends Error
 {
     public function __construct(
         private readonly ErrorType $type,

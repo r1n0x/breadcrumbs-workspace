@@ -26,11 +26,13 @@ final readonly class LabelVariablesProvider
         $routeName = $definition->getRouteName();
         $variables = [];
         foreach ($definition->getVariables() as $variableName) {
-            $variables[$variableName] = $this->provider->get(
-                $definition,
-                $variableName,
-                $routeName
-            )->getValue();
+            $variables[$variableName] = $this->provider
+                ->get(
+                    $definition,
+                    $variableName,
+                    $routeName
+                )
+                ->getValue();
         }
 
         return $variables;

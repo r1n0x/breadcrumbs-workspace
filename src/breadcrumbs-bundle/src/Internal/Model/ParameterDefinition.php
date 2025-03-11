@@ -9,13 +9,12 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ParameterDefinition
+final readonly class ParameterDefinition
 {
     public function __construct(
-        private readonly string $name,
-        // required for properly handling nullable default values
-        private readonly bool $isOptional,
-        private readonly null|int|string $optionalValue
+        private string $name,
+        private bool $isOptional,
+        private null|int|string $optionalValue
     ) {}
 
     public function getName(): string

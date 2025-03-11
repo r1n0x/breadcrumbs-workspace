@@ -11,7 +11,7 @@ use Override;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class RouteBreadcrumbDefinition extends BreadcrumbDefinition
+final readonly class RouteBreadcrumbDefinition extends BreadcrumbDefinition
 {
     /**
      * @param array<int, ParameterDefinition> $parameters
@@ -20,10 +20,10 @@ class RouteBreadcrumbDefinition extends BreadcrumbDefinition
     public function __construct(
         string $routeName,
         string $expression,
-        private readonly ?string $parentRoute,
-        private readonly ?string $root,
-        private readonly bool $passParametersToExpression,
-        private readonly array $parameters = [],
+        private ?string $parentRoute,
+        private ?string $root,
+        private bool $passParametersToExpression,
+        private array $parameters = [],
         array $variables = []
     ) {
         parent::__construct($routeName, $expression, $variables);

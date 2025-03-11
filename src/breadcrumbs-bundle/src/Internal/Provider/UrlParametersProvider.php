@@ -28,10 +28,12 @@ final readonly class UrlParametersProvider
             $parameterName = $parameterDefinition->getName();
 
             try {
-                $parameters[$parameterName] = $this->provider->get(
-                    $parameterName,
-                    $definition->getRouteName()
-                )->getPathValue();
+                $parameters[$parameterName] = $this->provider
+                    ->get(
+                        $parameterName,
+                        $definition->getRouteName()
+                    )
+                    ->getPathValue();
             } catch (UndefinedParameterException $e) {
                 if (!$parameterDefinition->isOptional()) {
                     throw $e;

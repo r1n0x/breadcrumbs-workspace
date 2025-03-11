@@ -12,11 +12,11 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbDefinition;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class DefinitionsResolver
+final readonly class DefinitionsResolver
 {
     public function __construct(
-        private readonly RouteDefinitionsResolver $routeDefinitionsResolver,
-        private readonly RootDefinitionsResolver $rootDefinitionsResolver
+        private RouteDefinitionsResolver $routeDefinitionsResolver,
+        private RootDefinitionsResolver $rootDefinitionsResolver
     ) {}
 
     /**

@@ -10,11 +10,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ParametersHolder
+final class ParametersHolder
 {
-    /**
-     * @var array<int, Parameter>
-     */
+    /** @var array<int, Parameter> */
     private array $parameters = [];
 
     /**

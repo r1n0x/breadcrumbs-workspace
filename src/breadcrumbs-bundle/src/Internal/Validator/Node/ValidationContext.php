@@ -12,7 +12,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Violation\RouteError;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ValidationContext
+final class ValidationContext
 {
     /** @var array<int, RouteError> */
     private array $routeErrors = [];
@@ -20,19 +20,31 @@ class ValidationContext
     /** @var array<int, RootError> */
     private array $rootErrors = [];
 
-    public function addRouteParameterViolation(string $routeName, string $parameterName): void
-    {
-        $this->getRouteViolation($routeName, ErrorType::Parameter)->addName($parameterName);
+    public function addRouteParameterViolation(
+        string $routeName,
+        string $parameterName
+    ): void {
+        $this
+            ->getRouteViolation($routeName, ErrorType::Parameter)
+            ->addName($parameterName);
     }
 
-    public function addRouteVariableViolation(string $routeName, string $variableName): void
-    {
-        $this->getRouteViolation($routeName, ErrorType::Variable)->addName($variableName);
+    public function addRouteVariableViolation(
+        string $routeName,
+        string $variableName
+    ): void {
+        $this
+            ->getRouteViolation($routeName, ErrorType::Variable)
+            ->addName($variableName);
     }
 
-    public function addRootVariableViolation(string $name, string $variableName): void
-    {
-        $this->getRootViolation($name, ErrorType::Variable)->addName($variableName);
+    public function addRootVariableViolation(
+        string $name,
+        string $variableName
+    ): void {
+        $this
+            ->getRootViolation($name)
+            ->addName($variableName);
     }
 
     public function hasErrors(): bool
@@ -48,10 +60,13 @@ class ValidationContext
         return array_merge($this->routeErrors, $this->rootErrors);
     }
 
-    private function getRouteViolation(string $routeName, ErrorType $type): RouteError
-    {
+    private function getRouteViolation(
+        string $routeName,
+        ErrorType $type
+    ): RouteError {
         foreach ($this->routeErrors as $error) {
-            if ($error->getRouteName() === $routeName && $error->getType() === $type) {
+            if ($error->getRouteName() === $routeName
+                && $error->getType() === $type) {
                 return $error;
             }
         }
@@ -64,15 +79,16 @@ class ValidationContext
         return $error;
     }
 
-    private function getRootViolation(string $name, ErrorType $type): RootError
+    private function getRootViolation(string $name): RootError
     {
         foreach ($this->rootErrors as $error) {
-            if ($error->getName() === $name && $error->getType() === $type) {
+            if ($error->getName() === $name
+                && ErrorType::Variable === $error->getType()) {
                 return $error;
             }
         }
         $error = new RootError(
-            $type,
+            ErrorType::Variable,
             $name,
         );
         $this->rootErrors[] = $error;

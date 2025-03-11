@@ -10,7 +10,7 @@ use R1n0x\BreadcrumbsBundle\Exception\RouteValidationException;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class RouteValidator
+final readonly class RouteValidator
 {
     public const int ERROR_CODE_PARENT_ROUTE_STRING = 10;
     public const int ERROR_CODE_EXPRESSION_STRING = 11;

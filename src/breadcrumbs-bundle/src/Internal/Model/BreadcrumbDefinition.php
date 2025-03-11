@@ -9,15 +9,15 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-abstract class BreadcrumbDefinition
+abstract readonly class BreadcrumbDefinition
 {
     /**
      * @param array<int, string> $variables
      */
     public function __construct(
-        private readonly ?string $routeName,
-        private readonly string $expression,
-        private readonly array $variables = []
+        private ?string $routeName,
+        private string $expression,
+        private array $variables = []
     ) {}
 
     public function getExpression(): string

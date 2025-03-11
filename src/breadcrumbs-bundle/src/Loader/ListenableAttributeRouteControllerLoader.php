@@ -17,7 +17,7 @@ use Symfony\Component\Routing\RouteCollection;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerLoader
+final class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerLoader
 {
     /** @phpstan-ignore property.uninitialized */
     private EventDispatcherInterface $dispatcher;
@@ -30,10 +30,15 @@ class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerL
     /**
      * @phpstan-ignore missingType.generics, missingType.iterableValue
      */
-    protected function addRoute(RouteCollection $collection, object $annot, array $globals, ReflectionClass $class, ReflectionMethod $method): void
-    {
-        parent::addRoute($collection, $annot, $globals, $class, $method);
-        if (!$annot instanceof Route) {
+    protected function addRoute(
+        RouteCollection $collection,
+        object $attr,
+        array $globals,
+        ReflectionClass $class,
+        ReflectionMethod $method
+    ): void {
+        parent::addRoute($collection, $attr, $globals, $class, $method);
+        if (!$attr instanceof Route) {
             return;
         }
         // As far is I know, after looking through symfony internals for FAR too long, this is the simplest way
@@ -60,7 +65,7 @@ class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerL
         // Huge thanks to Symfony for developing an awesome tool <3
         $this->dispatcher->dispatch(new RouteInitializedEvent(
             array_key_last($collection->all()), /* @phpstan-ignore argument.type */
-            $annot
+            $attr
         ));
     }
 }

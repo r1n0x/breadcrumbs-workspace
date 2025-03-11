@@ -10,11 +10,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class VariablesHolder
+final class VariablesHolder
 {
-    /**
-     * @var array<int, Variable>
-     */
+    /** @var array<int, Variable> */
     private array $variables = [];
 
     /**

@@ -12,16 +12,16 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class RootDefinitionsResolver
+final readonly class RootDefinitionsResolver
 {
     public const int ERROR_CODE_UNKNOWN_ROUTE_NAME = 1;
     public const int ERROR_CODE_DYNAMIC_ROUTE = 2;
 
     public function __construct(
-        private readonly RouterInterface $router,
-        private readonly VariablesResolver $variablesResolver,
-        private readonly ParametersResolver $parametersResolver,
-        private readonly RootsResolver $rootsResolver
+        private RouterInterface $router,
+        private VariablesResolver $variablesResolver,
+        private ParametersResolver $parametersResolver,
+        private RootsResolver $rootsResolver
     ) {}
 
     /**

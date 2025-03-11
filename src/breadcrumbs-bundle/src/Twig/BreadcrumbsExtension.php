@@ -16,7 +16,7 @@ use Twig\TwigFunction;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbsExtension extends AbstractExtension
+final class BreadcrumbsExtension extends AbstractExtension
 {
     public function __construct(
         private readonly RequestStack $requestStack,

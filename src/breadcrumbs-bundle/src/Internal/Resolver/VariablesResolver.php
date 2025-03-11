@@ -12,11 +12,11 @@ use Symfony\Component\ExpressionLanguage\SyntaxError;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class VariablesResolver
+final readonly class VariablesResolver
 {
     public function __construct(
-        private readonly Lexer $lexer,
-        private readonly Parser $parser
+        private Lexer $lexer,
+        private Parser $parser
     ) {}
 
     /**

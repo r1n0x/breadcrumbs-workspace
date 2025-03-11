@@ -13,7 +13,7 @@ use Throwable;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ValidationException extends BreadcrumbsException
+final class ValidationException extends BreadcrumbsException
 {
     public function __construct(ValidationContext $context, int $code = 0, ?Throwable $previous = null)
     {

@@ -18,13 +18,13 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class Builder
+final readonly class Builder
 {
     public function __construct(
-        private readonly NodesResolver $resolver,
-        private readonly UrlGenerator $urlGenerator,
-        private readonly LabelGenerator $labelGenerator,
-        private readonly NodeContextValidator $validator
+        private NodesResolver $resolver,
+        private UrlGenerator $urlGenerator,
+        private LabelGenerator $labelGenerator,
+        private NodeContextValidator $validator
     ) {}
 
     /**

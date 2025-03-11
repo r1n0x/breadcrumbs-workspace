@@ -11,13 +11,15 @@ use R1n0x\BreadcrumbsBundle\Exception\FileAccessException;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class CacheReader implements CacheReaderInterface
+final readonly class CacheReader implements CacheReaderInterface
 {
     /**
      * @throws FileAccessException
      */
-    public function write(string $cacheDir, string $contents): void
-    {
+    public function write(
+        string $cacheDir,
+        string $contents
+    ): void {
         $status = file_put_contents($this->getFilePath($cacheDir), $contents);
         if (false === $status) {
             throw new FileAccessException('Breadcrumbs couldn\'t be written to cache file');

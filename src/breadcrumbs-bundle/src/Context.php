@@ -14,11 +14,11 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class Context
+final readonly class Context
 {
     public function __construct(
-        private readonly ParametersHolder $parametersHolder,
-        private readonly VariablesHolder $variablesHolder
+        private ParametersHolder $parametersHolder,
+        private VariablesHolder $variablesHolder
     ) {}
 
     /**
@@ -28,7 +28,7 @@ class Context
         string $name,
         null|int|string $value,
         ?string $routeName = null
-    ): static {
+    ): Context {
         $this->parametersHolder->set(new Parameter($name, $routeName, $value, null));
 
         return $this;
@@ -37,8 +37,11 @@ class Context
     /**
      * @throws VariableAlreadyDefinedException
      */
-    public function setVariable(string $name, mixed $value, ?string $routeName = null): static
-    {
+    public function setVariable(
+        string $name,
+        mixed $value,
+        ?string $routeName = null
+    ): Context {
         $this->variablesHolder->set(new Variable($name, $value, $routeName));
 
         return $this;

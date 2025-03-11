@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Exception;
 
-use Exception;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 use Throwable;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ParameterAlreadyDefinedException extends Exception
+final class ParameterAlreadyDefinedException extends BreadcrumbsException
 {
     public const int CODE_SCOPE = 1;
     public const int CODE_GLOBAL = 2;

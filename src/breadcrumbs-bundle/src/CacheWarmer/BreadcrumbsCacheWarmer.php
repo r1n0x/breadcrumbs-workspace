@@ -21,13 +21,13 @@ use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class BreadcrumbsCacheWarmer implements WarmableInterface
+final readonly class BreadcrumbsCacheWarmer implements WarmableInterface
 {
     public function __construct(
-        private readonly NodeSerializer $serializer,
-        private readonly DefinitionToNodeTransformer $transformer,
-        private readonly CacheReaderInterface $cacheReader,
-        private readonly DefinitionsResolver $resolver,
+        private NodeSerializer $serializer,
+        private DefinitionToNodeTransformer $transformer,
+        private CacheReaderInterface $cacheReader,
+        private DefinitionsResolver $resolver,
     ) {}
 
     public function isOptional(): bool
@@ -59,7 +59,7 @@ class BreadcrumbsCacheWarmer implements WarmableInterface
      * @throws UnknownRouteException
      * @throws UnknownRootException
      */
-    public function transform(array $definitions): array
+    private function transform(array $definitions): array
     {
         $nodes = [];
         foreach ($definitions as $definition) {

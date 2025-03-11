@@ -14,7 +14,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class DefinitionToNodeTransformer
+final readonly class DefinitionToNodeTransformer
 {
     /**
      * @param array<int, BreadcrumbDefinition> $definitions
@@ -22,8 +22,10 @@ class DefinitionToNodeTransformer
      * @throws UnknownRootException
      * @throws UnknownRouteException
      */
-    public function transform(RouteBreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
-    {
+    public function transform(
+        RouteBreadcrumbDefinition $definition,
+        array $definitions
+    ): BreadcrumbNode {
         return $this->doTransform($definition, $definitions);
     }
 
@@ -33,8 +35,10 @@ class DefinitionToNodeTransformer
      * @throws UnknownRootException
      * @throws UnknownRouteException
      */
-    public function getParentDefinition(RouteBreadcrumbDefinition $definition, array $definitions): ?BreadcrumbNode
-    {
+    public function getParentDefinition(
+        RouteBreadcrumbDefinition $definition,
+        array $definitions
+    ): ?BreadcrumbNode {
         $parentRoute = $definition->getParentRoute();
         if (null !== $parentRoute) {
             $parentRouteDefinition = $this->getRouteDefinition($parentRoute, $definitions);
@@ -71,8 +75,10 @@ class DefinitionToNodeTransformer
      * @throws UnknownRootException
      * @throws UnknownRouteException
      */
-    private function doTransform(BreadcrumbDefinition $definition, array $definitions): BreadcrumbNode
-    {
+    private function doTransform(
+        BreadcrumbDefinition $definition,
+        array $definitions
+    ): BreadcrumbNode {
         $parentDefinition = match (true) {
             $definition instanceof RouteBreadcrumbDefinition => $this->getParentDefinition($definition, $definitions),
             default => null
@@ -87,8 +93,10 @@ class DefinitionToNodeTransformer
     /**
      * @param array<int, BreadcrumbDefinition> $definitions
      */
-    private function getRouteDefinition(string $routeName, array $definitions): ?RouteBreadcrumbDefinition
-    {
+    private function getRouteDefinition(
+        string $routeName,
+        array $definitions
+    ): ?RouteBreadcrumbDefinition {
         foreach ($definitions as $definition) {
             if ($definition instanceof RouteBreadcrumbDefinition && $definition->getRouteName() === $routeName) {
                 return $definition;
@@ -101,8 +109,10 @@ class DefinitionToNodeTransformer
     /**
      * @param array<int, BreadcrumbDefinition> $definitions
      */
-    private function getRootDefinition(string $rootName, array $definitions): ?RootBreadcrumbDefinition
-    {
+    private function getRootDefinition(
+        string $rootName,
+        array $definitions
+    ): ?RootBreadcrumbDefinition {
         foreach ($definitions as $definition) {
             if ($definition instanceof RootBreadcrumbDefinition && $definition->getName() === $rootName) {
                 return $definition;

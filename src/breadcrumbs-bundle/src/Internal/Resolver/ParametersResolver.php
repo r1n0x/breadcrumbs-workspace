@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Route;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class ParametersResolver
+final readonly class ParametersResolver
 {
     /**
      * @return array<int, ParameterDefinition>

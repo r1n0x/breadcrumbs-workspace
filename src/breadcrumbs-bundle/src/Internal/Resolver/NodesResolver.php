@@ -11,7 +11,7 @@ use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class NodesResolver
+final class NodesResolver
 {
     /**
      * @var null|array<int, BreadcrumbNode>

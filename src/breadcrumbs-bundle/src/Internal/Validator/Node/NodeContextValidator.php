@@ -35,8 +35,10 @@ final readonly class NodeContextValidator
         }
     }
 
-    private function doValidate(ValidationContext $context, BreadcrumbNode $node): void
-    {
+    private function doValidate(
+        ValidationContext $context,
+        BreadcrumbNode $node
+    ): void {
         $definition = $node->getDefinition();
 
         match (true) {
@@ -50,8 +52,10 @@ final readonly class NodeContextValidator
         }
     }
 
-    private function validateRoute(RouteBreadcrumbDefinition $definition, ValidationContext $context): void
-    {
+    private function validateRoute(
+        RouteBreadcrumbDefinition $definition,
+        ValidationContext $context
+    ): void {
         $routeName = $definition->getRouteName();
         foreach ($definition->getVariables() as $variableName) {
             try {
@@ -74,8 +78,10 @@ final readonly class NodeContextValidator
         }
     }
 
-    private function validateRoot(RootBreadcrumbDefinition $definition, ValidationContext $context): void
-    {
+    private function validateRoot(
+        RootBreadcrumbDefinition $definition,
+        ValidationContext $context
+    ): void {
         foreach ($definition->getVariables() as $variableName) {
             try {
                 $this->variableProvider->get($definition, $variableName, $definition->getRouteName());

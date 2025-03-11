@@ -12,7 +12,7 @@ use Throwable;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class LabelGenerationException extends Exception
+final class LabelGenerationException extends BreadcrumbsException
 {
     public const int CODE_ROUTE = 1;
     public const int CODE_ROOT = 2;

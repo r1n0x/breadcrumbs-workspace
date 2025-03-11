@@ -9,13 +9,13 @@ namespace R1n0x\BreadcrumbsBundle\Internal\Model;
  *
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class Parameter
+final readonly class Parameter
 {
     public function __construct(
-        private readonly string $name,
-        private readonly ?string $routeName,
-        private readonly null|int|string $pathValue,
-        private readonly mixed $autowiredValue
+        private string $name,
+        private ?string $routeName,
+        private null|int|string $pathValue,
+        private mixed $autowiredValue
     ) {}
 
     public function getName(): string

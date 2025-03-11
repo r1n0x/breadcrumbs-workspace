@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'debug:breadcrumbs',
     description: 'Display breadcrumb trees for an application'
 )]
-class DebugBreadcrumbsCommand extends Command
+final class DebugBreadcrumbsCommand extends Command
 {
     public function __construct(
         private readonly NodesResolver $resolver
@@ -31,7 +31,17 @@ class DebugBreadcrumbsCommand extends Command
         parent::__construct();
     }
 
-    public function printRouteDefinition(OutputInterface $output, string $prefix, RouteBreadcrumbDefinition $definition, int $level): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        foreach ($this->resolver->all() as $node) {
+            $this->printNode($node, $output, 1);
+            $output->writeln('');
+        }
+
+        return Command::SUCCESS;
+    }
+
+    private function printRouteDefinition(OutputInterface $output, string $prefix, RouteBreadcrumbDefinition $definition, int $level): void
     {
         $output->writeln($prefix . "----> \033[0;32m" . $definition->getRouteName() . "\033[0m (" . $level . ')');
         $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
@@ -44,22 +54,12 @@ class DebugBreadcrumbsCommand extends Command
         }, $definition->getParameters())) . ']');
     }
 
-    public function printRootDefinition(OutputInterface $output, string $prefix, int $level, RootBreadcrumbDefinition $definition): void
+    private function printRootDefinition(OutputInterface $output, string $prefix, int $level, RootBreadcrumbDefinition $definition): void
     {
         $output->writeln($prefix . "----> \033[0;33m(root)\033[0m (" . $level . ')');
         $output->writeln($prefix . '      Name: "' . $definition->getName() . '"');
         $output->writeln($prefix . '      Route: "' . ($definition->getRouteName() ?? '__UNSET__') . '"');
         $output->writeln($prefix . '      Expression: "' . $definition->getExpression() . '"');
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        foreach ($this->resolver->all() as $node) {
-            $this->printNode($node, $output, 1);
-            $output->writeln('');
-        }
-
-        return Command::SUCCESS;
     }
 
     private function printNode(BreadcrumbNode $node, OutputInterface $output, int $level): void

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Exception;
 
-use Exception;
-
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class InvalidConfigurationException extends Exception {}
+final class InvalidConfigurationException extends BreadcrumbsException {}

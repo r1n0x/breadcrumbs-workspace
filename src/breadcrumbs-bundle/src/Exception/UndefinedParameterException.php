@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Exception;
 
-use Exception;
 use Throwable;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class UndefinedParameterException extends Exception
+final class UndefinedParameterException extends BreadcrumbsException
 {
     public function __construct(string $name, int $code = 0, ?Throwable $previous = null)
     {
