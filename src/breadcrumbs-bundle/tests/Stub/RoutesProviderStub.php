@@ -10,7 +10,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\RoutesProviderInterface;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class RoutesProviderStub implements RoutesProviderInterface
+final class RoutesProviderStub implements RoutesProviderInterface
 {
     /** @var array<string, Route> */
     private array $routes = [];

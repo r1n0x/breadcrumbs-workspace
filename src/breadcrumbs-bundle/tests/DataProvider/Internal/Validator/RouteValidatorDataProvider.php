@@ -6,6 +6,7 @@ namespace R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator;
 
 use R1n0x\BreadcrumbsBundle\Attribute\Route;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -17,102 +18,88 @@ class RouteValidatorDataProvider
         return [
             'Invalid parent route (number)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => 1,
+                    Route::PARENT_ROUTE => Dummy::integer(),
                 ]),
                 RouteValidator::ERROR_CODE_PARENT_ROUTE_STRING,
             ],
             'Invalid parent route (array)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => [],
+                    Route::PARENT_ROUTE => Dummy::array(),
                 ]),
                 RouteValidator::ERROR_CODE_PARENT_ROUTE_STRING,
             ],
-            'Invalid parent route (boolean)' => [
+            'Invalid parent route (bool)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => false,
+                    Route::PARENT_ROUTE => Dummy::bool(),
                 ]),
                 RouteValidator::ERROR_CODE_PARENT_ROUTE_STRING,
             ],
             'Invalid expression (number)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => 1,
+                    Route::EXPRESSION => Dummy::integer(),
                 ]),
                 RouteValidator::ERROR_CODE_EXPRESSION_STRING,
             ],
             'Invalid expression (array)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => [],
+                    Route::EXPRESSION => Dummy::array(),
                 ]),
                 RouteValidator::ERROR_CODE_EXPRESSION_STRING,
             ],
-            'Invalid expression (boolean)' => [
+            'Invalid expression (bool)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => false,
+                    Route::EXPRESSION => Dummy::bool(),
                 ]),
                 RouteValidator::ERROR_CODE_EXPRESSION_STRING,
             ],
             'Invalid pass parameters to expression (integer)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => '',
-                    Route::PASS_PARAMETERS_TO_EXPRESSION => 1,
+                    Route::PASS_PARAMETERS_TO_EXPRESSION => Dummy::integer(),
                 ]),
                 RouteValidator::ERROR_CODE_PASS_PARAMETERS_TO_EXPRESSION_BOOL,
             ],
             'Invalid pass parameters to expression (array)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => '',
-                    Route::PASS_PARAMETERS_TO_EXPRESSION => 1,
+                    Route::PASS_PARAMETERS_TO_EXPRESSION => Dummy::array(),
                 ]),
                 RouteValidator::ERROR_CODE_PASS_PARAMETERS_TO_EXPRESSION_BOOL,
             ],
             'Invalid pass parameters to expression (string)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => '',
-                    Route::PASS_PARAMETERS_TO_EXPRESSION => '',
+                    Route::PASS_PARAMETERS_TO_EXPRESSION => Dummy::string(),
                 ]),
                 RouteValidator::ERROR_CODE_PASS_PARAMETERS_TO_EXPRESSION_BOOL,
             ],
             'Invalid root (integer)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => '',
-                    Route::PASS_PARAMETERS_TO_EXPRESSION => true,
-                    Route::ROOT => 1,
+                    Route::ROOT => Dummy::integer(),
                 ]),
                 RouteValidator::ERROR_CODE_ROOT_SCALAR,
             ],
             'Invalid root (array)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => '',
-                    Route::PASS_PARAMETERS_TO_EXPRESSION => true,
-                    Route::ROOT => [],
+                    Route::ROOT => Dummy::array(),
                 ]),
                 RouteValidator::ERROR_CODE_ROOT_SCALAR,
             ],
-            'Invalid root (boolean)' => [
+            'Invalid root (bool)' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => '',
-                    Route::PASS_PARAMETERS_TO_EXPRESSION => false,
-                    Route::ROOT => false,
+                    Route::ROOT => Dummy::bool(),
                 ]),
                 RouteValidator::ERROR_CODE_ROOT_SCALAR,
             ],
             'Defining parent route and root at the same time' => [
                 new Route(breadcrumb: [
-                    Route::PARENT_ROUTE => '',
-                    Route::EXPRESSION => '',
-                    Route::PASS_PARAMETERS_TO_EXPRESSION => false,
-                    Route::ROOT => '',
+                    Route::PARENT_ROUTE => Dummy::string(),
+                    Route::ROOT => Dummy::string(),
                 ]),
                 RouteValidator::ERROR_CODE_ROOT_AND_PARENT_ROUTE_DEFINED,
+            ],
+            'Circular reference' => [
+                new Route(name: 'route', breadcrumb: [
+                    Route::PARENT_ROUTE => 'route',
+                ]),
+                RouteValidator::ERROR_CODE_CIRCULAR_REFERENCE,
             ],
         ];
     }
@@ -120,26 +107,26 @@ class RouteValidatorDataProvider
     public static function getValidatesRouteTestScenarios(): array
     {
         return [
-            'Using root' => [
+            'Root' => [
                 new Route(
                     breadcrumb: [
-                        Route::ROOT => 'root-0bc831b8-4eef-4f28-848c-c92899221ca7',
-                        Route::EXPRESSION => 'expression-4a1856c8-2626-4e3f-b4a6-32265a592811',
+                        Route::ROOT => Dummy::string(),
+                        Route::EXPRESSION => Dummy::string(),
                     ]
                 ),
             ],
-            'Using parent route' => [
+            'Parent route' => [
                 new Route(
                     breadcrumb: [
-                        Route::PARENT_ROUTE => 'parent-route-d2cdb404-9a25-438c-8df4-03c77caa1f72',
-                        Route::EXPRESSION => 'expression-fc8a8dce-bcb6-451b-ad5d-81e30a16cb6e',
+                        Route::PARENT_ROUTE => Dummy::string(),
+                        Route::EXPRESSION => Dummy::string(),
                     ]
                 ),
             ],
-            'Using standalone breadcrumb' => [
+            'Standalone breadcrumb' => [
                 new Route(
                     breadcrumb: [
-                        Route::EXPRESSION => 'expression-e7d4a7d2-2ea9-4224-a82f-26a1fd36a28a',
+                        Route::EXPRESSION => Dummy::string(),
                     ]
                 ),
             ],

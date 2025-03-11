@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Provider;
@@ -20,9 +15,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\LabelVariablesProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextParameterProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextVariableProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ContextParameterProviderFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ContextVariableProviderFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -36,11 +31,11 @@ use R1n0x\BreadcrumbsBundle\Tests\Unused;
 class LabelVariablesProviderTest extends TestCase
 {
     #[Test]
-    public function providesVariablesForRouteBreadcrumb(): void
+    public function providesVariablesForRoute(): void
     {
         $variables = $this
             ->getService(
-                ContextVariableProviderProvider::createWithVariables(
+                ContextVariableProviderFake::createWithVariables(
                     [
                         new Variable(
                             'variable_name_1',
@@ -51,33 +46,34 @@ class LabelVariablesProviderTest extends TestCase
                             'variable_value_2'
                         ),
                     ],
-                    ContextParameterProviderProvider::empty()
+                    ContextParameterProviderFake::createWithParameters()
                 )
-            )->getVariables(new RouteBreadcrumbDefinition(
-                Unused::string(),
-                Unused::string(),
-                Unused::string(),
-                Unused::string(),
-                Unused::bool(),
-                Unused::array(),
+            )
+            ->getVariables(new RouteBreadcrumbDefinition(
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::bool(),
+                Dummy::array(),
                 [
                     'variable_name_1',
                     'variable_name_2',
                 ]
             ));
 
-        $this->arrayHasKey('variable_name_1')->evaluate($variables);
-        $this->arrayHasKey('variable_name_2')->evaluate($variables);
+        $this->assertArrayHasKey('variable_name_1', $variables);
+        $this->assertArrayHasKey('variable_name_2', $variables);
         $this->assertEquals('variable_value_1', $variables['variable_name_1']);
         $this->assertEquals('variable_value_2', $variables['variable_name_2']);
     }
 
     #[Test]
-    public function providesVariablesForRootBreadcrumb(): void
+    public function providesVariablesForRoot(): void
     {
         $variables = $this
             ->getService(
-                ContextVariableProviderProvider::createWithVariables(
+                ContextVariableProviderFake::createWithVariables(
                     [
                         new Variable(
                             'variable_name_1',
@@ -88,20 +84,23 @@ class LabelVariablesProviderTest extends TestCase
                             'variable_value_2'
                         ),
                     ],
-                    ContextParameterProviderProvider::empty()
+                    ContextParameterProviderFake::createWithParameters()
                 )
-            )->getVariables(new RootBreadcrumbDefinition(
-                Unused::string(),
-                Unused::string(),
-                Unused::string(),
-                [
-                    'variable_name_1',
-                    'variable_name_2',
-                ]
-            ));
+            )
+            ->getVariables(
+                new RootBreadcrumbDefinition(
+                    Dummy::string(),
+                    Dummy::string(),
+                    Dummy::string(),
+                    [
+                        'variable_name_1',
+                        'variable_name_2',
+                    ]
+                )
+            );
 
-        $this->arrayHasKey('variable_name_1')->evaluate($variables);
-        $this->arrayHasKey('variable_name_2')->evaluate($variables);
+        $this->assertArrayHasKey('variable_name_1', $variables);
+        $this->assertArrayHasKey('variable_name_2', $variables);
         $this->assertEquals('variable_value_1', $variables['variable_name_1']);
         $this->assertEquals('variable_value_2', $variables['variable_name_2']);
     }

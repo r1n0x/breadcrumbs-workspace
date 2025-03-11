@@ -14,7 +14,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class RouterStub implements RouterInterface
+final class RouterStub implements RouterInterface
 {
     private ParametersResolver $resolver;
 

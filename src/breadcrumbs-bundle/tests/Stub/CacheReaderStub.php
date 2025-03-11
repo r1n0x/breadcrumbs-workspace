@@ -6,12 +6,12 @@ namespace R1n0x\BreadcrumbsBundle\Tests\Stub;
 
 use R1n0x\BreadcrumbsBundle\Internal\CacheReaderInterface;
 use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\NodeSerializerProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\NodeSerializerFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class CacheReaderStub implements CacheReaderInterface
+final class CacheReaderStub implements CacheReaderInterface
 {
     /** @var array<int, BreadcrumbNode> */
     private array $nodes = [];
@@ -42,6 +42,6 @@ class CacheReaderStub implements CacheReaderInterface
 
     public function read(string $cacheDir): string
     {
-        return NodeSerializerProvider::create()->serialize($this->nodes);
+        return NodeSerializerFake::create()->serialize($this->nodes);
     }
 }

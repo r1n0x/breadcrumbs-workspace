@@ -24,7 +24,7 @@ final readonly class ContextVariableProvider
     /**
      * @throws UndefinedVariableException
      */
-    public function get(BreadcrumbDefinition $definition, string $name, ?string $routeName): Variable
+    public function get(BreadcrumbDefinition $definition, string $name, ?string $routeName = null): Variable
     {
         $variable = $this->holder->get($name, $routeName);
         if (null !== $variable) {

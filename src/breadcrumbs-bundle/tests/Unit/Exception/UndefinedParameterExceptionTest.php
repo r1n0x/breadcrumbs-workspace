@@ -20,10 +20,8 @@ class UndefinedParameterExceptionTest extends TestCase
     #[Test]
     public function messageIsReadable(): void
     {
-        $exception = new UndefinedParameterException('name-37bcbba4-9007-4d0f-b581-426bff3d09d4');
-        $this->assertEquals(sprintf(
-            'Parameter named "%s" is undefined',
-            'name-37bcbba4-9007-4d0f-b581-426bff3d09d4'
-        ), $exception->getMessage());
+        $exception = new UndefinedParameterException('parameter');
+
+        $this->assertEquals('Parameter named "parameter" is undefined', $exception->getMessage());
     }
 }

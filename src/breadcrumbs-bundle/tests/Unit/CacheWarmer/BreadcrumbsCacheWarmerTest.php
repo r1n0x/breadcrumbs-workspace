@@ -21,14 +21,14 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\RouteDefinitionsResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\RoutesProviderInterface;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\DefinitionsResolverProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\DefinitionToNodeTransformerProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\NodeSerializerProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\RootsResolverProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\DefinitionsResolverFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\DefinitionToNodeTransformerFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\NodeSerializerFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\RootsResolverFake;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\CacheReaderStub;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RoutesProviderStub;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -67,7 +67,7 @@ class BreadcrumbsCacheWarmerTest extends TestCase
                         Route::ROOT => 'root_name',
                     ]),
                 RouterStub::create(),
-                RootsResolverProvider::createWithConfig([
+                RootsResolverFake::create([
                     'root_name' => [
                         Route::EXPRESSION => 'root_expression',
                         'route' => null,
@@ -76,7 +76,7 @@ class BreadcrumbsCacheWarmerTest extends TestCase
             );
 
         $this->assertFalse($service->isOptional());
-        $service->warmUp(Unused::string());
+        $service->warmUp(Dummy::string());
 
         $this->assertEquals(
             [
@@ -158,10 +158,10 @@ class BreadcrumbsCacheWarmerTest extends TestCase
         RootsResolver $resolver
     ): BreadcrumbsCacheWarmer {
         return new BreadcrumbsCacheWarmer(
-            NodeSerializerProvider::create(),
-            DefinitionToNodeTransformerProvider::create(),
+            NodeSerializerFake::create(),
+            DefinitionToNodeTransformerFake::create(),
             $cacheReader,
-            DefinitionsResolverProvider::create(
+            DefinitionsResolverFake::create(
                 $routesProvider,
                 $router,
                 $resolver

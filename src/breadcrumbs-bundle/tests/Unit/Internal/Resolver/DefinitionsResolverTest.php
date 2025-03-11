@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Resolver;
@@ -24,8 +19,8 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\RouteDefinitionsResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\RoutesProviderInterface;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\DefinitionsResolverProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\RootsResolverProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\DefinitionsResolverFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\RootsResolverFake;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RoutesProviderStub;
 use Symfony\Component\Routing\RouterInterface;
@@ -57,7 +52,7 @@ class DefinitionsResolverTest extends TestCase
                         Route::EXPRESSION => 'route_expression_2',
                     ]),
                 RouterStub::create(),
-                RootsResolverProvider::createWithConfig([
+                RootsResolverFake::create([
                     'root_name' => [
                         Route::EXPRESSION => 'root_expression',
                         'route' => null,
@@ -83,6 +78,6 @@ class DefinitionsResolverTest extends TestCase
         RouterInterface $router,
         RootsResolver $resolver
     ): DefinitionsResolver {
-        return DefinitionsResolverProvider::create($provider, $router, $resolver);
+        return DefinitionsResolverFake::create($provider, $router, $resolver);
     }
 }

@@ -16,6 +16,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\NodeSerializerDataProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\NodeSerializerFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -36,8 +37,9 @@ class NodeSerializerTest extends TestCase
         BreadcrumbNode $node,
         string $expectedSerializedNode
     ): void {
-        $serializer = $this->getService();
-        $this->assertEquals($expectedSerializedNode, $serializer->serialize([$node]));
+        $service = $this->getService();
+
+        $this->assertEquals($expectedSerializedNode, $service->serialize([$node]));
     }
 
     #[Test]
@@ -46,12 +48,13 @@ class NodeSerializerTest extends TestCase
         string $serializedNode,
         BreadcrumbNode $expectedDeserializedNode
     ): void {
-        $serializer = $this->getService();
-        $this->assertEquals([$expectedDeserializedNode], $serializer->deserialize($serializedNode));
+        $service = $this->getService();
+
+        $this->assertEquals([$expectedDeserializedNode], $service->deserialize($serializedNode));
     }
 
     private function getService(): NodeSerializer
     {
-        return new NodeSerializer();
+        return NodeSerializerFake::create();
     }
 }

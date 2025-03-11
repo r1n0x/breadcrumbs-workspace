@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Generator;
@@ -26,9 +21,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\LabelVariablesProvider;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Generator\LabelGeneratorDataProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\LabelGeneratorProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\LabelVariablesProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\LabelGeneratorFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\LabelVariablesProviderFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -49,33 +44,35 @@ class LabelGeneratorTest extends TestCase
     public function throwsExceptionWhenInvalidVariableValueIsProvided(): void
     {
         $this->expectException(LabelGenerationException::class);
+
         $this
-            ->getService(LabelVariablesProviderProvider::createWithVariables([
-                new Variable('expected_object1', 'obviously_not_an_object'),
+            ->getService(LabelVariablesProviderFake::createWithVariables([
+                new Variable('object', 'obviously_not_an_object'),
             ]))
             ->generate(new RootBreadcrumbDefinition(
-                Unused::null(),
-                'expected_object1.property_name',
-                Unused::string(),
+                Dummy::null(),
+                'object.property',
+                Dummy::string(),
                 [
-                    'expected_object1',
+                    'object',
                 ]
             ));
     }
 
     #[Test]
-    #[TestDox('Throws exception, when no variable is provided')]
-    public function throwsExceptionWhenNoVariableIsProvided(): void
+    #[TestDox('Throws exception, when no variable value is provided')]
+    public function throwsExceptionWhenNoVariableValueIsProvided(): void
     {
         $this->expectException(UndefinedVariableException::class);
+
         $this
-            ->getService(LabelVariablesProviderProvider::empty())
+            ->getService(LabelVariablesProviderFake::createWithVariables())
             ->generate(new RootBreadcrumbDefinition(
-                Unused::null(),
-                'some_variable',
-                Unused::string(),
+                Dummy::null(),
+                'variable',
+                Dummy::string(),
                 [
-                    'some_variable',
+                    'variable',
                 ]
             ));
     }
@@ -92,6 +89,6 @@ class LabelGeneratorTest extends TestCase
 
     private function getService(LabelVariablesProvider $provider): LabelGenerator
     {
-        return LabelGeneratorProvider::create($provider);
+        return LabelGeneratorFake::create($provider);
     }
 }

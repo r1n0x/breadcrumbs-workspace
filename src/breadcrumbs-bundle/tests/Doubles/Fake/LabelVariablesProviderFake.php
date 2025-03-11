@@ -1,13 +1,8 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\Provider;
+namespace R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake;
 
 use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\LabelVariablesProvider;
@@ -15,7 +10,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Provider\LabelVariablesProvider;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class LabelVariablesProviderProvider
+final readonly class LabelVariablesProviderFake
 {
     public static function create(
         ContextVariableProvider $provider
@@ -23,17 +18,12 @@ class LabelVariablesProviderProvider
         return new LabelVariablesProvider($provider);
     }
 
-    public static function empty(): LabelVariablesProvider
-    {
-        return self::createWithVariables();
-    }
-
     public static function createWithVariables(array $variables = []): LabelVariablesProvider
     {
         return self::create(
-            ContextVariableProviderProvider::createWithVariables(
+            ContextVariableProviderFake::createWithVariables(
                 $variables,
-                ContextParameterProviderProvider::empty()
+                ContextParameterProviderFake::createWithParameters()
             )
         );
     }

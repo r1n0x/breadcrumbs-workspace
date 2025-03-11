@@ -25,17 +25,17 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextParameterProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextVariableProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\LabelGeneratorProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\LabelVariablesProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\NodeContextValidatorProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\NodesResolverProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\UrlGeneratorProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\UrlParametersProviderProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ContextParameterProviderFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ContextVariableProviderFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\LabelGeneratorFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\LabelVariablesProviderFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\NodeContextValidatorFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\NodesResolverFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\UrlGeneratorFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\UrlParametersProviderFake;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\CacheReaderStub;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -61,7 +61,8 @@ class BuilderTest extends TestCase
     #[Test]
     public function buildsBreadcrumbsForRequest(): void
     {
-        $contextParameterProvider = ContextParameterProviderProvider::createWithParameters();
+        $contextParameterProvider = ContextParameterProviderFake::createWithParameters();
+
         $breadcrumbs = $this
             ->getService(
                 CacheReaderStub::create()
@@ -69,9 +70,9 @@ class BuilderTest extends TestCase
                         new RouteBreadcrumbDefinition(
                             'route_1',
                             "'expression_1'",
-                            Unused::string(),
-                            Unused::string(),
-                            Unused::bool(),
+                            Dummy::string(),
+                            Dummy::string(),
+                            Dummy::bool(),
                             [],
                             []
                         ),
@@ -79,9 +80,9 @@ class BuilderTest extends TestCase
                             new RouteBreadcrumbDefinition(
                                 'route_2',
                                 "'expression_2'",
-                                Unused::string(),
-                                Unused::string(),
-                                Unused::bool(),
+                                Dummy::string(),
+                                Dummy::string(),
+                                Dummy::bool(),
                                 [],
                                 []
                             ),
@@ -89,7 +90,7 @@ class BuilderTest extends TestCase
                                 new RootBreadcrumbDefinition(
                                     'route_3',
                                     "'expression_3'",
-                                    Unused::string(),
+                                    Dummy::string(),
                                     []
                                 ),
                                 null
@@ -101,10 +102,7 @@ class BuilderTest extends TestCase
                     ->addRouteStub('route_2', '/route/2')
                     ->addRouteStub('route_3', '/route/3'),
                 $contextParameterProvider,
-                ContextVariableProviderProvider::createWithVariables(
-                    [],
-                    $contextParameterProvider
-                )
+                ContextVariableProviderFake::createWithParameterProvider($contextParameterProvider)
             )
             ->build(new Request(attributes: ['_route' => 'route_1']));
 
@@ -121,19 +119,17 @@ class BuilderTest extends TestCase
     }
 
     #[Test]
-    #[TestDox("Returns empty array, if current route doesn't have a breadcrumb")]
-    public function returnsEmptyArrayIfCurrentRouteDoesntHaveABreadcrumb(): void
+    #[TestDox("Builds, if request route doesn't have a breadcrumb")]
+    public function buildsIfRequestRouteDoesntHaveABreadcrumb(): void
     {
-        $contextParameterProvider = ContextParameterProviderProvider::createWithParameters();
+        $contextParameterProvider = ContextParameterProviderFake::createWithParameters();
+
         $breadcrumbs = $this
             ->getService(
                 CacheReaderStub::create(),
                 RouterStub::create(),
                 $contextParameterProvider,
-                ContextVariableProviderProvider::createWithVariables(
-                    [],
-                    $contextParameterProvider
-                )
+                ContextVariableProviderFake::createWithParameterProvider($contextParameterProvider)
             )
             ->build(new Request(attributes: ['_route' => 'route_1']));
 
@@ -147,13 +143,13 @@ class BuilderTest extends TestCase
         ContextVariableProvider $contextVariableProvider
     ): Builder {
         return new Builder(
-            NodesResolverProvider::create($cacheReader),
-            UrlGeneratorProvider::create(
+            NodesResolverFake::create($cacheReader),
+            UrlGeneratorFake::create(
                 $router,
-                UrlParametersProviderProvider::create($contextParameterProvider)
+                UrlParametersProviderFake::create($contextParameterProvider)
             ),
-            LabelGeneratorProvider::create(LabelVariablesProviderProvider::create($contextVariableProvider)),
-            NodeContextValidatorProvider::create($contextVariableProvider, $contextParameterProvider)
+            LabelGeneratorFake::create(LabelVariablesProviderFake::create($contextVariableProvider)),
+            NodeContextValidatorFake::create($contextVariableProvider, $contextParameterProvider)
         );
     }
 }

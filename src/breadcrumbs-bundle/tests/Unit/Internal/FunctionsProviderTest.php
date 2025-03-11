@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\FunctionsProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 
 /**
@@ -22,14 +23,14 @@ class FunctionsProviderTest extends TestCase
     #[Test]
     public function providesFunctions(): void
     {
-        $provider = $this->getService(new ArrayObject([
+        $service = $this->getService(new ArrayObject([
             new class implements ExpressionFunctionProviderInterface {
                 public function getFunctions(): array
                 {
                     return [
-                        'function-bbefd909-32b6-4f43-9be2-060e43b2954b',
-                        'function-db88b7ca-0583-4f98-a698-1904d01e5f1f',
-                        'function-e440cee0-6e4f-45ba-921a-4858d97fbffa',
+                        Dummy::string(),
+                        Dummy::string(),
+                        Dummy::string(),
                     ];
                 }
             },
@@ -37,19 +38,19 @@ class FunctionsProviderTest extends TestCase
                 public function getFunctions(): array
                 {
                     return [
-                        'function-f9c40344-e377-44b7-96f8-b9c0dbdda219',
+                        Dummy::string(),
                     ];
                 }
             },
         ]));
 
-        $this->assertCount(4, $provider->getFunctions());
+        $this->assertCount(4, $service->getFunctions());
     }
 
     #[Test]
     public function providesProviders(): void
     {
-        $provider = $this->getService(new ArrayObject([
+        $service = $this->getService(new ArrayObject([
             new class implements ExpressionFunctionProviderInterface {
                 public function getFunctions(): array
                 {
@@ -70,7 +71,7 @@ class FunctionsProviderTest extends TestCase
             },
         ]));
 
-        $this->assertCount(3, $provider->getProviders());
+        $this->assertCount(3, $service->getProviders());
     }
 
     /**

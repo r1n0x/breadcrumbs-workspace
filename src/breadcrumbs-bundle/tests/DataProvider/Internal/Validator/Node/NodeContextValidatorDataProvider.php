@@ -11,9 +11,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextParameterProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextVariableProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ContextParameterProviderFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ContextVariableProviderFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -28,43 +28,43 @@ class NodeContextValidatorDataProvider
     {
         return [
             'Undefined value of parameter on route node' => (function () {
-                $parameterProvider = ContextParameterProviderProvider::empty();
+                $parameterProvider = ContextParameterProviderFake::createWithParameters();
 
                 return [
                     self::createNested(self::createRoute([
                         new ParameterDefinition(
-                            'parameter-e7340724-46de-4a72-93c0-eb3c32e7f4e1',
+                            Dummy::string(),
                             false,
                             null
                         ),
                     ], [])),
-                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    ContextVariableProviderFake::createWithVariables([], $parameterProvider),
                     $parameterProvider,
                 ];
             })(),
             'Undefined value of variable on route node' => (function () {
                 $node = self::createNested(self::createRoute([], [
-                    'variable-43e824ca-76fc-4d9b-bf71-84ee7ad7a6e2',
+                    Dummy::string(),
                 ]));
 
-                $parameterProvider = ContextParameterProviderProvider::empty();
+                $parameterProvider = ContextParameterProviderFake::createWithParameters();
 
                 return [
                     $node,
-                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    ContextVariableProviderFake::createWithVariables([], $parameterProvider),
                     $parameterProvider,
                 ];
             })(),
             'Undefined value of variable on root node' => (function () {
                 $node = self::createNested(self::createRoot([
-                    'variable-84b9324b-657e-4b9c-adef-f97595774043',
+                    Dummy::string(),
                 ]));
 
-                $parameterProvider = ContextParameterProviderProvider::empty();
+                $parameterProvider = ContextParameterProviderFake::createWithParameters();
 
                 return [
                     $node,
-                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    ContextVariableProviderFake::createWithVariables([], $parameterProvider),
                     $parameterProvider,
                 ];
             })(),
@@ -77,58 +77,58 @@ class NodeContextValidatorDataProvider
             'Parameter on route node' => (function () {
                 $node = self::createNested(self::createRoute([
                     new ParameterDefinition(
-                        'parameter-2adacdf1-b453-4839-8665-f329b2f82537',
+                        'parameter',
                         false,
                         null
                     ),
                 ], []));
 
-                $parameterProvider = ContextParameterProviderProvider::createWithParameters([
+                $parameterProvider = ContextParameterProviderFake::createWithParameters([
                     new Parameter(
-                        'parameter-2adacdf1-b453-4839-8665-f329b2f82537',
+                        'parameter',
                         null,
-                        'value-0538095b-0090-44b4-b791-382796ecb37d',
-                        Unused::null()
+                        Dummy::string(),
+                        Dummy::null()
                     ),
                 ]);
 
                 return [
                     $node,
-                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    ContextVariableProviderFake::createWithVariables([], $parameterProvider),
                     $parameterProvider,
                 ];
             })(),
             'Parameter with optional value on route node' => (function () {
                 $node = self::createNested(self::createRoute([
                     new ParameterDefinition(
-                        'parameter-1ddb50f3-6539-4d70-8a11-55923f3861c4',
+                        Dummy::string(),
                         true,
-                        'value-e803f66b-1886-493e-9713-f509cb8b8eb2'
+                        Dummy::string()
                     ),
                 ], []));
 
-                $parameterProvider = ContextParameterProviderProvider::empty();
+                $parameterProvider = ContextParameterProviderFake::createWithParameters();
 
                 return [
                     $node,
-                    ContextVariableProviderProvider::createWithVariables([], $parameterProvider),
+                    ContextVariableProviderFake::createWithVariables([], $parameterProvider),
                     $parameterProvider,
                 ];
             })(),
             'Variable on route node' => (function () {
                 $node = self::createNested(self::createRoute([], [
-                    'variable-2aceadf3-820a-42eb-bf37-16e68d4f8596',
-                ], 'route-149d083c-25c9-48a4-8b04-0bcc72dc973c'));
+                    'variable',
+                ], 'route'));
 
-                $parameterProvider = ContextParameterProviderProvider::empty();
+                $parameterProvider = ContextParameterProviderFake::createWithParameters();
 
                 return [
                     $node,
-                    ContextVariableProviderProvider::createWithVariables([
+                    ContextVariableProviderFake::createWithVariables([
                         new Variable(
-                            'variable-2aceadf3-820a-42eb-bf37-16e68d4f8596',
-                            'value-2f817683-3089-414b-b00b-c31460c739a3',
-                            'route-149d083c-25c9-48a4-8b04-0bcc72dc973c'
+                            'variable',
+                            Dummy::string(),
+                            'route'
                         ),
                     ], $parameterProvider),
                     $parameterProvider,
@@ -136,17 +136,17 @@ class NodeContextValidatorDataProvider
             })(),
             'Variable on root node' => (function () {
                 $node = self::createNested(self::createRoot([
-                    'variable-f45cef06-9829-4cc7-bb5c-bbf8b2ed0036',
+                    'variable',
                 ], self::ROUTE_NONE));
 
-                $parameterProvider = ContextParameterProviderProvider::empty();
+                $parameterProvider = ContextParameterProviderFake::createWithParameters();
 
                 return [
                     $node,
-                    ContextVariableProviderProvider::createWithVariables([
+                    ContextVariableProviderFake::createWithVariables([
                         new Variable(
-                            'variable-f45cef06-9829-4cc7-bb5c-bbf8b2ed0036',
-                            'value-a69056e5-7368-4e2b-a56b-4c1f0bd03b5c'
+                            'variable',
+                            Dummy::string()
                         ),
                     ], $parameterProvider),
                     $parameterProvider,
@@ -182,11 +182,11 @@ class NodeContextValidatorDataProvider
     private static function createRoute(array $parameters, array $variables, ?string $routeName = null): RouteBreadcrumbDefinition
     {
         return new RouteBreadcrumbDefinition(
-            $routeName ?? Unused::string(),
-            Unused::string(),
-            Unused::string(),
-            Unused::string(),
-            Unused::bool(),
+            $routeName ?? Dummy::string(),
+            Dummy::string(),
+            Dummy::string(),
+            Dummy::string(),
+            Dummy::bool(),
             $parameters,
             $variables
         );
@@ -198,9 +198,9 @@ class NodeContextValidatorDataProvider
     private static function createRoot(array $variables, ?string $routeName = null): RootBreadcrumbDefinition
     {
         return new RootBreadcrumbDefinition(
-            self::ROUTE_NONE === $routeName ? null : Unused::string(),
-            Unused::string(),
-            Unused::string(),
+            self::ROUTE_NONE === $routeName ? null : Dummy::string(),
+            Dummy::string(),
+            Dummy::string(),
             $variables
         );
     }

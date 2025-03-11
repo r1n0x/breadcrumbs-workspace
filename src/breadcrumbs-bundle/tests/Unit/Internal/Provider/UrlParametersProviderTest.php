@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Provider;
@@ -21,9 +16,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\UrlParametersProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ContextParameterProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\UrlParametersProviderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ContextParameterProviderFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\UrlParametersProviderFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -42,97 +37,97 @@ class UrlParametersProviderTest extends TestCase
     {
         $this->expectException(UndefinedParameterException::class);
         $this
-            ->getService(ContextParameterProviderProvider::empty())
+            ->getService(ContextParameterProviderFake::createWithParameters())
             ->getParameters(new RouteBreadcrumbDefinition(
-                'route_name',
-                Unused::string(),
-                Unused::string(),
-                Unused::string(),
-                Unused::bool(),
+                'route',
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::bool(),
                 [
                     new ParameterDefinition(
-                        'parameter_name',
+                        'parameter',
                         false,
-                        Unused::null()
+                        Dummy::null()
                     ),
                 ],
-                Unused::array(),
+                Dummy::array(),
             ));
     }
 
     #[Test]
-    public function providesParametersForRouteBreadcrumb(): void
+    public function providesParameters(): void
     {
         $parameters = $this
-            ->getService(ContextParameterProviderProvider::createWithParameters([
+            ->getService(ContextParameterProviderFake::createWithParameters([
                 new Parameter(
-                    'parameter_name_1',
-                    'route_name',
+                    'parameter_1',
+                    'route',
                     'path_value_1',
                     'autowired_value_1'
                 ),
                 new Parameter(
-                    'parameter_name_2',
-                    'route_name',
+                    'parameter_2',
+                    'route',
                     'path_value_2',
                     'autowired_value_2'
                 ),
             ]))
             ->getParameters(new RouteBreadcrumbDefinition(
-                'route_name',
-                Unused::string(),
-                Unused::string(),
-                Unused::string(),
-                Unused::bool(),
+                'route',
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::bool(),
                 [
                     new ParameterDefinition(
-                        'parameter_name_1',
-                        Unused::bool(),
-                        Unused::null()
+                        'parameter_1',
+                        Dummy::bool(),
+                        Dummy::null()
                     ),
                     new ParameterDefinition(
-                        'parameter_name_2',
-                        Unused::bool(),
-                        Unused::null()
+                        'parameter_2',
+                        Dummy::bool(),
+                        Dummy::null()
                     ),
                 ],
-                Unused::array(),
+                Dummy::array(),
             ));
 
-        $this->assertArrayHasKey('parameter_name_1', $parameters);
-        $this->assertArrayHasKey('parameter_name_2', $parameters);
-        $this->assertEquals('path_value_1', $parameters['parameter_name_1']);
-        $this->assertEquals('path_value_2', $parameters['parameter_name_2']);
+        $this->assertArrayHasKey('parameter_1', $parameters);
+        $this->assertArrayHasKey('parameter_2', $parameters);
+        $this->assertEquals('path_value_1', $parameters['parameter_1']);
+        $this->assertEquals('path_value_2', $parameters['parameter_2']);
     }
 
     #[Test]
-    #[TestDox('Fallbacks to optional value, if parameter is not present in parameters')]
-    public function fallbacksToOptionalValueIfParameterNotPresentInParameters(): void
+    #[TestDox('Fallbacks to optional value, if parameter is not present in holder')]
+    public function fallbacksToOptionalValueIfParameterNotPresentInHolder(): void
     {
         $parameters = $this
-            ->getService(ContextParameterProviderProvider::empty())
+            ->getService(ContextParameterProviderFake::createWithParameters())
             ->getParameters(new RouteBreadcrumbDefinition(
-                'route_name',
-                Unused::string(),
-                Unused::string(),
-                Unused::string(),
-                Unused::bool(),
+                'route',
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::string(),
+                Dummy::bool(),
                 [
                     new ParameterDefinition(
-                        'parameter_name',
+                        'parameter',
                         true,
-                        'optional_value'
+                        'value'
                     ),
                 ],
-                Unused::array(),
+                Dummy::array(),
             ));
 
-        $this->assertArrayHasKey('parameter_name', $parameters);
-        $this->assertEquals('optional_value', $parameters['parameter_name']);
+        $this->assertArrayHasKey('parameter', $parameters);
+        $this->assertEquals('value', $parameters['parameter']);
     }
 
     private function getService(ContextParameterProvider $provider): UrlParametersProvider
     {
-        return UrlParametersProviderProvider::create($provider);
+        return UrlParametersProviderFake::create($provider);
     }
 }

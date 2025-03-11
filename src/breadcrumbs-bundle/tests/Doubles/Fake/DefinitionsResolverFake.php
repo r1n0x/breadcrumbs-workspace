@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\Provider;
+namespace R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake;
 
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\DefinitionsResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class DefinitionsResolverProvider
+final readonly class DefinitionsResolverFake
 {
     public static function create(
         RoutesProviderInterface $provider,
@@ -25,14 +25,14 @@ class DefinitionsResolverProvider
         return new DefinitionsResolver(
             new RouteDefinitionsResolver(
                 $provider,
-                VariablesResolverProvider::create(),
-                ParametersResolverProvider::create(),
-                RouteValidatorProvider::create(),
+                VariablesResolverFake::create(),
+                ParametersResolverFake::create(),
+                RouteValidatorFake::create(),
                 true
             ),
             new RootDefinitionsResolver(
                 $router,
-                VariablesResolverProvider::create(),
+                VariablesResolverFake::create(),
                 new ParametersResolver(),
                 $resolver
             )

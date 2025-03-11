@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Validator\Node;
@@ -35,7 +30,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextVariableProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\NodeContextValidator;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\Node\ValidationContext;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Validator\Node\NodeContextValidatorDataProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\NodeContextValidatorProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\NodeContextValidatorFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -72,7 +67,10 @@ class NodeContextValidatorTest extends TestCase
         ContextParameterProvider $parameterProvider
     ): void {
         $this->expectException(ValidationException::class);
-        $this->getService($variableProvider, $parameterProvider)->validate($node);
+
+        $this
+            ->getService($variableProvider, $parameterProvider)
+            ->validate($node);
     }
 
     #[Test]
@@ -83,13 +81,16 @@ class NodeContextValidatorTest extends TestCase
         ContextParameterProvider $parameterProvider
     ): void {
         $this->expectNotToPerformAssertions();
-        $this->getService($variableProvider, $parameterProvider)->validate($node);
+
+        $this
+            ->getService($variableProvider, $parameterProvider)
+            ->validate($node);
     }
 
     private function getService(
         ContextVariableProvider $variableProvider,
         ContextParameterProvider $parameterProvider
     ): NodeContextValidator {
-        return NodeContextValidatorProvider::create($variableProvider, $parameterProvider);
+        return NodeContextValidatorFake::create($variableProvider, $parameterProvider);
     }
 }

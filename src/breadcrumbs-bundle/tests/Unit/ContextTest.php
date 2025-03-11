@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit;
@@ -16,8 +11,8 @@ use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Context;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\ParametersHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ParametersHolderProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\VariablesHolderProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ParametersHolderFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\VariablesHolderFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -32,30 +27,32 @@ class ContextTest extends TestCase
     #[Test]
     public function setsParameterInContext(): void
     {
-        $holder = ParametersHolderProvider::create();
+        $holder = ParametersHolderFake::create();
+
         $this
-            ->getService($holder, VariablesHolderProvider::empty())
-            ->setParameter('parameter_name', 'parameter_value');
+            ->getService($holder, VariablesHolderFake::create())
+            ->setParameter('parameter', 'value');
 
-        $parameter = $holder->get('parameter_name');
+        $parameter = $holder->get('parameter');
 
-        $this->assertEquals('parameter_name', $parameter->getName());
-        $this->assertEquals('parameter_value', $parameter->getPathValue());
+        $this->assertEquals('parameter', $parameter->getName());
+        $this->assertEquals('value', $parameter->getPathValue());
         $this->assertEquals(null, $parameter->getAutowiredValue());
     }
 
     #[Test]
     public function setsVariableInContext(): void
     {
-        $holder = VariablesHolderProvider::create();
+        $holder = VariablesHolderFake::create();
+
         $this
-            ->getService(ParametersHolderProvider::empty(), $holder)
-            ->setVariable('variable_name', 'variable_value');
+            ->getService(ParametersHolderFake::create(), $holder)
+            ->setVariable('variable', 'value');
 
-        $parameter = $holder->get('variable_name');
+        $parameter = $holder->get('variable');
 
-        $this->assertEquals('variable_name', $parameter->getName());
-        $this->assertEquals('variable_value', $parameter->getValue());
+        $this->assertEquals('variable', $parameter->getName());
+        $this->assertEquals('value', $parameter->getValue());
     }
 
     private function getService(

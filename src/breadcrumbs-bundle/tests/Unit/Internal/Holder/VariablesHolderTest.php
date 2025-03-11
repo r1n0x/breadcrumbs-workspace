@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Exception\VariableAlreadyDefinedException;
 use R1n0x\BreadcrumbsBundle\Internal\Holder\VariablesHolder;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Variable;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\VariablesHolderProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\VariablesHolderFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -159,9 +159,11 @@ class VariablesHolderTest extends TestCase
 
     /**
      * @param array<int, Variable> $variables
+     *
+     * @throws VariableAlreadyDefinedException
      */
     private function getService(array $variables): VariablesHolder
     {
-        return VariablesHolderProvider::createWithVariables($variables);
+        return VariablesHolderFake::createWithVariables($variables);
     }
 }

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Generator;
@@ -27,7 +22,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\UrlParametersProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver;
 use R1n0x\BreadcrumbsBundle\Tests\DataProvider\Internal\Generator\UrlGeneratorDataProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\UrlGeneratorProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\UrlGeneratorFake;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -57,11 +52,18 @@ class UrlGeneratorTest extends TestCase
         BreadcrumbDefinition $definition,
         ?string $expectedPath
     ): void {
-        $this->assertEquals($expectedPath, $this->getService($router, $provider)->generate($definition));
+        $this->assertEquals(
+            $expectedPath,
+            $this
+                ->getService($router, $provider)
+                ->generate($definition)
+        );
     }
 
-    public function getService(RouterInterface $router, UrlParametersProvider $provider): UrlGenerator
-    {
-        return UrlGeneratorProvider::create($router, $provider);
+    public function getService(
+        RouterInterface $router,
+        UrlParametersProvider $provider
+    ): UrlGenerator {
+        return UrlGeneratorFake::create($router, $provider);
     }
 }

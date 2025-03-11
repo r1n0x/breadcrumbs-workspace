@@ -20,10 +20,8 @@ class UndefinedVariableExceptionTest extends TestCase
     #[Test]
     public function messageIsReadable(): void
     {
-        $exception = new UndefinedVariableException('name-9b354888-0f2d-49d5-b864-9d89f7b08b81');
-        $this->assertEquals(sprintf(
-            'Variable named "%s" is undefined',
-            'name-9b354888-0f2d-49d5-b864-9d89f7b08b81'
-        ), $exception->getMessage());
+        $exception = new UndefinedVariableException('variable');
+
+        $this->assertEquals('Variable named "variable" is undefined', $exception->getMessage());
     }
 }

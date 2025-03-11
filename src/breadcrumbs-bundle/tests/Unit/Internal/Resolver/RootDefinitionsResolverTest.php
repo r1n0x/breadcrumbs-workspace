@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
 namespace R1n0x\BreadcrumbsBundle\Tests\Unit\Internal\Resolver;
@@ -20,8 +15,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\ParametersResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\RootDefinitionsResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\RootsResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\RootsResolverProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\VariablesResolverProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\RootsResolverFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\VariablesResolverFake;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -44,9 +40,9 @@ class RootDefinitionsResolverTest extends TestCase
         $this->expectExceptionCode(RootDefinitionsResolver::ERROR_CODE_UNKNOWN_ROUTE_NAME);
 
         $this
-            ->getService(RouterStub::create(), RootsResolverProvider::createWithConfig([
+            ->getService(RouterStub::create(), RootsResolverFake::create([
                 'root_name' => [
-                    Route::EXPRESSION => 'expression',
+                    Route::EXPRESSION => Dummy::string(),
                     'route' => 'unknown_route_name',
                 ],
             ]))
@@ -64,9 +60,9 @@ class RootDefinitionsResolverTest extends TestCase
             ->getService(
                 RouterStub::create()
                     ->addRouteStub('route_name', '/route/{dynamic_parameter}'),
-                RootsResolverProvider::createWithConfig([
+                RootsResolverFake::create([
                     'root_name' => [
-                        Route::EXPRESSION => 'expression',
+                        Route::EXPRESSION => Dummy::string(),
                         'route' => 'route_name',
                     ],
                 ])
@@ -82,7 +78,7 @@ class RootDefinitionsResolverTest extends TestCase
                 RouterStub::create()
                     ->addRouteStub('route_name_1', '/route/static/1')
                     ->addRouteStub('route_name_2', '/route/static/2'),
-                RootsResolverProvider::createWithConfig([
+                RootsResolverFake::create([
                     'root_name_1' => [
                         Route::EXPRESSION => 'variable_1 + variable_2',
                         'route' => 'route_name_1',
@@ -114,7 +110,7 @@ class RootDefinitionsResolverTest extends TestCase
     ): RootDefinitionsResolver {
         return new RootDefinitionsResolver(
             $router,
-            VariablesResolverProvider::create(),
+            VariablesResolverFake::create(),
             new ParametersResolver(),
             $resolver
         );

@@ -14,7 +14,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\BreadcrumbNode;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\NodeSerializer;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\NodesResolver;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\NodesResolverProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\NodesResolverFake;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\CacheReaderStub;
 
 /**
@@ -34,7 +34,7 @@ class NodesResolverTest extends TestCase
                 CacheReaderStub::create()
                     ->addNode(new BreadcrumbNode(
                         new RouteBreadcrumbDefinition(
-                            'route_name',
+                            'route',
                             'expression',
                             null,
                             null,
@@ -46,28 +46,30 @@ class NodesResolverTest extends TestCase
                         ),
                         null
                     ))
-            )->get('route_name');
+            )
+            ->get('route');
 
         $this->assertInstanceOf(RouteBreadcrumbDefinition::class, $node->getDefinition());
-        $this->assertEquals('route_name', $node->getDefinition()->getRouteName());
+        $this->assertEquals('route', $node->getDefinition()->getRouteName());
         $this->assertEquals('expression', $node->getDefinition()->getExpression());
         $this->assertEquals(['variable'], $node->getDefinition()->getVariables());
     }
 
     #[Test]
-    #[TestDox("Resolves null when node for route name doesn't exist")]
-    public function resolvesNullWhenNodeForRouteNameDoesntExist(): void
+    #[TestDox("Resolves null when node for route doesn't exist")]
+    public function resolvesNullWhenNodeForRouteDoesntExist(): void
     {
         $node = $this
             ->getService(
                 CacheReaderStub::create()
-            )->get('route_name');
+            )
+            ->get('route');
 
         $this->assertEquals(null, $node);
     }
 
     private function getService(CacheReaderInterface $cacheReader): NodesResolver
     {
-        return NodesResolverProvider::create($cacheReader);
+        return NodesResolverFake::create($cacheReader);
     }
 }

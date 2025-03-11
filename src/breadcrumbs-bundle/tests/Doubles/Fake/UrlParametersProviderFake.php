@@ -1,14 +1,10 @@
 <?php
 
-/**
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpDocMissingThrowsInspection
- */
-
 declare(strict_types=1);
 
-namespace R1n0x\BreadcrumbsBundle\Tests\Provider;
+namespace R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake;
 
+use R1n0x\BreadcrumbsBundle\Exception\ParameterAlreadyDefinedException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\ContextParameterProvider;
 use R1n0x\BreadcrumbsBundle\Internal\Provider\UrlParametersProvider;
@@ -16,7 +12,7 @@ use R1n0x\BreadcrumbsBundle\Internal\Provider\UrlParametersProvider;
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
  */
-class UrlParametersProviderProvider
+final readonly class UrlParametersProviderFake
 {
     public static function create(
         ContextParameterProvider $provider
@@ -26,11 +22,13 @@ class UrlParametersProviderProvider
 
     /**
      * @param array<int, Parameter> $parameters
+     *
+     * @throws ParameterAlreadyDefinedException
      */
     public static function createWithParameters(array $parameters = []): UrlParametersProvider
     {
         return self::create(
-            ContextParameterProviderProvider::createWithParameters($parameters)
+            ContextParameterProviderFake::createWithParameters($parameters)
         );
     }
 }

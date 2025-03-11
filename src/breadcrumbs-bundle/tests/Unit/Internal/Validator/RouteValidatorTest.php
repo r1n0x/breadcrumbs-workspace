@@ -27,6 +27,7 @@ class RouteValidatorTest extends TestCase
         int $expectedErrorCode
     ): void {
         $this->expectExceptionCode($expectedErrorCode);
+
         $this->getService()->validate($route);
     }
 
@@ -36,6 +37,7 @@ class RouteValidatorTest extends TestCase
         Route $route
     ): void {
         $this->expectNotToPerformAssertions();
+
         $this->getService()->validate($route);
     }
 

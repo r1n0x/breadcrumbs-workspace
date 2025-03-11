@@ -17,6 +17,7 @@ final readonly class RouteValidator
     public const int ERROR_CODE_PASS_PARAMETERS_TO_EXPRESSION_BOOL = 12;
     public const int ERROR_CODE_ROOT_SCALAR = 13;
     public const int ERROR_CODE_ROOT_AND_PARENT_ROUTE_DEFINED = 14;
+    public const int ERROR_CODE_CIRCULAR_REFERENCE = 15;
 
     /**
      * @throws RouteValidationException
@@ -54,6 +55,9 @@ final readonly class RouteValidator
                 Route::ROOT,
                 Route::PARENT_ROUTE
             ), self::ERROR_CODE_ROOT_AND_PARENT_ROUTE_DEFINED);
+        }
+        if (array_key_exists(Route::PARENT_ROUTE, $breadcrumb) && $route->getName() === $breadcrumb[Route::PARENT_ROUTE]) {
+            throw new RouteValidationException('Value of breadcrumbs route name cannot be itself.', self::ERROR_CODE_CIRCULAR_REFERENCE);
         }
     }
 }

@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Route;
 class ParametersResolverTest extends TestCase
 {
     #[Test]
-    public function resolvesBreadcrumbParameters(): void
+    public function resolvesParameters(): void
     {
         $parameters = $this->getService()->getParameters(new BreadcrumbRoute(
             '/route/{dynamic_parameter_with_default_value}/{dynamic_parameter}',

@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Exception\ParameterAlreadyDefinedException;
 use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -25,32 +25,33 @@ class ParameterAlreadyDefinedExceptionTest extends TestCase
     public function messageForGlobalParameterIsReadable(): void
     {
         $exception = new ParameterAlreadyDefinedException(new Parameter(
-            'name-3d1e13d4-43d6-44ec-b151-8a5bf50a76ce',
+            'parameter',
             null,
-            Unused::null(),
-            Unused::null()
+            Dummy::null(),
+            Dummy::null()
         ));
+
         $this->assertEquals(ParameterAlreadyDefinedException::CODE_GLOBAL, $exception->getCode());
-        $this->assertEquals(sprintf(
-            'Global parameter named "%s" is already defined',
-            'name-3d1e13d4-43d6-44ec-b151-8a5bf50a76ce'
-        ), $exception->getMessage());
+        $this->assertEquals(
+            'Global parameter named "parameter" is already defined',
+            $exception->getMessage()
+        );
     }
 
     #[Test]
     public function messageForScopedParameterIsReadable(): void
     {
         $exception = new ParameterAlreadyDefinedException(new Parameter(
-            'name-3b0b12b2-a80a-40d0-9fb2-774fe47874cd',
-            'route-5d6c28d3-bcb6-4834-a123-e6136b15db9a',
-            Unused::null(),
-            Unused::null()
+            'parameter',
+            'route',
+            Dummy::null(),
+            Dummy::null()
         ));
+
         $this->assertEquals(ParameterAlreadyDefinedException::CODE_SCOPE, $exception->getCode());
-        $this->assertEquals(sprintf(
-            'Scoped parameter named "%s" for route "%s" is already defined',
-            'name-3b0b12b2-a80a-40d0-9fb2-774fe47874cd',
-            'route-5d6c28d3-bcb6-4834-a123-e6136b15db9a'
-        ), $exception->getMessage());
+        $this->assertEquals(
+            'Scoped parameter named "parameter" for route "route" is already defined',
+            $exception->getMessage()
+        );
     }
 }

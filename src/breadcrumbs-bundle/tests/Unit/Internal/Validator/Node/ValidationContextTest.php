@@ -38,12 +38,16 @@ class ValidationContextTest extends TestCase
         array $expectedErrors
     ): void {
         $context = new ValidationContext();
+
         $contextBuilder($context);
-        $this->assertEquals($expectedErrorsCount > 0, $context->hasErrors());
+
         $errors = $context->getErrors();
+
+        $this->assertEquals($expectedErrorsCount > 0, $context->hasErrors());
         $this->assertCount($expectedErrorsCount, $errors);
         $this->assertCount($expectedRouteErrorsCount, array_filter($errors, fn (Error $error) => $error instanceof RouteError));
         $this->assertCount($expectedRootErrorsCount, array_filter($errors, fn (Error $error) => $error instanceof RootError));
+
         foreach ($errors as $index => $error) {
             $expectedError = $expectedErrors[$index] ?? null;
             $this->assertNotNull($expectedError);

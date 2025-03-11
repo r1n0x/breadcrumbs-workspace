@@ -8,9 +8,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Model\Parameter;
 use R1n0x\BreadcrumbsBundle\Internal\Model\ParameterDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RootBreadcrumbDefinition;
 use R1n0x\BreadcrumbsBundle\Internal\Model\RouteBreadcrumbDefinition;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\UrlParametersProviderProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Dummy;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\UrlParametersProviderFake;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RouterStub;
-use R1n0x\BreadcrumbsBundle\Tests\Unused;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -21,45 +21,45 @@ class UrlGeneratorDataProvider
     {
         return [
             'Root without route name' => [
-                UrlParametersProviderProvider::createWithParameters(),
+                UrlParametersProviderFake::createWithParameters(),
                 RouterStub::create(),
                 new RootBreadcrumbDefinition(
                     null,
-                    Unused::string(),
-                    Unused::string(),
+                    Dummy::string(),
+                    Dummy::string(),
                     []
                 ),
                 null,
             ],
             'Root with route name' => [
-                UrlParametersProviderProvider::createWithParameters(),
+                UrlParametersProviderFake::createWithParameters(),
                 RouterStub::create()
                     ->addRouteStub('root-ccb35d2f-b3f8-4217-8876-776c8af84773', '/root/admin'),
                 new RootBreadcrumbDefinition(
                     'root-ccb35d2f-b3f8-4217-8876-776c8af84773',
-                    Unused::string(),
-                    Unused::string(),
+                    Dummy::string(),
+                    Dummy::string(),
                     []
                 ),
                 '/root/admin',
             ],
             'Route with global parameters' => [
-                UrlParametersProviderProvider::createWithParameters([
+                UrlParametersProviderFake::createWithParameters([
                     new Parameter(
                         'parameter-7469179f-b8a5-45a7-b676-66796e2e156a',
                         null,
                         'duck',
-                        Unused::null()
+                        Dummy::null()
                     ),
                 ]),
                 RouterStub::create()
                     ->addRouteStub('route-cbeb8187-435c-410c-a974-94622921d691', '/animal/{parameter-7469179f-b8a5-45a7-b676-66796e2e156a}'),
                 new RouteBreadcrumbDefinition(
                     'route-cbeb8187-435c-410c-a974-94622921d691',
-                    Unused::string(),
+                    Dummy::string(),
                     null,
                     null,
-                    Unused::bool(),
+                    Dummy::bool(),
                     [
                         new ParameterDefinition(
                             'parameter-7469179f-b8a5-45a7-b676-66796e2e156a',
@@ -71,22 +71,22 @@ class UrlGeneratorDataProvider
                 '/animal/duck',
             ],
             'Route with scoped parameters' => [
-                UrlParametersProviderProvider::createWithParameters([
+                UrlParametersProviderFake::createWithParameters([
                     new Parameter(
                         'parameter-31b8dcbc-9df9-4cef-a420-6bea4b4a1e1d',
                         'route-58cbb011-b2b0-4457-b204-5ae060f4c1d3',
                         'owl',
-                        Unused::null()
+                        Dummy::null()
                     ),
                 ]),
                 RouterStub::create()
                     ->addRouteStub('route-58cbb011-b2b0-4457-b204-5ae060f4c1d3', '/animal/{parameter-31b8dcbc-9df9-4cef-a420-6bea4b4a1e1d}'),
                 new RouteBreadcrumbDefinition(
                     'route-58cbb011-b2b0-4457-b204-5ae060f4c1d3',
-                    Unused::string(),
+                    Dummy::string(),
                     null,
                     null,
-                    Unused::bool(),
+                    Dummy::bool(),
                     [
                         new ParameterDefinition(
                             'parameter-31b8dcbc-9df9-4cef-a420-6bea4b4a1e1d',
@@ -98,22 +98,22 @@ class UrlGeneratorDataProvider
                 '/animal/owl',
             ],
             'Route with optional parameters' => [
-                UrlParametersProviderProvider::createWithParameters([
+                UrlParametersProviderFake::createWithParameters([
                     new Parameter(
                         'parameter-aa9e68e8-6826-4fc1-9c31-c8199a4ce291',
                         null,
                         null,
-                        Unused::null()
+                        Dummy::null()
                     ),
                 ]),
                 RouterStub::create()
                     ->addRouteStub('route-752ab06d-0457-4fde-83b8-9c2240069364', '/animal/{parameter-aa9e68e8-6826-4fc1-9c31-c8199a4ce291}'),
                 new RouteBreadcrumbDefinition(
                     'route-752ab06d-0457-4fde-83b8-9c2240069364',
-                    Unused::string(),
-                    Unused::string(),
-                    Unused::string(),
-                    Unused::bool(),
+                    Dummy::string(),
+                    Dummy::string(),
+                    Dummy::string(),
+                    Dummy::bool(),
                     [
                         new ParameterDefinition(
                             'parameter-aa9e68e8-6826-4fc1-9c31-c8199a4ce291',

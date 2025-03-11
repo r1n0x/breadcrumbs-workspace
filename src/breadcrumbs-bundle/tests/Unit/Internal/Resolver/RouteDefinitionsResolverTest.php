@@ -14,9 +14,9 @@ use R1n0x\BreadcrumbsBundle\Internal\Resolver\RouteDefinitionsResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\RoutesProviderInterface;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver;
 use R1n0x\BreadcrumbsBundle\Internal\Validator\RouteValidator;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\ParametersResolverProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\RouteValidatorProvider;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\VariablesResolverProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\ParametersResolverFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\RouteValidatorFake;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\VariablesResolverFake;
 use R1n0x\BreadcrumbsBundle\Tests\Stub\RoutesProviderStub;
 
 /**
@@ -83,14 +83,13 @@ class RouteDefinitionsResolverTest extends TestCase
         $this->assertEquals('root', $definitions[2]->getRoot());
     }
 
-    private function getService(
-        RoutesProviderInterface $provider
-    ): RouteDefinitionsResolver {
+    private function getService(RoutesProviderInterface $provider): RouteDefinitionsResolver
+    {
         return new RouteDefinitionsResolver(
             $provider,
-            VariablesResolverProvider::create(),
-            ParametersResolverProvider::create(),
-            RouteValidatorProvider::create(),
+            VariablesResolverFake::create(),
+            ParametersResolverFake::create(),
+            RouteValidatorFake::create(),
             true
         );
     }

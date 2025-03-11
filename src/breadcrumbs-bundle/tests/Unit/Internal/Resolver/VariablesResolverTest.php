@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use R1n0x\BreadcrumbsBundle\Exception\VariablesResolverException;
 use R1n0x\BreadcrumbsBundle\Internal\Resolver\VariablesResolver;
-use R1n0x\BreadcrumbsBundle\Tests\Provider\VariablesResolverProvider;
+use R1n0x\BreadcrumbsBundle\Tests\Doubles\Fake\VariablesResolverFake;
 
 /**
  * @author r1n0x <r1n0x-dev@proton.me>
@@ -32,13 +32,15 @@ class VariablesResolverTest extends TestCase
     #[Test]
     public function resolvesVariablesFromExpression(): void
     {
-        $variables = $this->getService()->getVariables('variable_name.property + variable_name2 + array["key"]');
+        $variables = $this
+            ->getService()
+            ->getVariables('variable_name.property + variable_name2 + array["key"]');
 
         $this->assertEquals(['variable_name', 'variable_name2', 'array'], $variables);
     }
 
     private function getService(): VariablesResolver
     {
-        return VariablesResolverProvider::create();
+        return VariablesResolverFake::create();
     }
 }
