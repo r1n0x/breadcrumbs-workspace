@@ -62,6 +62,9 @@ final class ListenableAttributeRouteControllerLoader extends AttributeRouteContr
         //
         // If you've read this thank you :)
         //
+        // TL;DR
+        // It's impossible to resolve breadcrumbs attached to route attribute without this or copying symfony internals.
+        //
         // Huge thanks to Symfony for developing an awesome tool <3
         $this->dispatcher->dispatch(new RouteInitializedEvent(
             array_key_last($collection->all()), /* @phpstan-ignore argument.type */
