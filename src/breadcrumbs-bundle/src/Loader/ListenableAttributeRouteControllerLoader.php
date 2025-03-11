@@ -46,6 +46,8 @@ class ListenableAttributeRouteControllerLoader extends AttributeRouteControllerL
         //
         // - symfony dynamic route name generation and being able to add prefixes to routes by putting Route
         //   attribute on class and adding sometimes adding indexes at the end of name (cannot use route name attribute as anchor)
+        //    - you could just use reflection on whole application, but you would need to copy all the symfony internal logic
+        //      and clone the behaviour of building route names - which would be a horrible thing to maintain.
         //
         // - surely, there is more ways to use Route attribute than I know (knowing Symfony) and I just don't want
         //   to copy every single thing to this bundle, when I can just add a listener here and have Symfony leverage everything

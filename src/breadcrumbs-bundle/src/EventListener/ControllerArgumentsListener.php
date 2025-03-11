@@ -37,6 +37,8 @@ final readonly class ControllerArgumentsListener
 
         /** @var array<string, string> $pathValues */
         $pathValues = $request->attributes->get('_route_params');
+
+        /** @var array<string, mixed> $autowiredValues */
         $autowiredValues = $event->getNamedArguments();
 
         /** @var RouteBreadcrumbDefinition $definition */
