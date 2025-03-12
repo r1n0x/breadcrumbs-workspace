@@ -31,7 +31,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "R1n0x\\BreadcrumbsBundle\\": "breadcrumbs-bundle/src/"
+            "R1n0x\\BreadcrumbsBundle\\": "../src/"
         }
     },
     "replace": {

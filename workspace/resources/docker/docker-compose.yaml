@@ -4,7 +4,7 @@ services:
   nginx:
     image: nginx:stable-alpine3.20
     volumes:
-      - ../../src:/symfony-app
+      - ../../../:/symfony-app
       - ./_config/nginx/default.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
@@ -15,8 +15,8 @@ services:
     build:
       context: '_services/php-fpm'
     volumes:
-      - ../../src:/symfony-app
-    working_dir: /symfony-app
+      - ../../../:/symfony-app
+    working_dir: /symfony-app/workspace
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:

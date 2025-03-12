@@ -1,4 +1,0 @@
-/vendor/
-.phpunit.cache
-.phpstan.cache
-coverege_report

@@ -1,13 +1,29 @@
-Status: work in progress
-------
-Setting up:
+About
+--------------------------
+TODO
 
+Documentation
+--------------------------
+TODO
+
+Running tests (PHPUnit)
+--------------------------
+Library provides a docker container for reproducible test environment.
 ```bash
-cd resources/docker && 
-docker compose up --detach && 
-docker compose exec php-fpm composer install &&
-docker compose exec php-fpm php bin/console d:m:m --no-interaction
+docker run --rm --volume .:/source --workdir /source --tty r1n0x/breadcrumbs-bundle-container:1.0.0 composer run-script phpunit
+```
+Running tests creates an `coverege_report` folder which contains [HTML coverage report](https://docs.phpunit.de/en/11.4/code-coverage.html) - to view it simply open it in your browser.
+
+Running types validator (PHPStan)
+--------------------------
+Library provides a docker container for reproducible PHPStan environment.
+```bash
+docker run --rm --volume .:/source --workdir /source --tty r1n0x/breadcrumbs-bundle-container:1.0.0 composer run-script phpstan
 ```
 
-Website will be available at:
-http://localhost:80
+Running code style validator (CS-Fixer)
+--------------------------
+Library provides a docker container for reproducible CS-Fixer environment.
+```bash
+docker run --rm --volume .:/source --workdir /source --tty r1n0x/breadcrumbs-bundle-container:1.0.0 composer run-script csfixer
+```
